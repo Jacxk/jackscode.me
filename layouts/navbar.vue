@@ -1,12 +1,12 @@
 <template>
   <div>
     <v-app-bar hide-on-scroll class="pr-5">
-      <v-app-bar-nav-icon @click.stop="drawer_open = !drawer_open"/>
+      <v-app-bar-nav-icon @click.stop="drawer_open = !drawer_open" />
       <v-toolbar-title>
-        <nuxt-link class="white--text" to="/">{{site.name}}</nuxt-link>
+        <nuxt-link class="white--text" to="/">{{ site.name }}</nuxt-link>
       </v-toolbar-title>
 
-      <v-spacer/>
+      <v-spacer />
 
       <v-slide-x-reverse-transition>
         <v-text-field
@@ -18,7 +18,7 @@
         />
       </v-slide-x-reverse-transition>
 
-      <v-btn @click.stop="search = !search" icon>
+      <v-btn icon @click.stop="search = !search">
         <v-icon>mdi-magnify</v-icon>
       </v-btn>
       <v-btn to="/" icon>
@@ -41,7 +41,7 @@
       />
     </v-expand-transition>
 
-    <v-navigation-drawer absolute temporary v-model="drawer_open">
+    <v-navigation-drawer v-model="drawer_open" absolute temporary>
       <v-list-item>
         <v-list-item-avatar>
           <v-img src="https://via.placeholder.com/150"></v-img>
@@ -52,10 +52,10 @@
         </v-list-item-content>
       </v-list-item>
 
-      <v-divider/>
+      <v-divider />
 
       <v-list dense>
-        <v-list-item v-for="item in items" :key="item.id" v-bind:to="item.href">
+        <v-list-item v-for="item in items" :key="item.id" :to="item.href">
           <v-list-item-icon>
             <v-icon>mdi-{{ item.icon }}</v-icon>
           </v-list-item-icon>
@@ -65,28 +65,25 @@
           </v-list-item-content>
         </v-list-item>
       </v-list>
-
     </v-navigation-drawer>
   </div>
 </template>
 
 <script>
-  export default {
-    props: ['site'],
-    name: "navbar",
-    data() {
-      return {
-        drawer_open: false,
-        search: false,
-        items: [
-          {title: 'Home', icon: 'home', href: '/'},
-          {title: 'All Products', icon: 'shopping', href: '/products'},
-        ]
-      }
+export default {
+  name: 'Navbar',
+  props: ['site'],
+  data() {
+    return {
+      drawer_open: false,
+      search: false,
+      items: [
+        { title: 'Home', icon: 'home', href: '/' },
+        { title: 'All Products', icon: 'shopping', href: '/products' }
+      ]
     }
   }
+}
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>
