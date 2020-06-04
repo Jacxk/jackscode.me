@@ -3,11 +3,17 @@ const consola = require('consola')
 const { Nuxt, Builder } = require('nuxt')
 const app = express()
 
-// Import and Set Nuxt.js options
 const config = require('../nuxt.config.js')
+const api = require('./api.js')
+const { connectDB } = require('./database/index.js')
+
+// Import and Set Nuxt.js options
 config.dev = process.env.NODE_ENV !== 'production'
 
 async function start() {
+  // Init database
+  await connectDB()
+
   // Init Nuxt.js
   const nuxt = new Nuxt(config)
 
@@ -20,6 +26,8 @@ async function start() {
     await builder.build()
   }
 
+  app.use(express.json())
+  app.use('/api', api)
   // Give nuxt middleware to express
   app.use(nuxt.render)
 

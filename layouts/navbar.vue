@@ -14,7 +14,7 @@
           label="Search"
           class="mt-7 mr-2 d-none d-sm-block"
           dense
-          outlined
+          solo
         />
       </v-slide-x-reverse-transition>
 
@@ -25,7 +25,7 @@
         <v-icon>mdi-home</v-icon>
       </v-btn>
       <v-btn to="/cart" icon>
-        <v-badge content="50" bottom>
+        <v-badge :content="'' + (this.$store.state.cart || []).length" bottom>
           <v-icon>mdi-cart</v-icon>
         </v-badge>
       </v-btn>
@@ -37,7 +37,7 @@
         label="Search"
         class="pt-5 pr-5 pl-5 d-sm-none"
         dense
-        outlined
+        solo
       />
     </v-expand-transition>
 

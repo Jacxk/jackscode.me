@@ -1,10 +1,9 @@
 <template>
   <v-app>
-    <navbar :site="site"></navbar>
+    <navbar :site="site" />
     <v-content>
       <v-container>
         <nuxt />
-        <!--        <v-btn @click="change">Click</v-btn>-->
       </v-container>
     </v-content>
   </v-app>
@@ -29,3 +28,11 @@ export default {
   }
 }
 </script>
+
+<style>
+.add-product {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+}
+</style>

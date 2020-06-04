@@ -2,21 +2,37 @@
   <v-container>
     <v-list>
       <v-subheader class="center-text">Your Cart</v-subheader>
-      <template v-for="item in products">
+      <div v-if="this.$store.state.cart.length <= 0">
         <v-divider />
+        <v-subheader>
+          <span>
+            Cart is empty. Go to the
+            <nuxt-link to="/products">products</nuxt-link>
+            page and add some things!
+          </span>
+        </v-subheader>
+      </div>
+      <template v-for="item in items">
+        <div :key="item._id">
+          <v-divider />
 
-        <v-list-item :key="item.id" :to="'/product/' + item.id" :ripple="false">
-          <v-list-item-avatar>
-            <v-img :src="item.img" />
-          </v-list-item-avatar>
+          <v-list-item :to="'/product/' + item._id" :ripple="false">
+            <v-list-item-avatar>
+              <v-img :src="item.picture" />
+            </v-list-item-avatar>
 
-          <v-list-item-content>
-            <v-list-item-title v-text="item.name" />
-            <v-list-item-subtitle v-text="item.description" />
-          </v-list-item-content>
+            <v-list-item-content>
+              <v-list-item-title v-text="item.name" />
+              <v-list-item-subtitle v-text="item.description" />
+            </v-list-item-content>
 
-          <v-list-item-action v-text="item.amount || 1" />
-        </v-list-item>
+            <v-list-item-action>
+              <v-btn icon @click.prevent="remove(item)">
+                <v-icon>mdi-close</v-icon>
+              </v-btn>
+            </v-list-item-action>
+          </v-list-item>
+        </div>
       </template>
     </v-list>
   </v-container>
@@ -26,35 +42,16 @@
 export default {
   name: 'Cart',
   data() {
-    return {
-      products: [
-        {
-          id: 0,
-          name: 'Product 1',
-          description: 'This product cures cancer',
-          likes: 15,
-          img: 'https://via.placeholder.com/500',
-          amount: 2
-        },
-        {
-          id: 1,
-          name: 'Product 2',
-          description:
-            'This product does not cure cancer but you should buy it',
-          likes: 69,
-          img: 'https://via.placeholder.com/500',
-          amount: 5
-        },
-        {
-          id: 3,
-          name: 'Product 4',
-          description:
-            'This product does not cure cancer but you should buy it ' +
-            'This product does not cure cancer but you should buy it',
-          likes: 69,
-          img: 'https://via.placeholder.com/500'
-        }
-      ]
+    return {}
+  },
+  computed: {
+    items() {
+      return this.$store.state.cart
+    }
+  },
+  methods: {
+    remove(item) {
+      this.$store.commit('remove', item)
     }
   }
 }
