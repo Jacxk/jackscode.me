@@ -7,7 +7,7 @@ export const mutations = {
     state.cart.push(item)
   },
   remove(state: any, item: Item) {
-    state.cart = state.cart.filter((it: Item) => it.id !== item.id)
+    state.cart = state.cart.filter((it: Item) => it._id !== item._id)
   },
   toggle(state: any, item: Item) {
     if (mutations.hasItem(state, item)) {
@@ -17,14 +17,14 @@ export const mutations = {
     }
   },
   hasItem(state: any, item: Item) {
-    return state.cart.some((it: Item)=> it.id === item.id);
+    return state.cart.some((it: Item) => it._id === item._id);
   }
 }
 
 interface Item {
-  id: number
+  _id: number
   name: string
   description: string
   likes: number
-  img: string | 'https://via.placeholder.com/500'
+  picture: string | 'https://via.placeholder.com/500'
 }

@@ -1,5 +1,4 @@
-const { connect, connection } = require('mongoose')
-const increment = require('mongoose-auto-increment')
+const { connect } = require('mongoose')
 
 const url = 'mongodb+srv://admin:admin@cluster0-ljx07.mongodb.net/plugin-store'
 
@@ -8,8 +7,6 @@ const options = {
   poolSize: 4,
   useUnifiedTopology: true
 }
-
-// increment.initialize(connection)
 
 module.exports = {
   async connectDB() {

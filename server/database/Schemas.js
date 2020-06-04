@@ -1,4 +1,3 @@
-const increment = require('mongoose-auto-increment')
 const { model, Schema } = require('mongoose')
 
 const product = new Schema({
@@ -10,7 +9,7 @@ const product = new Schema({
     type: String,
     required: true
   },
-  description: {
+  page_content: {
     type: String,
     required: true
   },
@@ -27,8 +26,6 @@ const product = new Schema({
     default: 0
   }
 })
-
-// schema.plugin(increment.plugin, name);
 
 module.exports = {
   Product: model('product', product)

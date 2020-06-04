@@ -5,8 +5,7 @@ const api = Router()
 
 api.get('/products', async function(_, res) {
   try {
-    const products = await Schemas.Product.find({})
-      .lean()
+    const products = await Schemas.Product.find({}).lean()
     res.json(products)
   } catch (e) {
     console.error(e)
@@ -16,8 +15,7 @@ api.get('/products', async function(_, res) {
 
 api.get('/product/:id', async function(req, res) {
   try {
-    const product = await Schemas.Product.findById(req.params.id)
-      .lean()
+    const product = await Schemas.Product.findById(req.params.id).lean()
     res.json(product)
   } catch (e) {
     console.error(e)
