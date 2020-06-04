@@ -1,4 +1,4 @@
-const { model, Schema } = require('mongoose')
+const {model, Schema} = require('mongoose')
 
 const product = new Schema({
   name: {
@@ -24,9 +24,44 @@ const product = new Schema({
   rating: {
     type: Number,
     default: 0
+  },
+  created_at: {
+    type: Date,
+    default: Date.now
   }
 })
 
+const user = new Schema({
+  name: {
+    type: String,
+    required: true
+  },
+  email: {
+    type: String,
+    required: true
+  },
+  password: {
+    salt: {
+      type: String,
+      required: true
+    },
+    hash: {
+      type: String,
+      required: true
+    }
+  },
+  cart: [{
+    type: Schema.Types.ObjectID,
+    ref: 'product',
+    default: []
+  }],
+  created_at: {
+    type: Date,
+    default: Date.now
+  }
+});
+
 module.exports = {
-  Product: model('product', product)
+  Product: model('product', product),
+  User: model('user', user),
 }

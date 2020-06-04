@@ -10,7 +10,7 @@
     <span v-if="products.length <= 0">
       There are no products... Check back later!
     </span>
-    <v-row align="stretch" justify="center" dense>
+    <v-row align="stretch" justify="start" dense>
       <v-col
         v-for="product in products"
         :key="product._id"
@@ -73,7 +73,6 @@
       elevation="5"
       fab
       large
-      dark
       bottom
       left
     >
