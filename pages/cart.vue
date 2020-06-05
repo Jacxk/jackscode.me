@@ -1,5 +1,5 @@
 <template>
-  <v-container>
+  <v-card>
     <v-list>
       <v-subheader class="center-text">Your Cart</v-subheader>
       <div v-if="this.$store.state.cart.length <= 0">
@@ -35,7 +35,7 @@
         </div>
       </template>
     </v-list>
-  </v-container>
+  </v-card>
 </template>
 
 <script>

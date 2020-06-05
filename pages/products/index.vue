@@ -31,7 +31,7 @@
           <v-img
             :src="product.picture"
             height="200px"
-            class="align-end"
+            class="white--text align-end"
             gradient="to bottom, rgba(0,0,0,0),rgba(0,0,0,.2), rgba(0,0,0,.8)"
           >
             <v-card-title>{{ product.name }}</v-card-title>

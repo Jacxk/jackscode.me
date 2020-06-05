@@ -1,7 +1,7 @@
 <template>
   <v-app>
-    <navbar :site="site" />
     <v-content>
+      <navbar :site="site" />
       <v-container>
         <nuxt />
       </v-container>

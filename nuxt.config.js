@@ -22,7 +22,7 @@ module.exports = {
   /*
    ** Customize the progress-bar color
    */
-  loading: { color: '#fff' },
+  loading: { color: '#f44336' },
   /*
    ** Global CSS
    */
@@ -46,8 +46,20 @@ module.exports = {
   modules: [
     // Doc: https://axios.nuxtjs.org/usage
     '@nuxtjs/axios',
-    '@nuxtjs/pwa'
+    '@nuxtjs/pwa',
+    '@nuxtjs/markdownit'
   ],
+  /*
+   ** markdownit options
+   ** See https://github.com/markdown-it/markdown-it
+  */
+  markdownit: {
+    injected: true,
+    preset: 'default',
+    html: false,
+    linkify: true,
+    breaks: true,
+  },
   /*
    ** Axios module configuration
    ** See https://axios.nuxtjs.org/options
