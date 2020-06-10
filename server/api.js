@@ -25,7 +25,6 @@ api.get('/product/:id', async function(req, res) {
 
 api.post('/products', async function(req, res) {
   try {
-    console.log(req.body)
     const product = new Schemas.Product(req.body)
     await product.save()
     res.json(product)

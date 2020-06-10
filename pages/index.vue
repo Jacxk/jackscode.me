@@ -1,7 +1,10 @@
 <template>
-  <h1 class="text-center">Hot Products</h1>
+  <HotItems horizontal scroll />
 </template>
 
 <script>
-export default {}
+import HotItems from '../components/products/hot_items'
+export default {
+  components: { HotItems }
+}
 </script>

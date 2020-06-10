@@ -1,5 +1,6 @@
 export const state = () => ({
-  cart: []
+  cart: [],
+  hot: ['5ed846178e9303175c83fb12', '5ed846c18e9303175c83fb13']
 })
 
 export const mutations = {
@@ -10,14 +11,17 @@ export const mutations = {
     state.cart = state.cart.filter((it: Item) => it._id !== item._id)
   },
   toggle(state: any, item: Item) {
-    if (mutations.hasItem(state, item)) {
-      mutations.remove(state, item);
+    if (getters.hasItem(state)(item)) {
+      mutations.remove(state, item)
     } else {
-      mutations.add(state, item);
+      mutations.add(state, item)
     }
-  },
-  hasItem(state: any, item: Item) {
-    return state.cart.some((it: Item) => it._id === item._id);
+  }
+}
+
+export const getters = {
+  hasItem: (state: any) => (item: Item) => {
+    return state.cart.some((it: Item) => it._id === item._id)
   }
 }
 
