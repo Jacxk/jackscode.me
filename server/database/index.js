@@ -1,6 +1,7 @@
 const { connect } = require('mongoose')
 
-const url = 'mongodb+srv://admin:admin@cluster0-ljx07.mongodb.net/plugin-store'
+const [user, password] = [process.env.DB_USER, process.env.DB_PASS]
+const url = `mongodb+srv://${user}:${password}@cluster0-ljx07.mongodb.net/plugin-store`
 
 const options = {
   useNewUrlParser: true,

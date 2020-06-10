@@ -1,7 +1,7 @@
 const colors = require('vuetify/es5/util/colors').default
 
 module.exports = {
-  mode: 'universal',
+  mode: 'spa',
   /*
    ** Headers of the page
    */
@@ -52,13 +52,13 @@ module.exports = {
   /*
    ** markdownit options
    ** See https://github.com/markdown-it/markdown-it
-  */
+   */
   markdownit: {
     injected: true,
     preset: 'default',
     html: false,
     linkify: true,
-    breaks: true,
+    breaks: true
   },
   /*
    ** Axios module configuration
@@ -104,5 +104,8 @@ module.exports = {
      ** You can extend webpack config here
      */
     extend(config, ctx) {}
+  },
+  generate: {
+    fallback: true
   }
 }
