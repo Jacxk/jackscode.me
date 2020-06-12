@@ -98,7 +98,7 @@ export default {
   props: ['site'],
   data(vm) {
     return {
-      drawer_open: true,
+      drawer_open: false,
       search: false,
       dark: vm.$vuetify.theme.dark,
       items: [

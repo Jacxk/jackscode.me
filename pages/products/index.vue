@@ -1,11 +1,5 @@
 <template>
   <v-container>
-    <v-slide-x-reverse-transition>
-      <v-alert v-if="!!alert_message" type="success" outlined text dismissible>
-        {{ alert_message }}
-      </v-alert>
-    </v-slide-x-reverse-transition>
-
     <h1 class="text-center">Product List</h1>
     <span v-if="products.length <= 0">
       There are no products... Check back later!
@@ -49,15 +43,7 @@ export default {
   },
   data() {
     return {
-      alert_message: '',
       products: []
-    }
-  },
-  methods: {
-    addToCart(item) {
-      this.alert_message = `${item.name} added to cart!`
-      this.$store.commit('toggle', item)
-      setTimeout(() => (this.alert_message = false), 10 * 1000)
     }
   }
 }

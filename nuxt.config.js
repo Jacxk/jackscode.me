@@ -47,8 +47,24 @@ module.exports = {
     // Doc: https://axios.nuxtjs.org/usage
     '@nuxtjs/axios',
     '@nuxtjs/pwa',
-    '@nuxtjs/markdownit'
+    '@nuxtjs/markdownit',
+    '@nuxtjs/auth'
   ],
+  auth: {
+    strategies: {
+      local: {
+        endpoints: {
+          login: {
+            url: '/api/auth/login',
+            method: 'post',
+            propertyName: 'token'
+          },
+          logout: { url: '/api/auth/logout', method: 'post' },
+          user: { url: '/api/auth/user', method: 'get', propertyName: 'user' }
+        }
+      }
+    }
+  },
   /*
    ** markdownit options
    ** See https://github.com/markdown-it/markdown-it
@@ -108,6 +124,7 @@ module.exports = {
     /*
      ** You can extend webpack config here
      */
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     extend(config, ctx) {}
   },
   generate: {

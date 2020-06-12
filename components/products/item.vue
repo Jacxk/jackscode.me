@@ -36,7 +36,7 @@
       <v-spacer />
 
       <v-btn icon @click.prevent="addToCart(product)">
-        <v-icon :color="product.in_cart || false ? 'primary' : 'grey'">
+        <v-icon :color="hasItem()(product) ? 'primary' : 'grey'">
           mdi-cart-plus
         </v-icon>
       </v-btn>
@@ -45,16 +45,23 @@
 </template>
 
 <script>
+import { mapActions, mapGetters } from 'vuex'
 export default {
   name: 'Item',
   props: {
     product: Object
   },
   methods: {
+    ...mapGetters(['hasItem']),
+    ...mapActions(['sendSnackbar']),
     addToCart(item) {
-      this.alert_message = `${item.name} added to cart!`
-      this.$store.commit('toggle', item)
-      setTimeout(() => (this.alert_message = false), 10 * 1000)
+      if (!this.hasItem()(item)) {
+        this.$store.commit('add', item)
+        this.sendSnackbar({ text: 'Item added to cart', color: 'success' })
+      } else {
+        this.$store.commit('remove', item)
+        this.sendSnackbar({ text: 'Item removed from cart', color: 'error' })
+      }
     }
   }
 }

@@ -46,6 +46,7 @@
 </template>
 
 <script>
+import { mapActions } from 'vuex'
 import HotItems from '../components/products/hot_items'
 
 export default {
@@ -57,8 +58,10 @@ export default {
     }
   },
   methods: {
+    ...mapActions(['sendSnackbar']),
     remove(item) {
       this.$store.commit('remove', item)
+      this.sendSnackbar({ text: 'Item removed from cart', color: 'success' })
     }
   }
 }
