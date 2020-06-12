@@ -35,11 +35,23 @@
 
       <v-spacer />
 
-      <v-btn icon @click.prevent="addToCart(product)">
-        <v-icon :color="hasItem()(product) ? 'primary' : 'grey'">
-          mdi-cart-plus
-        </v-icon>
-      </v-btn>
+      <v-tooltip bottom>
+        <template v-slot:activator="{ on, attrs }">
+          <v-btn
+            icon
+            v-bind="attrs"
+            v-on="on"
+            @click.prevent="addToCart(product)"
+          >
+            <v-icon :color="hasItem()(product) ? 'primary' : 'grey'">
+              {{ hasItem()(product) ? 'mdi-cart-off' : 'mdi-cart-plus' }}
+            </v-icon>
+          </v-btn>
+        </template>
+        <span>
+          {{ hasItem()(product) ? 'Remove from cart' : 'Add to cart' }}
+        </span>
+      </v-tooltip>
     </v-card-actions>
   </v-card>
 </template>
