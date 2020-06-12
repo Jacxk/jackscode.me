@@ -33,15 +33,19 @@
     </v-app-bar>
 
     <v-expand-transition>
-      <v-text-field
+      <v-card
         v-if="search"
-        label="Search"
-        class="pt-5 pr-5 pl-5 d-sm-none"
-        dense
-        solo
-        autofocus
-        @blur="search = false"
-      />
+        style="position: fixed; top: 50px; right: 0; left: 0; z-index: 1"
+      >
+        <v-text-field
+          label="Search"
+          class="pt-5 pr-5 pl-5 d-sm-none"
+          dense
+          autofocus
+          outlined
+          @blur="search = false"
+        />
+      </v-card>
     </v-expand-transition>
 
     <v-navigation-drawer v-model="drawer_open" clipped fixed app>
