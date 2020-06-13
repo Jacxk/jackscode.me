@@ -1,6 +1,5 @@
 export const state = () => ({
   cart: [],
-  hot: ['5ed846178e9303175c83fb12', '5ed846c18e9303175c83fb13'],
   snackbar: {
     showing: false,
     timeout: 6000,

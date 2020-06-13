@@ -25,7 +25,6 @@
 <script>
 import { mapState, mapMutations } from 'vuex'
 import Navbar from './navbar'
-
 export default {
   components: { Navbar },
   data() {
@@ -43,7 +42,27 @@ export default {
   },
   head() {
     return {
-      title: 'Hello'
+      title: 'Hello',
+      script: [
+        {
+          src: 'https://www.gstatic.com/firebasejs/7.15.1/firebase-app.js',
+          body: true
+        },
+        {
+          src:
+            'https://www.gstatic.com/firebasejs/7.15.1/firebase-analytics.js',
+          body: true
+        },
+        {
+          src:
+            'https://www.gstatic.com/firebasejs/7.15.1/firebase-remote-config.js',
+          body: true
+        },
+        {
+          src: '/firebase.js',
+          body: true
+        }
+      ]
     }
   }
 }

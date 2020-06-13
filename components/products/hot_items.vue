@@ -48,7 +48,7 @@ export default {
     scroll: Boolean
   },
   async fetch() {
-    const ids = this.$store.state.hot
+    const ids = remoteConfig.getValue('hot_items')
     const hotItems = []
 
     for (let i = 0; i < ids.length; i++) {
