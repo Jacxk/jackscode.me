@@ -110,7 +110,7 @@ module.exports = {
     proxy: true
   },
   proxy: {
-    '/api/': 'https://jackscode.herokuapp.com/product/'
+    '/api/': 'https://jackscode.herokuapp.com/'
   },
   /*
    ** vuetify module configuration
