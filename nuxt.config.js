@@ -48,7 +48,8 @@ module.exports = {
     '@nuxtjs/axios',
     '@nuxtjs/pwa',
     '@nuxtjs/markdownit',
-    '@nuxtjs/auth'
+    '@nuxtjs/auth',
+    '@nuxtjs/firebase'
   ],
   auth: {
     strategies: {
@@ -61,6 +62,31 @@ module.exports = {
           },
           logout: { url: '/api/auth/logout', method: 'post' },
           user: { url: '/api/auth/user', method: 'get', propertyName: 'user' }
+        },
+        tokenType: 'Bearer'
+      }
+    }
+  },
+  firebase: {
+    config: {
+      apiKey: 'AIzaSyD73aM65GIQd6-dDOTWNL7_bQTJQZ7Xn7k',
+      authDomain: 'jackscodedotme.firebaseapp.com',
+      databaseURL: 'https://jackscodedotme.firebaseio.com',
+      projectId: 'jackscodedotme',
+      storageBucket: 'jackscodedotme.appspot.com',
+      messagingSenderId: '730475699521',
+      appId: '1:730475699521:web:f304d722488737312f55c0',
+      measurementId: 'G-RQSXJKREY5'
+    },
+    onFirebaseHosting: false,
+    services: {
+      remoteConfig: {
+        settings: {
+          fetchTimeoutMillis: 60000,
+          minimumFetchIntervalMillis: 43200000
+        },
+        defaultConfig: {
+          hot_items: []
         }
       }
     }

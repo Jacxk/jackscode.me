@@ -14,18 +14,21 @@
   },
   "dependencies": {
     "@nuxtjs/auth": "^4.9.1",
-    "@nuxtjs/axios": "^5.3.6",
+    "@nuxtjs/axios": "^5.11.0",
+    "@nuxtjs/firebase": "^6.0.1",
     "@nuxtjs/markdownit": "^1.2.9",
     "@nuxtjs/pwa": "^3.0.0-0",
     "@nuxtjs/vuetify": "^1.11.2",
     "cross-env": "^5.2.0",
-    "express": "^4.16.4",
-    "mongoose": "^5.9.17",
-    "nuxt": "^2.0.0",
-    "vuetify": "^2.2.34"
+    "express": "^4.17.1",
+    "firebase": "^7.15.1",
+    "jsonwebtoken": "^8.5.1",
+    "mongoose": "^5.9.18",
+    "nuxt": "^2.12.2",
+    "vuetify": "^2.3.0"
   },
   "devDependencies": {
-    "@nuxt/typescript-build": "^0.6.0",
+    "@nuxt/typescript-build": "^0.6.7",
     "@nuxtjs/eslint-config-typescript": "^1.0.0",
     "@nuxtjs/eslint-module": "^1.0.0",
     "@nuxtjs/stylelint-module": "^3.1.0",

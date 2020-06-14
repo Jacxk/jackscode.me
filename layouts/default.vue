@@ -42,27 +42,7 @@ export default {
   },
   head() {
     return {
-      title: 'Hello',
-      script: [
-        {
-          src: 'https://www.gstatic.com/firebasejs/7.15.1/firebase-app.js',
-          body: true
-        },
-        {
-          src:
-            'https://www.gstatic.com/firebasejs/7.15.1/firebase-analytics.js',
-          body: true
-        },
-        {
-          src:
-            'https://www.gstatic.com/firebasejs/7.15.1/firebase-remote-config.js',
-          body: true
-        },
-        {
-          src: '/firebase.js',
-          body: true
-        }
-      ]
+      title: 'Hello'
     }
   }
 }

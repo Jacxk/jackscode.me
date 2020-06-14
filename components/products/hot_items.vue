@@ -1,6 +1,6 @@
 <template>
   <v-card outlined>
-    <v-subheader>Hot products</v-subheader>
+    <v-subheader @click="readRemoteConfig()">Hot products</v-subheader>
     <v-divider />
     <v-list-item v-if="hotItems.length < 1">
       No items found...
@@ -40,6 +40,7 @@
 
 <script>
 import Item from './item'
+
 export default {
   name: 'HotItems',
   components: { Item },
@@ -47,20 +48,38 @@ export default {
     horizontal: Boolean,
     scroll: Boolean
   },
-  async fetch() {
-    const ids = remoteConfig.getValue('hot_items')
+  data() {
+    return { hotItems: [] }
+  },
+  async mounted() {
+    await this.$fireConfig.fetchAndActivate()
+    const { _value } = await this.$fireConfig.getValue('hot_items')
+    const items = JSON.parse(_value)
+
     const hotItems = []
 
-    for (let i = 0; i < ids.length; i++) {
-      const id = ids[i]
+    for (let i = 0; i < items.length; i++) {
+      const id = items[i]
       const item = await this.$axios.$get(`/api/product/${id}`)
       hotItems.push(item)
     }
 
     this.hotItems = hotItems
   },
-  data() {
-    return { hotItems: [] }
+  methods: {
+    async readRemoteConfig() {
+      try {
+        await this.$fireConfig.fetchAndActivate()
+      } catch (e) {
+        alert(e)
+        return
+      }
+      console.info(this.$fireConfig)
+      const exampleMessage = await this.$fireConfig.getValue('hot_items')
+      alert(
+        `Success. Read RemoteConfig parameter 'exampleMessage' is: ${exampleMessage._value}`
+      )
+    }
   }
 }
 </script>
