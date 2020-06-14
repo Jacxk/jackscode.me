@@ -4,7 +4,7 @@ const { Nuxt, Builder } = require('nuxt')
 const app = express()
 
 const config = require('../nuxt.config.js')
-const api = require('./api.js')
+const backend = require('./backend/')
 const { connectDB } = require('./database/index.js')
 
 // Import and Set Nuxt.js options
@@ -27,7 +27,8 @@ async function start() {
   }
 
   app.use(express.json())
-  app.use('/api', api)
+  app.use(express.urlencoded({ extended: false }))
+  app.use('/api', backend)
   // Give nuxt middleware to express
   app.use(nuxt.render)
 

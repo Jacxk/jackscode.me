@@ -107,7 +107,7 @@ module.exports = {
    ** See https://axios.nuxtjs.org/options
    */
   axios: {
-    proxy: true
+    proxy: process.env.NODE_ENV !== 'development'
   },
   proxy: {
     '/api/': 'https://jackscode.herokuapp.com/product/'

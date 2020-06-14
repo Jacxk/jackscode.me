@@ -30,8 +30,44 @@
           <v-icon>mdi-cart</v-icon>
         </v-badge>
       </v-btn>
+      <v-menu offset-y transition="slide-y-transition">
+        <template v-slot:activator="{ on, attrs }">
+          <v-btn class="ml-2" v-bind="attrs" icon v-on="on">
+            <v-icon v-if="!loggedIn">mdi-account</v-icon>
+            <v-avatar v-else>
+              <v-img src="https://via.placeholder.com/150" />
+            </v-avatar>
+          </v-btn>
+        </template>
+        <v-list>
+          <v-list-item
+            v-for="(item, index) in loggedIn ? items.logged : items.not_logged"
+            :key="index"
+            dense
+            @click=""
+          >
+            <v-list-item-icon>
+              <v-icon>mdi-{{ item.icon }}</v-icon>
+            </v-list-item-icon>
+            <v-list-item-title>{{ item.title }}</v-list-item-title>
+          </v-list-item>
+          <v-divider class="my-1" />
+          <v-list-item>
+            <v-btn v-if="loggedIn" color="error" to="/signout" block outlined>
+              Sign out
+            </v-btn>
+            <div v-else>
+              <v-btn class="mx-1" color="success" to="/login" outlined>
+                Login
+              </v-btn>
+              <v-btn class="mx-1" color="warning" to="/register" outlined>
+                Register
+              </v-btn>
+            </div>
+          </v-list-item>
+        </v-list>
+      </v-menu>
     </v-app-bar>
-
     <v-expand-transition>
       <v-card
         v-if="search"
@@ -49,20 +85,12 @@
     </v-expand-transition>
 
     <v-navigation-drawer v-model="drawer_open" clipped fixed app>
-      <v-list-item>
-        <v-list-item-avatar>
-          <v-img src="https://via.placeholder.com/150"></v-img>
-        </v-list-item-avatar>
-
-        <v-list-item-content>
-          <v-list-item-title>{user.name}</v-list-item-title>
-        </v-list-item-content>
-      </v-list-item>
-
-      <v-divider />
-
-      <v-list dense>
-        <v-list-item v-for="item in items" :key="item.id" :to="item.href">
+      <v-list>
+        <v-list-item
+          v-for="item in items.drawer"
+          :key="item.id"
+          :to="item.href"
+        >
           <v-list-item-icon>
             <v-icon>mdi-{{ item.icon }}</v-icon>
           </v-list-item-icon>
@@ -100,23 +128,38 @@
 export default {
   name: 'Navbar',
   props: ['site'],
-  data(vm) {
+  data() {
     return {
       drawer_open: false,
       search: false,
-      dark: vm.$vuetify.theme.dark,
-      items: [
-        { title: 'Home', icon: 'home', href: '/' },
-        { title: 'All Products', icon: 'shopping', href: '/products' },
-        { title: 'My Cart', icon: 'cart', href: '/cart' }
-      ],
+      items: {
+        drawer: [
+          { title: 'Home', icon: 'home', href: '/' },
+          { title: 'All Products', icon: 'shopping', href: '/products' },
+          { title: 'My Cart', icon: 'cart', href: '/cart' }
+        ],
+        logged: [
+          { title: 'Account', icon: 'account', href: '/users/@me' },
+          {
+            title: 'My Orders',
+            icon: 'storefront-outline',
+            href: '/account/orders'
+          }
+        ],
+        not_logged: []
+      },
       toggleTheme: () => {
-        vm.$vuetify.theme.dark = !vm.$vuetify.theme.dark
-        this.dark = !this.dark
+        this.$vuetify.theme.dark = !this.$vuetify.theme.dark
       }
     }
   },
   computed: {
+    loggedIn() {
+      return this.$auth.loggedIn
+    },
+    dark() {
+      return this.$vuetify.theme.dark
+    },
     inCart() {
       return String(this.$store.state.cart.length)
     }

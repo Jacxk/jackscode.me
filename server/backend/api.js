@@ -1,5 +1,5 @@
 const { Router } = require('express')
-const Schemas = require('./database/Schemas.js')
+const Schemas = require('../database/Schemas.js')
 
 const api = Router()
 
