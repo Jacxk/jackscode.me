@@ -15,7 +15,7 @@ services:
       - backend
     volumes:
     - ./frontend:/usr/src
-    command: npm run start
+    command: npm run start-dev
   backend:
     env_file:
       - .env
@@ -26,4 +26,4 @@ services:
       - ${SERVER_PORT}:${SERVER_PORT}
     volumes:
       - ./backend:/usr/src
-    command: npm run start
+    command: npm run start-dev

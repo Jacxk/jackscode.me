@@ -60,7 +60,10 @@ export default {
 
     for (let i = 0; i < items.length; i++) {
       const id = items[i]
-      const item = await this.$axios.$get(`/api/product/${id}`)
+      const item = await this.$axios.$get(`/api/products/${id}`)
+      if (item.error) {
+        continue
+      }
       hotItems.push(item)
     }
 

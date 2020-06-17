@@ -142,6 +142,11 @@ module.exports = {
       }
     }
   },
+  watchers: {
+    webpack: {
+      poll: true
+    }
+  },
   /*
    ** Build configuration
    */
