@@ -109,7 +109,7 @@ module.exports = {
     proxy: true
   },
   proxy: {
-    '/api/': 'http://0.0.0.0:3030'
+    '/api/': 'http://backend:3030'
   },
   /*
    ** vuetify module configuration

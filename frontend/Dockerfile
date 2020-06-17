@@ -1,7 +1,7 @@
 ###########
 # Builder #
 ###########
-FROM node:12.14-alpine AS builder
+FROM node:12-alpine
 
 WORKDIR /usr/src
 
@@ -10,27 +10,9 @@ COPY package*.json ./
 RUN npm ci
 
 # Copy source
-COPY . .
+COPY . /usr/src
 
 # Build source
 RUN npm run build
 
-#########
-# Image #
-#########
-FROM node:12.14-alpine
-
-WORKDIR /usr/src
-
-# Set and expose port
-ARG NUXT_PORT
-EXPOSE $NUXT_PORT
-
-# Install dependencies
-COPY package*.json ./
-RUN npm ci --production
-
-# Copy dist
-COPY --from=builder /usr/src/.nuxt .nuxt
-
-CMD ["yarn", "start"]
+CMD ["npm", "start"]

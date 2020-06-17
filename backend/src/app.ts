@@ -1,18 +1,21 @@
 import express from 'express'
 // @ts-ignore
 import cookieParser from 'cookie-parser'
+import morgan from 'morgan'
 import { getStatus } from './helpers'
 
 import routes from './routes'
 
+
 const app = express()
-const port: number = parseInt(process.env.BE_PORT) || 3000
-const host: string = process.env.BE_HOST || 'localhost'
+const port: number = parseInt(process.env.SERVER_PORT) || 3000
+const host: string = process.env.SERVER_HOST || 'localhost'
 
 app.use(express.json())
 app.use(express.urlencoded({ extended: false }))
 app.use(cookieParser())
 
+app.use(morgan('dev'))
 app.use('/api', routes)
 
 app.use((_, res) => {
