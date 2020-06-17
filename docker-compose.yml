@@ -1,0 +1,29 @@
+version: "3.8"
+
+services:
+  frontend:
+    container_name: frontend
+    build:
+      args:
+        NUXT_PORT: ${NUXT_PORT}
+      context: frontend
+      dockerfile: Dockerfile
+    ports:
+      - 3000:3000
+    depends_on:
+      - backend
+    env_file:
+      - .env
+    restart: always
+  backend:
+    container_name: backend
+    build:
+      args:
+        BE_PORT: ${BE_PORT}
+      context: backend
+      dockerfile: Dockerfile
+    ports:
+      - 3030:3030
+    env_file:
+      - .env
+    restart: always
