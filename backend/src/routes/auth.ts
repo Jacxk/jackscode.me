@@ -1,95 +1,79 @@
 import { Router } from 'express'
-import jwt from 'jsonwebtoken'
+import { JWT, Password, sendError } from '../helpers'
+import { Schemas } from '../database/'
+import { newUser, returningUser } from '../validation'
 
 const auth = Router()
 
-const secret = 'iloveyou'
-
-const users = [
-  {
-    username: 'john@g.c',
-    password: 'password123admin',
-    role: 'admin'
-  },
-  {
-    username: 'anna',
-    password: 'password123member',
-    role: 'member'
-  }
-]
-const books = [
-  {
-    author: 'Chinua Achebe',
-    country: 'Nigeria',
-    language: 'English',
-    pages: 209,
-    title: 'Things Fall Apart',
-    year: 1958
-  },
-  {
-    author: 'Hans Christian Andersen',
-    country: 'Denmark',
-    language: 'Danish',
-    pages: 784,
-    title: 'Fairy tales',
-    year: 1836
-  },
-  {
-    author: 'Dante Alighieri',
-    country: 'Italy',
-    language: 'Italian',
-    pages: 928,
-    title: 'The Divine Comedy',
-    year: 1315
-  }
-]
-
-const authenticateJWT = (req, res, next) => {
-  const authHeader = req.headers.authorization
-
-  if (authHeader) {
-    const token = authHeader.split(' ')[1]
-
-    jwt.verify(token, secret, (err, user) => {
-      if (err) {
-        return res.sendStatus(403)
-      }
-
-      req.user = user
-      next()
-    })
-  } else {
-    res.sendStatus(401)
-  }
-}
-
-auth.post('/login', function(req, res) {
+auth.post('/register', async (req, res) => {
   try {
-    const { username, password } = req.body
+    const body = req.body
 
-    const user = users.find((u) => {
-      return u.username === username && u.password === password
-    })
-    if (user) {
-      const token = jwt.sign(
-        {
-          username: user.username,
-          role: user.role
-        },
-        secret
-      )
-
-      res.json({ token })
-    } else {
-      res.json({ error: 'Username or password incorrect' })
+    const { error } = newUser(body)
+    if (error) {
+      return sendError(res, error.message, 400)
     }
+
+    const exists = await Schemas.User.findOne({ email: body.email })
+    if (exists) {
+      return sendError(res, 'Email already exists', 400)
+    }
+
+
+    let user: any = new Schemas.User({
+      ...body,
+      password: await Password.hash(body.password)
+    })
+    user.token = JWT.createAccessToken(Object.assign({}, user)._doc)
+
+    await user.save()
+    delete user.password
+
+    res.json(user)
+
   } catch (e) {
-    res.json({ status: 500, message: 'Internal error!' })
+    console.log(e)
+    return sendError(res)
   }
 })
 
-auth.get('/books', authenticateJWT, (_, res) => {
-  res.json(books)
+auth.post('/login', async (req, res) => {
+  try {
+    const body = req.body
+    console.log(body)
+    const { error } = returningUser(body)
+    if (error) {
+      return sendError(res, error.message, 400)
+    }
+
+    const user: any = await Schemas.User
+      .findOne({ email: body.email })
+      .lean()
+
+    if (!user) {
+      return sendError(res, 'Incorrect email', 400)
+    }
+
+    const valid = await Password.isValid(body.password, user.password)
+    if (!valid) {
+      return sendError(res, 'Incorrect password', 400)
+    }
+
+    res.json({ token: user.token })
+  } catch (e) {
+    console.log(e)
+    return sendError(res)
+  }
+})
+
+auth.get('/user', JWT.authenticate, async (req, res) => {
+  try {
+    return res.json(req.user)
+  } catch (e) {
+    console.log(e)
+    return sendError(res)
+  }
+
 })
 
 export default auth

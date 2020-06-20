@@ -1,7 +1,7 @@
 import { model, Schema } from 'mongoose'
 
 const schema = new Schema({
-  name: {
+  username: {
     type: String,
     required: true
   },
@@ -10,18 +10,12 @@ const schema = new Schema({
     required: true
   },
   password: {
-    salt: {
-      type: String,
-      required: true
-    },
-    hash: {
-      type: String,
-      required: true
-    }
+    type: String,
+    required: true
   },
-  tokens: {
-    access: String,
-    refresh: String
+  token: {
+    type: String,
+    default: ''
   },
   cart: [
     {

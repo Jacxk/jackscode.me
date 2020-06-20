@@ -49,16 +49,13 @@
         </v-card-text>
       </v-card>
     </v-col>
-    {{ books }}
   </v-row>
 </template>
 
 <script>
 import { mapActions } from 'vuex'
 export default {
-  async asyncData({ $axios }) {
-    return { books: await $axios.$get('/api/auth/books') }
-  },
+  middleware: 'guest',
   data() {
     return {
       why_login: [
@@ -68,7 +65,6 @@ export default {
       ],
       valid: true,
       hide: true,
-      times: 0,
       login: {
         email: '',
         password: ''
@@ -89,18 +85,13 @@ export default {
   methods: {
     ...mapActions(['sendSnackbar']),
     submit() {
-      this.times++
       if (!this.$refs.form.validate()) {
         this.sendSnackbar({ text: 'Invalid data provided', color: 'red' })
-        return
       }
 
       this.$auth
         .loginWith('local', {
-          data: {
-            username: this.username,
-            password: this.password
-          }
+          data: this.login
         })
         .then(() => {
           this.sendSnackbar({
@@ -108,7 +99,12 @@ export default {
             color: 'success'
           })
         })
-        .catch(console.error)
+        .catch((error) => {
+          this.sendSnackbar({
+            text: error.message,
+            color: 'error'
+          })
+        })
     }
   }
 }

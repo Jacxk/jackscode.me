@@ -30,11 +30,7 @@
           <v-icon>mdi-cart</v-icon>
         </v-badge>
       </v-btn>
-      <v-menu
-        offset-y
-        :close-on-content-click="false"
-        transition="slide-y-transition"
-      >
+      <v-menu offset-y transition="slide-y-transition">
         <template v-slot:activator="{ on, attrs }">
           <v-btn class="ml-2" v-bind="attrs" icon v-on="on">
             <v-icon v-if="!loggedIn">mdi-account</v-icon>
@@ -48,23 +44,29 @@
             v-for="(item, index) in loggedIn ? items.logged : items.not_logged"
             :key="index"
             dense
-            @click=""
+            :to="item.href"
           >
             <v-list-item-icon>
               <v-icon>mdi-{{ item.icon }}</v-icon>
             </v-list-item-icon>
             <v-list-item-title>{{ item.title }}</v-list-item-title>
           </v-list-item>
-          <v-divider class="my-1" />
+          <v-divider v-if="loggedIn" class="my-1" />
           <v-list-item>
-            <v-btn v-if="loggedIn" color="error" to="/signout" block outlined>
+            <v-btn
+              v-if="loggedIn"
+              color="error"
+              block
+              outlined
+              @click="$auth.logout()"
+            >
               Sign out
             </v-btn>
             <div v-else>
-              <v-btn class="mx-1" color="success" to="/login" outlined>
+              <v-btn class="mx-1" color="success" to="/login" outlined block>
                 Login
               </v-btn>
-              <v-btn class="mx-1" color="warning" to="/register" outlined>
+              <v-btn class="mx-1" color="warning" to="/register" outlined block>
                 Register
               </v-btn>
             </div>
@@ -159,7 +161,7 @@ export default {
   },
   computed: {
     loggedIn() {
-      return false // this.$auth.loggedIn
+      return this.$auth.loggedIn
     },
     dark() {
       return this.$vuetify.theme.dark

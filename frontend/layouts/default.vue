@@ -16,9 +16,6 @@
       @input="hideSnackbar"
     >
       {{ snackbar.text }}
-      <v-btn dark text @click="hideSnackbar">
-        Close
-      </v-btn>
     </v-snackbar>
   </v-app>
 </template>

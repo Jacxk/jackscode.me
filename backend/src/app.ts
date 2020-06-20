@@ -19,7 +19,7 @@ app.use(morgan('dev'))
 app.use('/api', routes)
 
 app.use((_, res) => {
-  res.json({ error: 'Invalid endpoint' })
+  res.status(404).json({ error: 'Invalid endpoint' })
 })
 
 app.use((error, req, res, _) => {

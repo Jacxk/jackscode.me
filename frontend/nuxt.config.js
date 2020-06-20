@@ -47,7 +47,7 @@ module.exports = {
     '@nuxtjs/axios',
     '@nuxtjs/pwa',
     '@nuxtjs/markdownit',
-    // '@nuxtjs/auth',
+    '@nuxtjs/auth',
     '@nuxtjs/firebase'
   ],
   auth: {
@@ -60,9 +60,8 @@ module.exports = {
             propertyName: 'token'
           },
           logout: { url: '/api/auth/logout', method: 'post' },
-          user: { url: '/api/auth/user', method: 'get', propertyName: 'user' }
-        },
-        tokenType: 'Bearer'
+          user: { url: '/api/auth/user', method: 'get', propertyName: false }
+        }
       }
     }
   },

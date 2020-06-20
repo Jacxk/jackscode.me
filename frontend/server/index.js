@@ -21,7 +21,6 @@ async function start() {
     await builder.build()
   }
 
-  app.use(express.json())
   app.use(express.urlencoded({ extended: false }))
   // Give nuxt middleware to express
   app.use(nuxt.render)

@@ -47,7 +47,9 @@
                 class="align-end"
                 gradient="to bottom, rgba(0,0,0,0),rgba(0,0,0,.2), rgba(0,0,0,.8)"
               >
-                <v-card-title>{{ products.name || 'No Title...' }}</v-card-title>
+                <v-card-title>{{
+                  products.name || 'No Title...'
+                }}</v-card-title>
               </v-img>
 
               <v-card-text class="mb-10">
@@ -97,6 +99,7 @@
 import axios from 'axios'
 
 export default {
+  middleware: 'auth',
   name: 'Create',
   data() {
     return {

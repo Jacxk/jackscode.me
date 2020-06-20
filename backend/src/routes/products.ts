@@ -1,9 +1,10 @@
 import { Router } from 'express'
 import { Schemas } from '../database'
+import { newProduct } from '../validation'
 
 const products = Router()
 
-products.get('/products', async function(_, res) {
+products.get('/', async function(_, res) {
   try {
     const products = await Schemas.Product.find({}).lean()
     res.json(products)
@@ -13,7 +14,7 @@ products.get('/products', async function(_, res) {
   }
 })
 
-products.get('/products/:id', async function(req, res) {
+products.get('/:id', async function(req, res) {
   try {
     const product = await Schemas.Product.findById(req.params.id).lean()
     res.json(product)
@@ -23,9 +24,20 @@ products.get('/products/:id', async function(req, res) {
   }
 })
 
-products.post('/products', async function(req, res) {
+products.put('/:id', async function(req, res) {
+  // TODO
+})
+
+products.post('/', async function(req, res) {
   try {
-    const product = new Schemas.Product(req.body)
+    const body = req.body;
+
+    const { error } = newProduct(body)
+    if (error) {
+      return res.status(400).json({ error })
+    }
+
+    const product = new Schemas.Product(body)
     await product.save()
     res.json(product)
   } catch (e) {
