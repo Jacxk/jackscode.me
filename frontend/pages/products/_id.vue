@@ -109,31 +109,9 @@
 
               <v-list v-for="i in 5" :key="i">
                 <v-divider />
-
-                <v-list-item>
-                  <v-list-item-avatar>
-                    <v-img :src="product.picture" />
-                  </v-list-item-avatar>
-
-                  <v-list-item-content>
-                    <v-list-item-title class="d-flex justify-space-between">
-                      <span>Person #{{ i }}</span>
-                      <v-rating
-                        :value="Math.random() * 5"
-                        color="yellow darken-3"
-                        background-color="grey darken-1"
-                        empty-icon="$ratingFull"
-                        half-increments
-                        readonly
-                        small
-                        dense
-                      />
-                    </v-list-item-title>
-                    <v-list-item-subtitle
-                      >This Item is awesome</v-list-item-subtitle
-                    >
-                  </v-list-item-content>
-                </v-list-item>
+                <Rating :title="'User ' + i" :rating="5"
+                  >Rating #{{ i }}</Rating
+                >
               </v-list>
             </v-card>
           </v-col>
@@ -146,10 +124,11 @@
 <script>
 import { mapGetters, mapMutations } from 'vuex'
 import HotItems from '../../components/products/hot_items'
+import Rating from '../../components/products/rating'
 
 export default {
   name: 'Id',
-  components: { HotItems },
+  components: { Rating, HotItems },
   async asyncData({ params, $axios }) {
     try {
       const product = await $axios.$get(`/api/products/${params.id}`)

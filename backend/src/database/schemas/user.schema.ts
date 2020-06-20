@@ -17,6 +17,24 @@ const schema = new Schema({
     type: String,
     default: ''
   },
+  avatar: {
+    type: String,
+    default: 'https://via.placeholder.com/200'
+  },
+  products_bought: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: 'product',
+      default: []
+    }
+  ],
+  ratings_given: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: 'rating',
+      default: []
+    }
+  ],
   cart: [
     {
       type: Schema.Types.ObjectId,
