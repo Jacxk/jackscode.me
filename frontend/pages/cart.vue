@@ -4,7 +4,7 @@
       <v-card outlined>
         <v-list>
           <v-subheader class="center-text">Your Cart</v-subheader>
-          <div v-if="this.$store.state.cart.length <= 0">
+          <div v-if="cart.length <= 0">
             <v-divider />
             <v-subheader>
               <span>
@@ -14,7 +14,7 @@
               </span>
             </v-subheader>
           </div>
-          <template v-for="item in items">
+          <template v-for="item in cart">
             <div :key="item._id">
               <v-divider />
 
@@ -52,19 +52,21 @@ import HotItems from '../components/products/hot_items'
 export default {
   name: 'Cart',
   components: { HotItems },
+  async asyncData({ $axios, $auth, store }) {
+    const res = await $axios.$get(`/api/users/${$auth.user._id}/cart`)
+    store.dispatch('setCart', res.cart)
+  },
   computed: {
-    items() {
+    cart() {
       return this.$store.state.cart
     }
   },
   methods: {
-    ...mapActions(['sendSnackbar']),
+    ...mapActions(['sendSnackbar', 'removeFromCart', 'setCart']),
     remove(item) {
-      this.$store.commit('remove', item)
+      this.removeFromCart(item)
       this.sendSnackbar({ text: 'Item removed from cart', color: 'success' })
     }
   }
 }
 </script>
-
-<style scoped></style>

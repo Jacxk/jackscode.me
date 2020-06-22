@@ -13,7 +13,7 @@
       :timeout="snackbar.timeout"
       :bottom="true"
       outlined
-      @input="hideSnackbar"
+      @input="HIDE_SNACKBAR"
     >
       {{ snackbar.text }}
     </v-snackbar>
@@ -26,6 +26,10 @@ import Navbar from './navbar'
 export default {
   components: { Navbar },
   data() {
+    this.$store.dispatch(
+      'setCart',
+      this.$auth.user.cart.map((_id) => ({ _id }))
+    )
     return {
       site: {
         name: "Jack's Store"
@@ -36,7 +40,7 @@ export default {
     ...mapState(['snackbar'])
   },
   methods: {
-    ...mapMutations(['hideSnackbar'])
+    ...mapMutations(['HIDE_SNACKBAR'])
   },
   head() {
     return {

@@ -37,12 +37,7 @@
 
       <v-tooltip bottom>
         <template v-slot:activator="{ on, attrs }">
-          <v-btn
-            icon
-            v-bind="attrs"
-            v-on="on"
-            @click.prevent="addToCart(product)"
-          >
+          <v-btn icon v-bind="attrs" v-on="on" @click.prevent="add(product)">
             <v-icon :color="hasItem()(product) ? 'primary' : 'grey'">
               {{ hasItem()(product) ? 'mdi-cart-off' : 'mdi-cart-plus' }}
             </v-icon>
@@ -65,14 +60,12 @@ export default {
   },
   methods: {
     ...mapGetters(['hasItem']),
-    ...mapActions(['sendSnackbar']),
-    addToCart(item) {
+    ...mapActions(['sendSnackbar', 'addToCart', 'removeFromCart']),
+    add(item) {
       if (!this.hasItem()(item)) {
-        this.$store.commit('add', item)
-        this.sendSnackbar({ text: 'Item added to cart', color: 'success' })
+        this.addToCart(item)
       } else {
-        this.$store.commit('remove', item)
-        this.sendSnackbar({ text: 'Item removed from cart', color: 'error' })
+        this.removeFromCart(item)
       }
     }
   }

@@ -122,7 +122,7 @@
 </template>
 
 <script>
-import { mapGetters, mapMutations } from 'vuex'
+import { mapGetters, mapActions } from 'vuex'
 import HotItems from '../../components/products/hot_items'
 import Rating from '../../components/products/rating'
 
@@ -150,9 +150,9 @@ export default {
     })
   },
   methods: {
-    ...mapMutations({
-      addCart: 'add',
-      removeCart: 'remove'
+    ...mapActions({
+      addCart: 'addToCart',
+      removeCart: 'removeFromCart'
     })
   }
 }

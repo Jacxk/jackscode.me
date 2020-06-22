@@ -17,7 +17,8 @@
     "express": "^4.17.1",
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^5.9.18",
-    "morgan": "^1.10.0"
+    "morgan": "^1.10.0",
+    "stripe": "^8.64.0"
   },
   "devDependencies": {
     "@types/bcrypt": "^3.0.0",
@@ -26,6 +27,7 @@
     "@types/mongoose": "^5.7.16",
     "@types/node": "^13.13.5",
     "@types/passport": "^1.0.3",
+    "@types/stripe": "^7.13.23",
     "@typescript-eslint/eslint-plugin": "^2.34.0",
     "@typescript-eslint/parser": "^2.34.0",
     "eslint": "^7.0.0",

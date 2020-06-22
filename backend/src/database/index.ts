@@ -1,4 +1,4 @@
-import { connect, Mongoose } from 'mongoose'
+import { connect, ConnectionOptions, Mongoose } from 'mongoose'
 
 const [ user, password, host, db ] = [
   process.env.MONGO_USER,
@@ -9,10 +9,11 @@ const [ user, password, host, db ] = [
 
 const url = `mongodb+srv://${ user }:${ password }@${ host }/${ db }`
 
-const options = {
+const options: ConnectionOptions = {
   useNewUrlParser: true,
   poolSize: 4,
-  useUnifiedTopology: true
+  useUnifiedTopology: true,
+  useFindAndModify: false
 }
 
 export function connectDB(): Promise<Mongoose> {

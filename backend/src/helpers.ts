@@ -2,6 +2,7 @@ import jwt from 'jsonwebtoken'
 import bcrypt from 'bcrypt'
 import { Schemas } from './database/'
 import { Response } from 'express'
+import { Types } from "mongoose"
 
 const secret = process.env.ACCESS_TOKEN_SECRET || 'youllneverfindme'
 
@@ -62,4 +63,9 @@ export const Password = {
   async isValid(password, compare) {
     return await bcrypt.compare(password, compare)
   }
+}
+
+export function isValidObjectId(id) {
+  const object = Types.ObjectId(id)
+  return object.equals(id)
 }

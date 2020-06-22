@@ -68,7 +68,11 @@ auth.post('/login', async (req, res) => {
 
 auth.get('/user', JWT.authenticate, async (req, res) => {
   try {
-    return res.json(req.user)
+    const user = await Schemas.User
+      // @ts-ignore
+      .findById(req.user._id)
+      .lean()
+    return res.json(user)
   } catch (e) {
     console.log(e)
     return sendError(res)
