@@ -60,6 +60,11 @@ export function newProduct(data) {
       .string()
       .base64()
       .required(),
+    price: Joi
+      .number()
+      .min(100)
+      .max(5000)
+      .required(),
     version: Joi
       .string()
       .min(1)
@@ -86,6 +91,10 @@ export function productUpdate(data) {
     picture: Joi
       .string()
       .base64(),
+    price: Joi
+      .number()
+      .min(100)
+      .max(5000),
     version: Joi
       .string()
       .min(1)

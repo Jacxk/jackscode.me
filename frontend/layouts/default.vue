@@ -26,10 +26,12 @@ import Navbar from './navbar'
 export default {
   components: { Navbar },
   data() {
-    this.$store.dispatch(
-      'setCart',
-      this.$auth.user.cart.map((_id) => ({ _id }))
-    )
+    if (this.$auth.loggedIn) {
+      this.$store.dispatch(
+        'setCart',
+        this.$auth.user.cart.map((_id) => ({ _id }))
+      )
+    }
     return {
       site: {
         name: "Jack's Store"

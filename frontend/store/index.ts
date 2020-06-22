@@ -13,11 +13,16 @@ export const state = () => ({
 export const mutations = {
   ADD_TO_CART({ cart, auth }: any, item: Item) {
     cart.push(item)
-    auth.user.cart.push(item)
+    if (auth.loggedIn) {
+      auth.user.cart.push(item)
+    }
   },
   REMOVE_FROM_CART(state: any, item: Item) {
     state.cart = state.cart.filter((it: Item) => it._id !== item._id)
-    state.auth.user.cart = state.cart
+
+    if (state.auth.loggedIn) {
+      state.auth.user.cart = state.cart
+    }
   },
   SEND_SNACKBAR(state: any, snackbar: Snackbar) {
     state.snackbar = { ...snackbar, showing: true }
@@ -27,17 +32,19 @@ export const mutations = {
   },
   SET_CART(state: any, newCart: Array<any>) {
     state.cart = newCart
-    state.auth.cart = newCart
+    if (state.auth.loggedIn) {
+      state.auth.cart = newCart
+    }
   }
 }
 export const actions = {
   sendSnackbar({ commit }: any, snackbar: Snackbar) {
-    commit('HIDE_SNACKBAR')
+    commit('HIDE_SNACKBAR', null)
     setTimeout(() => {
-      commit('SEND_SNACKBAR', { text: snackbar, color: 'error' })
+      commit('SEND_SNACKBAR', snackbar)
     }, 200)
   },
-  addToCart({ state, commit }: any, item: Item) {
+  addToCart({ state, commit, dispatch }: any, item: Item) {
     const { auth } = state
     if (auth.loggedIn) {
       axios
@@ -46,26 +53,26 @@ export const actions = {
         })
         .then(() => {
           commit('ADD_TO_CART', item)
-          commit('SEND_SNACKBAR', {
+          dispatch('sendSnackbar', {
             text: 'Item added to cart',
             color: 'success'
           })
         })
         .catch((e) => {
-          commit('SEND_SNACKBAR', {
+          dispatch('sendSnackbar', {
             text: e.response.data.error,
             color: 'error'
           })
         })
     } else {
       commit('ADD_TO_CART', item)
-      commit('SEND_SNACKBAR', {
+      dispatch('sendSnackbar', {
         text: 'Item added to cart',
         color: 'success'
       })
     }
   },
-  removeFromCart({ state, commit }: any, item: Item) {
+  removeFromCart({ state, commit, dispatch }: any, item: Item) {
     const { auth } = state
     if (auth.loggedIn) {
       axios
@@ -76,20 +83,20 @@ export const actions = {
         })
         .then(() => {
           commit('REMOVE_FROM_CART', item)
-          commit('SEND_SNACKBAR', {
+          dispatch('sendSnackbar', {
             text: 'Item removed from cart',
             color: 'success'
           })
         })
         .catch((e) => {
-          commit('SEND_SNACKBAR', {
+          dispatch('sendSnackbar', {
             text: e.response.data.error,
             color: 'error'
           })
         })
     } else {
       commit('REMOVE_FROM_CART', item)
-      commit('SEND_SNACKBAR', {
+      dispatch('sendSnackbar', {
         text: 'Item removed from cart',
         color: 'success'
       })
@@ -97,6 +104,9 @@ export const actions = {
   },
   setCart({ commit }: any, cart: Array<any>) {
     commit('SET_CART', cart)
+  },
+  logout() {
+    // TODO: Clear cart
   }
 }
 

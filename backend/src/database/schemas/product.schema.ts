@@ -21,6 +21,12 @@ const schema = new Schema({
     type: String,
     required: true
   },
+  price: {
+    type: Number,
+    min: 100,
+    max: 5000,
+    required: true
+  },
   rating: {
     type: Number,
     default: 0

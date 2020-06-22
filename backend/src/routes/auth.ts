@@ -77,7 +77,6 @@ auth.get('/user', JWT.authenticate, async (req, res) => {
     console.log(e)
     return sendError(res)
   }
-
 })
 
 export default auth

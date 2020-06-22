@@ -53,8 +53,10 @@ export default {
   name: 'Cart',
   components: { HotItems },
   async asyncData({ $axios, $auth, store }) {
-    const res = await $axios.$get(`/api/users/${$auth.user._id}/cart`)
-    store.dispatch('setCart', res.cart)
+    if ($auth.loggedIn) {
+      const res = await $axios.$get(`/api/users/${$auth.user._id}/cart`)
+      store.dispatch('setCart', res.cart)
+    }
   },
   computed: {
     cart() {
