@@ -1,5 +1,5 @@
 import { Router } from 'express'
-import { isValidObjectId, sendError } from '../helpers'
+import { isValidObjectId, sendError, stripe } from '../helpers'
 import { Schemas } from '../database/'
 
 const users = Router()
@@ -34,7 +34,11 @@ users.use('/:id/*', async (req, res, next) => {
   const body = req.body
 
   if (!body) {
-    return sendError(res, '')
+    return sendError(res, 'No body found', 400)
+  }
+
+  if (!body.product) {
+    return next()
   }
 
   if (!isValidObjectId(body.product)) {
@@ -42,7 +46,7 @@ users.use('/:id/*', async (req, res, next) => {
   }
 
   try {
-    const exists = await Schemas.Product.exists({_id: body.product})
+    const exists = await Schemas.Product.exists({ _id: body.product })
     if (!exists) {
       return sendError(res, 'Product does not exist')
     }
@@ -73,6 +77,36 @@ users.delete('/:id/cart', async (req, res) => {
     const { product } = req.body
 
     await Schemas.User.findByIdAndUpdate(id, { $pull: { cart: product } })
+
+    res.sendStatus(204)
+  } catch (e) {
+    console.log(e)
+    return sendError(res)
+  }
+})
+
+users.put('/:id/product', async (req, res) => {
+  try {
+    const userId = req.params['id']
+    const { id, status } = req.body
+
+    if (status !== 'succeeded') {
+      return sendError(res, 'Payment did not succeeded', 400)
+    }
+
+    const paymentIntent = await stripe.paymentIntents.retrieve(id)
+    console.log(paymentIntent)
+    if (!paymentIntent) {
+      return sendError(res, 'Payment not found', 400)
+    }
+
+    await Schemas.User.findByIdAndUpdate(userId, {
+      $push: {
+        products_bought: {
+          $each: JSON.parse(paymentIntent.metadata.products)
+        }
+      }
+    })
 
     res.sendStatus(204)
   } catch (e) {

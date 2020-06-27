@@ -3,6 +3,7 @@ import bcrypt from 'bcrypt'
 import { Schemas } from './database/'
 import { Response } from 'express'
 import { Types } from "mongoose"
+import Stripe from 'stripe'
 
 const secret = process.env.ACCESS_TOKEN_SECRET || 'youllneverfindme'
 
@@ -69,3 +70,5 @@ export function isValidObjectId(id) {
   const object = Types.ObjectId(id)
   return object.equals(id)
 }
+
+export const stripe = new Stripe(process.env.STRIPE_API_KEY, null)

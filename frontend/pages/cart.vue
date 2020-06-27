@@ -3,9 +3,12 @@
     <v-col cols="12" xs="12" sm="12" md="9" xl="9">
       <v-card outlined>
         <v-list>
-          <v-subheader class="center-text">Your Cart</v-subheader>
-          <div v-if="cart.length <= 0">
-            <v-divider />
+          <v-subheader class="d-flex justify-space-between">
+            <span>Your Cart</span>
+            <span>Total: ${{ totalPrice }}</span>
+          </v-subheader>
+          <v-divider />
+          <div v-if="cartEmpty()">
             <v-subheader>
               <span>
                 Cart is empty. Go to the
@@ -14,29 +17,24 @@
               </span>
             </v-subheader>
           </div>
-          <template v-for="item in cart">
+          <template v-for="item in cart" v-else>
             <div :key="item._id">
+              <Item deleteable :product="item" dense />
               <v-divider />
-
-              <v-list-item :to="'/products/' + item._id" :ripple="false">
-                <v-list-item-avatar>
-                  <v-img :src="item.picture" />
-                </v-list-item-avatar>
-
-                <v-list-item-content>
-                  <v-list-item-title v-text="item.name" />
-                  <v-list-item-subtitle v-text="item.description" />
-                </v-list-item-content>
-
-                <v-list-item-action>
-                  <v-btn icon @click.prevent="remove(item)">
-                    <v-icon>mdi-close</v-icon>
-                  </v-btn>
-                </v-list-item-action>
-              </v-list-item>
             </div>
           </template>
         </v-list>
+        <v-card-text v-if="!cartEmpty()">
+          <v-btn
+            :disabled="loading"
+            :loading="loading"
+            text
+            outlined
+            @click.prevent="checkout"
+          >
+            Checkout
+          </v-btn>
+        </v-card-text>
       </v-card>
     </v-col>
     <v-col class="button-outline" cols="12" xs="12" sm="12" md="3" xl="3">
@@ -48,26 +46,56 @@
 <script>
 import { mapActions } from 'vuex'
 import HotItems from '../components/products/hot_items'
+import Item from '../components/products/item'
 
 export default {
   name: 'Cart',
-  components: { HotItems },
+  components: { Item, HotItems },
   async asyncData({ $axios, $auth, store }) {
     if ($auth.loggedIn) {
       const res = await $axios.$get(`/api/users/${$auth.user._id}/cart`)
       store.dispatch('setCart', res.cart)
     }
   },
+  data() {
+    return { loading: false }
+  },
   computed: {
     cart() {
       return this.$store.state.cart
+    },
+    totalPrice() {
+      return this.cart.reduce((a, b) => a + b.price, 0)
     }
   },
   methods: {
-    ...mapActions(['sendSnackbar', 'removeFromCart', 'setCart']),
+    ...mapActions([
+      'sendSnackbar',
+      'removeFromCart',
+      'setCart',
+      'setClientSecret'
+    ]),
     remove(item) {
       this.removeFromCart(item)
       this.sendSnackbar({ text: 'Item removed from cart', color: 'success' })
+    },
+    cartEmpty() {
+      return this.cart.length < 1
+    },
+    async checkout() {
+      if (!this.$auth.loggedIn) {
+        await this.$router.push('/login')
+        return
+      }
+      this.loading = true
+      // eslint-disable-next-line camelcase
+      const { data } = await this.$axios.post('/api/payments/secret', {
+        amount: this.totalPrice,
+        products: this.cart.map((product) => product._id),
+        receipt_email: this.$auth.user.email
+      })
+      this.setClientSecret(data.client_secret)
+      await this.$router.push('/checkout')
     }
   }
 }

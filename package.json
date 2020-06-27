@@ -13,5 +13,6 @@
   "bugs": {
     "url": "https://github.com/Jacxk/jackscode.me/issues"
   },
-  "homepage": "https://github.com/Jacxk/jackscode.me#readme"
+  "homepage": "https://github.com/Jacxk/jackscode.me#readme",
+  "dependencies": {}
 }

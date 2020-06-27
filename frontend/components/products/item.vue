@@ -1,5 +1,6 @@
 <template>
   <v-card
+    v-if="!dense"
     :to="'/products/' + product._id"
     :ripple="false"
     height="100%"
@@ -24,6 +25,7 @@
         v-model="product.rating"
         :title="product.rating"
         color="yellow darken-3"
+        class="px-2"
         background-color="grey darken-1"
         readonly
         half-increments
@@ -35,7 +37,8 @@
 
       <v-spacer />
 
-      <v-tooltip bottom>
+      <v-subheader>${{ product.price }}</v-subheader>
+      <v-tooltip v-if="!bought()(product._id)" bottom>
         <template v-slot:activator="{ on, attrs }">
           <v-btn icon v-bind="attrs" v-on="on" @click.prevent="add(product)">
             <v-icon :color="hasItem()(product) ? 'primary' : 'grey'">
@@ -49,6 +52,23 @@
       </v-tooltip>
     </v-card-actions>
   </v-card>
+
+  <v-list-item v-else :to="'/products/' + product._id" :ripple="false">
+    <v-list-item-avatar>
+      <v-img :src="product.picture" />
+    </v-list-item-avatar>
+
+    <v-list-item-content>
+      <v-list-item-title v-text="`${product.name} - $${product.price}`" />
+      <v-list-item-subtitle v-text="product.description" />
+    </v-list-item-content>
+
+    <v-list-item-action v-if="deleteable">
+      <v-btn icon @click.prevent="removeFromCart(product)">
+        <v-icon>mdi-close</v-icon>
+      </v-btn>
+    </v-list-item-action>
+  </v-list-item>
 </template>
 
 <script>
@@ -56,10 +76,23 @@ import { mapActions, mapGetters } from 'vuex'
 export default {
   name: 'Item',
   props: {
-    product: Object
+    product: {
+      type: Object,
+      default() {
+        return {
+          name: 'No name',
+          price: 0.0,
+          _id: null,
+          rating: 0.0,
+          description: 'No description'
+        }
+      }
+    },
+    dense: Boolean,
+    deleteable: Boolean
   },
   methods: {
-    ...mapGetters(['hasItem']),
+    ...mapGetters(['hasItem', 'bought']),
     ...mapActions(['sendSnackbar', 'addToCart', 'removeFromCart']),
     add(item) {
       if (!this.hasItem()(item)) {

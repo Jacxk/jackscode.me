@@ -2,6 +2,7 @@ import axios from 'axios'
 
 export const state = () => ({
   cart: [],
+  checkout_secret: '',
   snackbar: {
     showing: false,
     timeout: 6000,
@@ -35,6 +36,9 @@ export const mutations = {
     if (state.auth.loggedIn) {
       state.auth.cart = newCart
     }
+  },
+  SET_CLIENT_SECRET(state: any, token: string) {
+    state.checkout_secret = token
   }
 }
 export const actions = {
@@ -44,8 +48,16 @@ export const actions = {
       commit('SEND_SNACKBAR', snackbar)
     }, 200)
   },
-  addToCart({ state, commit, dispatch }: any, item: Item) {
+  addToCart({ state, commit, dispatch, getters }: any, item: Item) {
     const { auth } = state
+
+    if (getters.bought(item._id)) {
+      return dispatch('sendSnackbar', {
+        text: 'Cannot add item you own',
+        color: 'error'
+      })
+    }
+
     if (auth.loggedIn) {
       axios
         .put(`/api/users/${auth.user._id}/cart`, {
@@ -102,17 +114,34 @@ export const actions = {
       })
     }
   },
-  setCart({ commit }: any, cart: Array<any>) {
+  setCart({ commit, getters }: any, cart: Array<any>) {
+    cart = cart.filter((product) => !getters.bought(product._id))
     commit('SET_CART', cart)
   },
   logout() {
     // TODO: Clear cart
+  },
+  setClientSecret({ commit }: any, token: string) {
+    commit('SET_CLIENT_SECRET', token)
   }
 }
 
 export const getters = {
   hasItem: (state: any) => (item: Item) => {
     return state.cart.some((it: Item) => it._id === item._id)
+  },
+  bought({ auth }: any) {
+    return (product: string) => {
+      if (!auth.loggedIn) return false
+
+      // eslint-disable-next-line camelcase
+      const { products_bought } = auth.user
+      // eslint-disable-next-line camelcase
+      if (!products_bought) return false
+
+      // eslint-disable-next-line camelcase
+      return !!products_bought.find((p: any) => p._id === product)
+    }
   }
 }
 
