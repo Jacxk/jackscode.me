@@ -95,7 +95,6 @@ users.put('/:id/product', async (req, res) => {
     }
 
     const paymentIntent = await stripe.paymentIntents.retrieve(id)
-    console.log(paymentIntent)
     if (!paymentIntent) {
       return sendError(res, 'Payment not found', 400)
     }
@@ -105,6 +104,9 @@ users.put('/:id/product', async (req, res) => {
         products_bought: {
           $each: JSON.parse(paymentIntent.metadata.products)
         }
+      },
+      $set: {
+        cart: []
       }
     })
 

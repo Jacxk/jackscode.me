@@ -1,5 +1,5 @@
 import { Router } from 'express'
-import { JWT, Password, sendError } from '../helpers'
+import { JWT, Password, sendError, stripe } from '../helpers'
 import { Schemas } from '../database/'
 import { newUser, returningUser } from '../validation'
 
@@ -10,19 +10,27 @@ auth.post('/register', async (req, res) => {
     const body = req.body
 
     const { error } = newUser(body)
+
     if (error) {
       return sendError(res, error.message, 400)
     }
 
-    const exists = await Schemas.User.findOne({ email: body.email })
+    const { email, password, username } = body
+    const exists = await Schemas.User.findOne({ email })
+
     if (exists) {
       return sendError(res, 'Email already exists', 400)
     }
 
+    const customer = await stripe.customers.create({
+      email,
+      name: username
+    })
 
     let user: any = new Schemas.User({
       ...body,
-      password: await Password.hash(body.password)
+      customerId: customer.id,
+      password: await Password.hash(password)
     })
     user.token = JWT.createAccessToken(Object.assign({}, user)._doc)
 
@@ -40,7 +48,6 @@ auth.post('/register', async (req, res) => {
 auth.post('/login', async (req, res) => {
   try {
     const body = req.body
-    console.log(body)
     const { error } = returningUser(body)
     if (error) {
       return sendError(res, error.message, 400)
@@ -72,6 +79,7 @@ auth.get('/user', JWT.authenticate, async (req, res) => {
       // @ts-ignore
       .findById(req.user._id)
       .populate('products_bought')
+      .populate('cart')
       .lean()
     return res.json(user)
   } catch (e) {

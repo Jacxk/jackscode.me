@@ -1,6 +1,10 @@
 import { model, Schema } from 'mongoose'
 
 const schema = new Schema({
+  customerId: {
+    type: String,
+    required: true
+  },
   username: {
     type: String,
     required: true

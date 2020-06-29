@@ -27,10 +27,7 @@ export default {
   components: { Navbar },
   data() {
     if (this.$auth.loggedIn) {
-      this.$store.dispatch(
-        'setCart',
-        this.$auth.user.cart.map((_id) => ({ _id }))
-      )
+      this.$store.dispatch('setCart', this.$auth.user.cart)
     }
     return {
       site: {

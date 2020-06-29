@@ -73,7 +73,7 @@ export default {
       'sendSnackbar',
       'removeFromCart',
       'setCart',
-      'setClientSecret'
+      'handleCheckout'
     ]),
     remove(item) {
       this.removeFromCart(item)
@@ -88,13 +88,7 @@ export default {
         return
       }
       this.loading = true
-      // eslint-disable-next-line camelcase
-      const { data } = await this.$axios.post('/api/payments/secret', {
-        amount: this.totalPrice,
-        products: this.cart.map((product) => product._id),
-        receipt_email: this.$auth.user.email
-      })
-      this.setClientSecret(data.client_secret)
+      await this.handleCheckout(this.totalPrice)
       await this.$router.push('/checkout')
     }
   }

@@ -39,6 +39,10 @@ export const mutations = {
   },
   SET_CLIENT_SECRET(state: any, token: string) {
     state.checkout_secret = token
+  },
+  CLEAR_STATE(state: any) {
+    state.checkout_secret = ''
+    state.cart = []
   }
 }
 export const actions = {
@@ -123,12 +127,40 @@ export const actions = {
   },
   setClientSecret({ commit }: any, token: string) {
     commit('SET_CLIENT_SECRET', token)
+  },
+  async handleCheckout({ state, dispatch }: any, price: number) {
+    // eslint-disable-next-line camelcase
+    const { checkout_secret, cart, auth } = state
+
+    // eslint-disable-next-line camelcase
+    if (!checkout_secret) {
+      const { data } = await axios.post(
+        '/api/payments/secret',
+        {
+          amount: price,
+          products: cart.map((product: any) => product._id),
+          receipt_email: auth.user.email
+        },
+        {
+          headers: {
+            Authorization: window.localStorage.getItem('auth._token.local')
+          }
+        }
+      )
+
+      dispatch('setClientSecret', data.client_secret)
+    }
+  },
+  finishCheckout({ commit }: any) {
+    commit('CLEAR_STATE')
   }
 }
 
 export const getters = {
-  hasItem: (state: any) => (item: Item) => {
-    return state.cart.some((it: Item) => it._id === item._id)
+  hasItem({ cart }: any) {
+    return (item: Item) => {
+      return cart.some((it: Item) => it._id === item._id)
+    }
   },
   bought({ auth }: any) {
     return (product: string) => {
@@ -142,6 +174,11 @@ export const getters = {
       // eslint-disable-next-line camelcase
       return !!products_bought.find((p: any) => p._id === product)
     }
+  },
+  // eslint-disable-next-line camelcase
+  isBuying({ checkout_secret }: any) {
+    // eslint-disable-next-line camelcase
+    return !!checkout_secret
   }
 }
 

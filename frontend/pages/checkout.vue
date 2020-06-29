@@ -168,14 +168,14 @@ export default {
               paymentIntent
             )
 
-            this.setCart([])
+            this.finishCheckout()
             this.$router.push('/')
           }
         })
     })
   },
   methods: {
-    ...mapActions(['sendSnackbar', 'setCart']),
+    ...mapActions(['sendSnackbar', 'setCart', 'finishCheckout']),
     hasProducts() {
       return this.cartProducts.length > 0
     },
