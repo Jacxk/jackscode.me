@@ -122,8 +122,8 @@ export const actions = {
     cart = cart.filter((product) => !getters.bought(product._id))
     commit('SET_CART', cart)
   },
-  logout() {
-    // TODO: Clear cart
+  logout({ commit }: any) {
+    commit('CLEAR_STATE')
   },
   setClientSecret({ commit }: any, token: string) {
     commit('SET_CLIENT_SECRET', token)
@@ -174,11 +174,6 @@ export const getters = {
       // eslint-disable-next-line camelcase
       return !!products_bought.find((p: any) => p._id === product)
     }
-  },
-  // eslint-disable-next-line camelcase
-  isBuying({ checkout_secret }: any) {
-    // eslint-disable-next-line camelcase
-    return !!checkout_secret
   }
 }
 

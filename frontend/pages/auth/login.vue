@@ -26,15 +26,22 @@
               required
               @click:append="hide = !hide"
             />
-            <a>Forgot Password?</a>
+            <div class="text-right">
+              <a>Forgot Password?</a>
+            </div>
+            <div>
+              <v-btn
+                color="primary"
+                :loading="loading"
+                :disabled="loading"
+                outlined
+                @click="submit"
+              >
+                Login
+              </v-btn>
+            </div>
           </v-form>
         </v-card-text>
-        <v-card-actions>
-          <v-spacer />
-          <v-btn color="primary" outlined @click="submit">
-            Login
-          </v-btn>
-        </v-card-actions>
       </v-card>
     </v-col>
     <v-col cols="12" xs="12" sm="6" class="px-0">
@@ -64,6 +71,7 @@ export default {
         'Talk to the developer'
       ],
       valid: true,
+      loading: false,
       hide: true,
       login: {
         email: '',
@@ -85,8 +93,13 @@ export default {
   methods: {
     ...mapActions(['sendSnackbar']),
     submit() {
+      this.loading = true
       if (!this.$refs.form.validate()) {
-        this.sendSnackbar({ text: 'Invalid data provided', color: 'red' })
+        this.loading = false
+        return this.sendSnackbar({
+          text: 'Invalid data provided',
+          color: 'red'
+        })
       }
 
       this.$auth
@@ -105,6 +118,7 @@ export default {
             color: 'error'
           })
         })
+        .finally(() => (this.loading = false))
     }
   }
 }

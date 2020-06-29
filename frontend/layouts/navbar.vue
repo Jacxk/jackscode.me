@@ -63,10 +63,22 @@
               Sign out
             </v-btn>
             <div v-else>
-              <v-btn class="mx-1" color="success" to="/login" outlined block>
+              <v-btn
+                class="mx-1"
+                color="success"
+                to="/auth/login"
+                outlined
+                block
+              >
                 Login
               </v-btn>
-              <v-btn class="mx-1" color="warning" to="/register" outlined block>
+              <v-btn
+                class="mx-1"
+                color="warning"
+                to="/auth/register"
+                outlined
+                block
+              >
                 Register
               </v-btn>
             </div>

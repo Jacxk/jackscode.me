@@ -10,15 +10,8 @@
               </v-subheader>
               <v-form>
                 <v-text-field
-                  v-model="user.name"
-                  label="Name"
-                  solo
-                  outlined
-                  dense
-                />
-                <v-text-field
-                  v-model="user.lastName"
-                  label="Last Name"
+                  v-model="user.username"
+                  label="Username"
                   solo
                   outlined
                   dense

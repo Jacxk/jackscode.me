@@ -4,7 +4,6 @@ export function newUser(data) {
   const schema = Joi.object({
     username: Joi
       .string()
-      .alphanum()
       .min(2)
       .max(30)
       .required(),
