@@ -128,28 +128,48 @@ export const actions = {
   setClientSecret({ commit }: any, token: string) {
     commit('SET_CLIENT_SECRET', token)
   },
-  async handleCheckout({ state, dispatch }: any, price: number) {
-    // eslint-disable-next-line camelcase
-    const { checkout_secret, cart, auth } = state
-
-    // eslint-disable-next-line camelcase
-    if (!checkout_secret) {
-      const { data } = await axios.post(
-        '/api/payments/secret',
-        {
-          amount: price,
-          products: cart.map((product: any) => product._id),
-          receipt_email: auth.user.email
-        },
-        {
-          headers: {
-            Authorization: window.localStorage.getItem('auth._token.local')
-          }
-        }
-      )
-
-      dispatch('setClientSecret', data.client_secret)
+  handleCheckout({ state, dispatch }: any, price: number) {
+    if (!state.checkout_secret) {
+      dispatch('setCheckout', price)
+    } else {
+      dispatch('updateCheckout', price)
     }
+  },
+  async setCheckout({ dispatch, state }: any, price: number) {
+    const { auth, cart } = state
+
+    const { data } = await axios.post(
+      '/api/payments/create',
+      {
+        amount: price,
+        products: cart.map((product: any) => product._id),
+        receipt_email: auth.user.email
+      },
+      {
+        headers: {
+          Authorization: window.localStorage.getItem('auth._token.local')
+        }
+      }
+    )
+
+    dispatch('setClientSecret', data.client_secret)
+  },
+  async updateCheckout({ state }: any, price: number) {
+    // eslint-disable-next-line camelcase
+    const { checkout_secret, auth } = state
+    await axios.post(
+      '/api/payments/update',
+      {
+        secret: checkout_secret.split('_secret_')[0],
+        amount: price,
+        receipt_email: auth.user.email
+      },
+      {
+        headers: {
+          Authorization: window.localStorage.getItem('auth._token.local')
+        }
+      }
+    )
   },
   finishCheckout({ commit }: any) {
     commit('CLEAR_STATE')

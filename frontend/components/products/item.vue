@@ -40,7 +40,12 @@
       <v-subheader>${{ product.price }}</v-subheader>
       <v-tooltip v-if="!bought()(product._id)" bottom>
         <template v-slot:activator="{ on, attrs }">
-          <v-btn icon v-bind="attrs" v-on="on" @click.prevent="add(product)">
+          <v-btn
+            icon
+            v-bind="attrs"
+            v-on="on"
+            @click.prevent="handleCart(product)"
+          >
             <v-icon :color="hasItem()(product) ? 'primary' : 'grey'">
               {{ hasItem()(product) ? 'mdi-cart-off' : 'mdi-cart-plus' }}
             </v-icon>
@@ -64,7 +69,7 @@
     </v-list-item-content>
 
     <v-list-item-action v-if="deleteable">
-      <v-btn icon @click.prevent="removeFromCart(product)">
+      <v-btn icon @click.prevent="handleCart(product)">
         <v-icon>mdi-close</v-icon>
       </v-btn>
     </v-list-item-action>
@@ -94,11 +99,13 @@ export default {
   methods: {
     ...mapGetters(['hasItem', 'bought']),
     ...mapActions(['sendSnackbar', 'addToCart', 'removeFromCart']),
-    add(item) {
+    handleCart(item) {
       if (!this.hasItem()(item)) {
         this.addToCart(item)
+        this.$emit('add', item)
       } else {
         this.removeFromCart(item)
+        this.$emit('remove', item)
       }
     }
   }

@@ -62,6 +62,7 @@
             :product="product"
             dense
             deleteable
+            @remove="updateCheckout(totalPrice - $event.price)"
           />
         </div>
         <v-card-text v-else>
@@ -167,7 +168,12 @@ export default {
     })
   },
   methods: {
-    ...mapActions(['sendSnackbar', 'setCart', 'finishCheckout']),
+    ...mapActions([
+      'sendSnackbar',
+      'setCart',
+      'finishCheckout',
+      'updateCheckout'
+    ]),
     hasProducts() {
       return this.cartProducts.length > 0
     },
