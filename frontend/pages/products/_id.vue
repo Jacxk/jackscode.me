@@ -28,8 +28,8 @@
                 />
               </div>
             </v-card-text>
-            <v-card-text v-if="!bought(product._id)">
-              <div>
+            <v-card-text>
+              <div v-if="!bought(product._id)">
                 <v-btn
                   v-if="inCart(product)"
                   color="warning"
@@ -47,6 +47,11 @@
                   @click="addCart(product)"
                 >
                   Add to cart
+                </v-btn>
+              </div>
+              <div v-else>
+                <v-btn color="primary" block outlined @click="">
+                  Download
                 </v-btn>
               </div>
             </v-card-text>

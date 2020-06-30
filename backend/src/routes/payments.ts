@@ -9,8 +9,6 @@ payments.post('/secret', async (req, res) => {
   try {
     const { amount, products, receipt_email } = req.body
 
-    // @ts-ignore
-    console.log(req.user.customerId)
     const { client_secret } = await stripe.paymentIntents.create({
       amount: Math.floor(amount * 100),
       currency: 'usd',
