@@ -10,7 +10,7 @@
               <span>{{ product.name }}</span>
             </v-card-title>
             <v-card-text>
-              <div>Price: ${{ product.price }}</div>
+              <div>Price: {{ price(product.price) }}</div>
               <div>Description: {{ product.description }}</div>
               <div>Author: {{ product.author }}</div>
               <div>Version: {{ product.version }}</div>
@@ -29,7 +29,7 @@
               </div>
             </v-card-text>
             <v-card-text>
-              <div v-if="!bought(product._id)">
+              <div v-if="!bought(product._id) && product.price > 0">
                 <v-btn
                   v-if="inCart(product)"
                   color="warning"
@@ -149,7 +149,8 @@ export default {
   computed: {
     ...mapGetters({
       inCart: 'hasItem',
-      bought: 'bought'
+      bought: 'bought',
+      price: 'price'
     })
   },
   methods: {

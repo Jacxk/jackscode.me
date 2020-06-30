@@ -55,6 +55,13 @@ export const actions = {
   addToCart({ state, commit, dispatch, getters }: any, item: Item) {
     const { auth } = state
 
+    if (item.price < 1) {
+      return dispatch('sendSnackbar', {
+        text: 'Cannot add free item',
+        color: 'error'
+      })
+    }
+
     if (getters.bought(item._id)) {
       return dispatch('sendSnackbar', {
         text: 'Cannot add item you own',
@@ -154,6 +161,7 @@ export const actions = {
 
     dispatch('setClientSecret', data.client_secret)
   },
+  // TODO: Fix removing product on checkout not using updated values
   async updateCheckout({ state }: any, price: number) {
     // eslint-disable-next-line camelcase
     const { checkout_secret, auth, cart } = state
@@ -180,6 +188,7 @@ export const actions = {
 export const getters = {
   hasItem({ cart }: any) {
     return (item: Item) => {
+      if (!item) return false
       return cart.some((it: Item) => it._id === item._id)
     }
   },
@@ -195,11 +204,20 @@ export const getters = {
       // eslint-disable-next-line camelcase
       return !!products_bought.find((p: any) => p._id === product)
     }
+  },
+  price() {
+    return (price: number) => {
+      if (price > 0) {
+        return `$${price}`
+      }
+      return 'Free'
+    }
   }
 }
 
 interface Item {
   _id: number
+  price: number
   name: string
   description: string
   rating: number

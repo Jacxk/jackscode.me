@@ -75,16 +75,12 @@ export default {
       'setCart',
       'handleCheckout'
     ]),
-    remove(item) {
-      this.removeFromCart(item)
-      this.sendSnackbar({ text: 'Item removed from cart', color: 'success' })
-    },
     cartEmpty() {
       return this.cart.length < 1
     },
     async checkout() {
       if (!this.$auth.loggedIn) {
-        await this.$router.push('/login')
+        await this.$router.push('/auth/login')
         return
       }
       this.loading = true

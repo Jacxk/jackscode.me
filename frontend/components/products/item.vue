@@ -37,8 +37,8 @@
 
       <v-spacer />
 
-      <v-subheader>${{ product.price }}</v-subheader>
-      <v-tooltip v-if="!bought()(product._id)" bottom>
+      <v-subheader>{{ price(product.price) }}</v-subheader>
+      <v-tooltip v-if="!bought(product._id) && product.price > 0" bottom>
         <template v-slot:activator="{ on, attrs }">
           <v-btn
             icon
@@ -46,13 +46,13 @@
             v-on="on"
             @click.prevent="handleCart(product)"
           >
-            <v-icon :color="hasItem()(product) ? 'primary' : 'grey'">
-              {{ hasItem()(product) ? 'mdi-cart-off' : 'mdi-cart-plus' }}
+            <v-icon :color="hasItem(product) ? 'primary' : 'grey'">
+              {{ hasItem(product) ? 'mdi-cart-off' : 'mdi-cart-plus' }}
             </v-icon>
           </v-btn>
         </template>
         <span>
-          {{ hasItem()(product) ? 'Remove from cart' : 'Add to cart' }}
+          {{ hasItem(product) ? 'Remove from cart' : 'Add to cart' }}
         </span>
       </v-tooltip>
     </v-card-actions>
@@ -64,7 +64,9 @@
     </v-list-item-avatar>
 
     <v-list-item-content>
-      <v-list-item-title v-text="`${product.name} - $${product.price}`" />
+      <v-list-item-title>
+        {{ product.name }} - {{ price(product.price) }}
+      </v-list-item-title>
       <v-list-item-subtitle v-text="product.description" />
     </v-list-item-content>
 
@@ -96,11 +98,13 @@ export default {
     dense: Boolean,
     deleteable: Boolean
   },
+  computed: {
+    ...mapGetters(['hasItem', 'bought', 'price'])
+  },
   methods: {
-    ...mapGetters(['hasItem', 'bought']),
     ...mapActions(['sendSnackbar', 'addToCart', 'removeFromCart']),
     handleCart(item) {
-      if (!this.hasItem()(item)) {
+      if (!this.hasItem(item)) {
         this.addToCart(item)
         this.$emit('add', item)
       } else {
