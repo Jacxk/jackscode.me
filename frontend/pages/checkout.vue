@@ -1,79 +1,77 @@
 <template>
-  <v-main>
-    <v-row>
-      <v-col>
-        <v-card>
-          <v-card-text>
-            <div>
-              <v-subheader class="text-uppercase px-0 mx-0">
-                User Information
-              </v-subheader>
-              <v-form>
-                <v-text-field
-                  v-model="user.username"
-                  label="Username"
-                  solo
-                  outlined
-                  dense
-                />
-                <v-text-field
-                  v-model="user.email"
-                  label="Email"
-                  solo
-                  outlined
-                  dense
-                />
-              </v-form>
-            </div>
-            <div>
-              <v-subheader class="text-uppercase px-0 mx-0">
-                Payment Information
-              </v-subheader>
-              <form id="payment-form" action="/charge" method="post">
-                <div class="form-row">
-                  <div id="card-element" />
-                  <!-- Used to display form errors. -->
-                  <div id="card-errors" role="alert" class="red--text" />
-                </div>
-                <v-btn
-                  type="submit"
-                  text
-                  block
-                  outlined
-                  color="primary"
-                  class="mt-5"
-                  :disabled="loading"
-                  :loading="loading"
-                >
-                  Pay ${{ totalPrice }}
-                </v-btn>
-              </form>
-            </div>
-          </v-card-text>
-        </v-card>
-      </v-col>
-      <v-col>
-        <v-card min-height="50vh">
-          <v-card-title>Products</v-card-title>
-          <v-divider />
-          <div v-if="hasProducts()">
-            <Item
-              v-for="(product, i) in cartProducts"
-              :key="i"
-              :product="product"
-              dense
-              deleteable
-            />
-          </div>
-          <v-card-text v-else>
-            <v-subheader>
-              No items in cart... You shouldn't even see this...
+  <v-row>
+    <v-col>
+      <v-card>
+        <v-card-text>
+          <div>
+            <v-subheader class="text-uppercase px-0 mx-0">
+              User Information
             </v-subheader>
-          </v-card-text>
-        </v-card>
-      </v-col>
-    </v-row>
-  </v-main>
+            <v-form>
+              <v-text-field
+                v-model="user.username"
+                label="Username"
+                solo
+                outlined
+                dense
+              />
+              <v-text-field
+                v-model="user.email"
+                label="Email"
+                solo
+                outlined
+                dense
+              />
+            </v-form>
+          </div>
+          <div>
+            <v-subheader class="text-uppercase px-0 mx-0">
+              Payment Information
+            </v-subheader>
+            <form id="payment-form" action="/charge" method="post">
+              <div class="form-row">
+                <div id="card-element" />
+                <!-- Used to display form errors. -->
+                <div id="card-errors" role="alert" class="red--text" />
+              </div>
+              <v-btn
+                type="submit"
+                text
+                block
+                outlined
+                color="primary"
+                class="mt-5"
+                :disabled="loading"
+                :loading="loading"
+              >
+                Pay ${{ totalPrice }}
+              </v-btn>
+            </form>
+          </div>
+        </v-card-text>
+      </v-card>
+    </v-col>
+    <v-col>
+      <v-card min-height="50vh">
+        <v-card-title>Products</v-card-title>
+        <v-divider />
+        <div v-if="hasProducts()">
+          <Item
+            v-for="(product, i) in cartProducts"
+            :key="i"
+            :product="product"
+            dense
+            deleteable
+          />
+        </div>
+        <v-card-text v-else>
+          <v-subheader>
+            No items in cart... You shouldn't even see this...
+          </v-subheader>
+        </v-card-text>
+      </v-card>
+    </v-col>
+  </v-row>
 </template>
 
 <script>

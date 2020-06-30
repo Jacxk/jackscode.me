@@ -1,5 +1,5 @@
 <template>
-  <v-container>
+  <div>
     <h1 class="text-center">Product List</h1>
     <span v-if="products.length <= 0">
       There are no products... Check back later!
@@ -30,7 +30,7 @@
     >
       <v-icon>mdi-plus</v-icon>
     </v-btn>
-  </v-container>
+  </div>
 </template>
 
 <script>

@@ -1,30 +1,28 @@
 <template>
-  <v-main>
-    <v-row>
-      <v-col>
-        <v-card>
-          <div v-if="hasBought()">
-            <v-card-title>Orders</v-card-title>
-            <v-divider />
-            <Item
-              v-for="(product, i) in orders"
-              :key="i"
-              :product="product"
-              dense
-            />
-          </div>
-          <v-card-text v-else>
-            <v-subheader>
-              <span>
-                You do not own anything. Try buying some products.
-                <nuxt-link to="/products">products</nuxt-link>
-              </span>
-            </v-subheader>
-          </v-card-text>
-        </v-card>
-      </v-col>
-    </v-row>
-  </v-main>
+  <v-row>
+    <v-col>
+      <v-card>
+        <div v-if="hasBought()">
+          <v-card-title>Orders</v-card-title>
+          <v-divider />
+          <Item
+            v-for="(product, i) in orders"
+            :key="i"
+            :product="product"
+            dense
+          />
+        </div>
+        <v-card-text v-else>
+          <v-subheader>
+            <span>
+              You do not own anything. Try buying some products.
+              <nuxt-link to="/products">products</nuxt-link>
+            </span>
+          </v-subheader>
+        </v-card-text>
+      </v-card>
+    </v-col>
+  </v-row>
 </template>
 
 <script>

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <v-app-bar class="pr-5" fixed clipped-left app flat>
+    <v-app-bar class="pr-5" hide-on-scroll clipped-left app flat>
       <v-app-bar-nav-icon @click.stop="drawer_open = !drawer_open" />
       <v-toolbar-title>{{ site.name }}</v-toolbar-title>
 
