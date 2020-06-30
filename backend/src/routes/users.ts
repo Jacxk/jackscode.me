@@ -99,6 +99,10 @@ users.put('/:id/product', async (req, res) => {
       return sendError(res, 'Payment not found', 400)
     }
 
+    if (paymentIntent.status !== 'succeeded') {
+      return sendError(res, 'Payment did not succeeded', 400)
+    }
+
     await Schemas.User.findByIdAndUpdate(userId, {
       $push: {
         products_bought: {

@@ -29,12 +29,16 @@ payments.post('/create', async (req, res) => {
 
 payments.post('/update', async (req, res) => {
   try {
-    const { amount, secret, receipt_email } = req.body
+    const { amount, secret, receipt_email, products } = req.body
 
     const { client_secret } = await stripe.paymentIntents.update(secret, {
       amount: Math.floor(amount * 100),
       currency: 'usd',
-      receipt_email
+      receipt_email,
+      metadata: {
+        integration_check: 'accept_a_payment',
+        products: JSON.stringify(products)
+      }
     })
     res.json({ client_secret })
   } catch (e) {

@@ -156,12 +156,13 @@ export const actions = {
   },
   async updateCheckout({ state }: any, price: number) {
     // eslint-disable-next-line camelcase
-    const { checkout_secret, auth } = state
+    const { checkout_secret, auth, cart } = state
     await axios.post(
       '/api/payments/update',
       {
         secret: checkout_secret.split('_secret_')[0],
         amount: price,
+        products: cart.map((product: any) => product._id),
         receipt_email: auth.user.email
       },
       {
