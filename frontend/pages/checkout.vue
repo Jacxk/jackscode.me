@@ -160,6 +160,7 @@ export default {
             )
 
             this.finishCheckout()
+            this.$auth.fetchUser()
             this.$router.push('/')
           }
         })

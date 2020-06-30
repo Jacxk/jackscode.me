@@ -64,6 +64,12 @@ module.exports = {
           user: { url: '/api/auth/user', method: 'get', propertyName: false }
         }
       }
+    },
+    redirect: {
+      login: '/auth/login',
+      logout: '/',
+      callback: '/auth/login',
+      home: '/'
     }
   },
   firebase: {
