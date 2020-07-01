@@ -1,36 +1,21 @@
 <template>
-  <div>
-    <h1 class="text-center">Product List</h1>
-    <span v-if="products.length <= 0">
+  <v-row align="stretch" justify="start" dense>
+    <v-col v-if="products.length <= 0" cols="12">
       There are no products... Check back later!
-    </span>
-    <v-row align="stretch" justify="start" dense>
-      <v-col
-        v-for="products in products"
-        :key="products._id"
-        cols="12"
-        xs="12"
-        sm="6"
-        md="4"
-        lg="3"
-        xl="2"
-      >
-        <item :product="products" />
-      </v-col>
-    </v-row>
-
-    <v-btn
-      to="/products/create"
-      class="add-product"
-      elevation="5"
-      fab
-      large
-      bottom
-      left
+    </v-col>
+    <v-col
+      v-for="(product, i) in products"
+      :key="i"
+      cols="12"
+      xs="12"
+      sm="6"
+      md="4"
+      lg="3"
+      xl="2"
     >
-      <v-icon>mdi-plus</v-icon>
-    </v-btn>
-  </div>
+      <Item :product="product" />
+    </v-col>
+  </v-row>
 </template>
 
 <script>

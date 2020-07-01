@@ -22,69 +22,97 @@
       <v-btn icon @click="search = true">
         <v-icon>mdi-magnify</v-icon>
       </v-btn>
-      <v-btn to="/" icon>
-        <v-icon>mdi-home</v-icon>
-      </v-btn>
-      <v-btn to="/cart" icon>
-        <v-badge :content="inCart" bottom>
-          <v-icon>mdi-cart</v-icon>
-        </v-badge>
-      </v-btn>
-      <v-menu offset-y transition="slide-y-transition">
+      <div class="hidden-xs-only">
+        <v-btn to="/" icon>
+          <v-icon>mdi-home</v-icon>
+        </v-btn>
+        <v-btn to="/cart" icon>
+          <v-badge :content="inCart" bottom overlap>
+            <v-icon>mdi-cart</v-icon>
+          </v-badge>
+        </v-btn>
+      </div>
+
+      <v-menu offset-y auto transition="slide-y-transition">
         <template v-slot:activator="{ on, attrs }">
-          <v-btn class="ml-2" v-bind="attrs" icon v-on="on">
-            <v-icon v-if="!loggedIn">mdi-account</v-icon>
-            <v-avatar v-else>
-              <v-img src="https://via.placeholder.com/150" />
-            </v-avatar>
+          <v-btn icon v-bind="attrs" v-on="on">
+            <v-badge :content="String(notifications.length)" bottom overlap>
+              <v-icon v-if="notifications.length > 0">mdi-bell-ring</v-icon>
+              <v-icon v-else>mdi-bell</v-icon>
+            </v-badge>
           </v-btn>
         </template>
         <v-list>
-          <v-list-item
-            v-for="(item, index) in loggedIn ? items.logged : items.not_logged"
-            :key="index"
-            dense
-            :to="item.href"
-          >
-            <v-list-item-icon>
-              <v-icon>mdi-{{ item.icon }}</v-icon>
-            </v-list-item-icon>
-            <v-list-item-title>{{ item.title }}</v-list-item-title>
-          </v-list-item>
-          <v-divider v-if="loggedIn" class="my-1" />
-          <v-list-item>
-            <v-btn
-              v-if="loggedIn"
-              color="error"
-              block
-              outlined
-              @click="$auth.logout()"
-            >
-              Sign out
-            </v-btn>
-            <div v-else>
-              <v-btn
-                class="mx-1"
-                color="success"
-                to="/auth/login"
-                outlined
-                block
-              >
-                Login
-              </v-btn>
-              <v-btn
-                class="mx-1"
-                color="warning"
-                to="/auth/register"
-                outlined
-                block
-              >
-                Register
-              </v-btn>
-            </div>
+          <div v-if="notifications.length > 0">
+            <v-list-item v-for="(notif, i) in notifications" :key="i">
+              {{ notif }}
+            </v-list-item>
+          </div>
+          <v-list-item v-else class="mx-5">
+            No notifications...
           </v-list-item>
         </v-list>
       </v-menu>
+
+      <div class="hidden-xs-only">
+        <v-menu offset-y transition="slide-y-transition">
+          <template v-slot:activator="{ on, attrs }">
+            <v-btn class="ml-2" icon v-bind="attrs" v-on="on">
+              <v-icon v-if="!loggedIn">mdi-account</v-icon>
+              <v-avatar v-else>
+                <v-img src="https://via.placeholder.com/150" />
+              </v-avatar>
+            </v-btn>
+          </template>
+          <v-list>
+            <v-list-item
+              v-for="(item, index) in loggedIn
+                ? items.logged
+                : items.not_logged"
+              :key="index"
+              dense
+              :to="item.href"
+            >
+              <v-list-item-icon>
+                <v-icon>mdi-{{ item.icon }}</v-icon>
+              </v-list-item-icon>
+              <v-list-item-title>{{ item.title }}</v-list-item-title>
+            </v-list-item>
+            <v-divider v-if="loggedIn" class="my-1" />
+            <v-list-item>
+              <v-btn
+                v-if="loggedIn"
+                color="error"
+                block
+                outlined
+                @click="$auth.logout()"
+              >
+                Sign out
+              </v-btn>
+              <div v-else>
+                <v-btn
+                  class="mx-1"
+                  color="success"
+                  to="/auth/login"
+                  outlined
+                  block
+                >
+                  Login
+                </v-btn>
+                <v-btn
+                  class="mx-1"
+                  color="warning"
+                  to="/auth/register"
+                  outlined
+                  block
+                >
+                  Register
+                </v-btn>
+              </div>
+            </v-list-item>
+          </v-list>
+        </v-menu>
+      </div>
     </v-app-bar>
     <v-expand-transition>
       <v-card
@@ -153,6 +181,7 @@ export default {
       items: {
         drawer: [
           { title: 'Home', icon: 'home', href: '/' },
+          { title: 'My account', icon: 'account', href: '/users/@me' },
           { title: 'All Products', icon: 'shopping', href: '/products' },
           { title: 'My Cart', icon: 'cart', href: '/cart' }
         ],
@@ -180,9 +209,10 @@ export default {
     },
     inCart() {
       return String(this.$store.state.cart.length)
+    },
+    notifications() {
+      return []
     }
   }
 }
 </script>
-
-<style scoped></style>

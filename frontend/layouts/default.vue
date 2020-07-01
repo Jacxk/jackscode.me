@@ -1,11 +1,12 @@
 <template>
   <v-app>
+    <navbar :site="site" />
     <v-main>
-      <navbar :site="site" />
       <v-container>
         <nuxt />
       </v-container>
     </v-main>
+    <BottomNav class="hidden-sm-and-up" />
 
     <v-snackbar
       :value="snackbar.showing"
@@ -23,8 +24,9 @@
 <script>
 import { mapState, mapMutations } from 'vuex'
 import Navbar from './navbar'
+import BottomNav from './bottom_nav'
 export default {
-  components: { Navbar },
+  components: { BottomNav, Navbar },
   data() {
     if (this.$auth.loggedIn) {
       this.$store.dispatch('setCart', this.$auth.user.cart)
