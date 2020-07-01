@@ -65,11 +65,24 @@
     <v-col cols="12" xs="12" sm="8" md="8" lg="8" xl="9">
       <v-row>
         <v-col cols="12">
-          <v-card outlined width="100%" height="100%">
-            <v-card-text>
-              <div v-html="$md.render(product.page_content)" />
-            </v-card-text>
-          </v-card>
+          <v-tabs v-model="tab" grow>
+            <v-tab>Information</v-tab>
+            <v-tab>Versions</v-tab>
+            <v-tab-item>
+              <v-card width="100%" height="100%">
+                <v-card-text>
+                  <div v-html="$md.render(product.page_content)" />
+                </v-card-text>
+              </v-card>
+            </v-tab-item>
+            <v-tab-item>
+              <v-card width="100%" height="100%">
+                <v-card-text>
+                  Soon
+                </v-card-text>
+              </v-card>
+            </v-tab-item>
+          </v-tabs>
         </v-col>
         <v-col cols="12">
           <v-card outlined width="100%" height="100%">
@@ -141,6 +154,7 @@ export default {
   },
   data() {
     return {
+      tab: null,
       params: this.$route.params,
       product: {},
       rating: 0
