@@ -9,18 +9,13 @@
             </v-subheader>
             <v-form>
               <v-text-field
-                v-model="user.username"
-                label="Username"
-                solo
-                outlined
-                dense
-              />
-              <v-text-field
-                v-model="user.email"
+                v-model="email"
                 label="Email"
+                hint="Where the receipt is going!"
                 solo
                 outlined
                 dense
+                disabled
               />
             </v-form>
           </div>
@@ -80,11 +75,14 @@ import { mapActions } from 'vuex'
 import Item from '../components/products/item'
 
 export default {
-  middleware: 'auth',
+  middleware: ['auth', 'needs_secret'],
   name: 'Checkout',
   components: { Item },
   data() {
+    const user = this.$auth.user
     return {
+      username: user.username,
+      email: user.email,
       loading: false,
       clientSecret: this.$store.state.checkout_secret
     }
@@ -143,7 +141,8 @@ export default {
         .confirmCardPayment(this.clientSecret, {
           payment_method: {
             card
-          }
+          },
+          receipt_email: this.user.email
         })
         .then(({ error, paymentIntent }) => {
           if (error) {
@@ -164,6 +163,10 @@ export default {
             this.$auth.fetchUser()
             this.$router.push('/')
           }
+        })
+        .catch((error) => {
+          this.loading = false
+          this.sendSnackbar({ text: error.message, color: 'error' })
         })
     })
   },

@@ -135,11 +135,11 @@ export const actions = {
   setClientSecret({ commit }: any, token: string) {
     commit('SET_CLIENT_SECRET', token)
   },
-  handleCheckout({ state, dispatch }: any, price: number) {
+  async handleCheckout({ state, dispatch }: any, price: number) {
     if (!state.checkout_secret) {
-      dispatch('setCheckout', price)
+      await dispatch('setCheckout', price)
     } else {
-      dispatch('updateCheckout', price)
+      await dispatch('updateCheckout', price)
     }
   },
   async setCheckout({ dispatch, state }: any, price: number) {
