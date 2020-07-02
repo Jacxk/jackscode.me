@@ -1,8 +1,10 @@
 import { Router } from 'express'
-import { isValidObjectId, sendError, stripe } from '../helpers'
+import { isValidObjectId, sendError, stripe, JWT } from '../helpers'
 import { Schemas } from '../database/'
 
 const users = Router()
+
+users.use(JWT.authenticate)
 
 users.use('/:id/*', (req, res, next) => {
   const id = req.params['id']
@@ -101,6 +103,11 @@ users.put('/:id/product', async (req, res) => {
 
     if (paymentIntent.status !== 'succeeded') {
       return sendError(res, 'Payment did not succeeded', 400)
+    }
+
+    // @ts-ignore
+    if (paymentIntent.customer !== req.user.customerId) {
+      return sendError(res, 'You do not own this product... Stop hacking...', 403)
     }
 
     await Schemas.User.findByIdAndUpdate(userId, {
