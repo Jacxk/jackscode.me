@@ -22,6 +22,7 @@
 
     <v-card-actions class="product-card-action">
       <v-rating
+        v-if="ratings"
         v-model="product.rating"
         :title="product.rating"
         color="yellow darken-3"
@@ -32,7 +33,6 @@
         hover
         dense
         small
-        @click.prevent=""
       />
 
       <v-spacer />
@@ -58,24 +58,41 @@
     </v-card-actions>
   </v-card>
 
-  <v-list-item v-else :to="'/products/' + product._id" :ripple="false">
-    <v-list-item-avatar>
-      <v-img :src="product.picture" />
-    </v-list-item-avatar>
+  <div v-else>
+    <v-divider v-if="divider && top" />
+    <v-list-item :to="'/products/' + product._id" :ripple="false">
+      <v-list-item-avatar>
+        <v-img :src="product.picture" />
+      </v-list-item-avatar>
 
-    <v-list-item-content>
-      <v-list-item-title>
-        {{ product.name }} - {{ price(product.price) }}
-      </v-list-item-title>
-      <v-list-item-subtitle v-text="product.description" />
-    </v-list-item-content>
+      <v-list-item-content>
+        <v-list-item-title class="d-flex flex-wrap justify-space-between">
+          <span> {{ product.name }} - {{ price(product.price) }} </span>
 
-    <v-list-item-action v-if="deleteable">
-      <v-btn icon @click.prevent="handleCart(product)">
-        <v-icon>mdi-close</v-icon>
-      </v-btn>
-    </v-list-item-action>
-  </v-list-item>
+          <v-rating
+            v-if="ratings"
+            v-model="product.rating"
+            :title="product.rating"
+            color="yellow darken-3"
+            background-color="grey darken-1"
+            readonly
+            half-increments
+            hover
+            dense
+            small
+          />
+        </v-list-item-title>
+        <v-list-item-subtitle v-text="product.description" />
+      </v-list-item-content>
+
+      <v-list-item-action v-if="deleteable">
+        <v-btn icon @click.prevent="handleCart(product)">
+          <v-icon>mdi-close</v-icon>
+        </v-btn>
+      </v-list-item-action>
+    </v-list-item>
+    <v-divider v-if="divider && bottom" />
+  </div>
 </template>
 
 <script>
@@ -96,7 +113,14 @@ export default {
       }
     },
     dense: Boolean,
-    deleteable: Boolean
+    deleteable: Boolean,
+    divider: Boolean,
+    top: Boolean,
+    bottom: Boolean,
+    ratings: {
+      type: Boolean,
+      default: true
+    }
   },
   computed: {
     ...mapGetters(['hasItem', 'bought', 'price'])
