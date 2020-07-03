@@ -6,8 +6,8 @@ FROM node:14-alpine
 WORKDIR /usr/src
 
 # Install dependencies
-COPY package*.json ./
-RUN npm ci
+COPY package.json ./
+RUN npm i
 
 # Copy source
 COPY . /usr/src
