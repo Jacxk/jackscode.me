@@ -7,6 +7,7 @@ import users from './users'
 
 const router = Router()
 
+router.use('/ping', (_, res) => res.send('pong'))
 router.use('/products', products)
 router.use('/payments', payments)
 router.use('/users', users)
