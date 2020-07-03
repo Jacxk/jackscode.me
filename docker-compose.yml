@@ -15,6 +15,7 @@ services:
       - backend
     volumes:
     - ./frontend:/usr/src
+    restart: always
     command: npm run start-dev
   backend:
     env_file:
@@ -26,4 +27,5 @@ services:
       - ${SERVER_PORT}:${SERVER_PORT}
     volumes:
       - ./backend:/usr/src
+    restart: always
     command: npm run start-dev

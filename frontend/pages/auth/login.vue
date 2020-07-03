@@ -11,7 +11,6 @@
               v-model="login.email"
               :rules="rules.email"
               label="Email"
-              prepend-icon="mdi-account-circle"
               outlined
               required
             />
@@ -20,7 +19,6 @@
               :rules="rules.password"
               label="Password"
               :type="hide ? 'password' : 'text'"
-              prepend-icon="mdi-lock"
               :append-icon="hide ? 'mdi-eye-off' : 'mdi-eye'"
               outlined
               required
@@ -60,6 +58,7 @@
 </template>
 
 <script>
+// TODO: Register on login
 import { mapActions } from 'vuex'
 export default {
   middleware: 'guest',

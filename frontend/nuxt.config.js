@@ -112,10 +112,7 @@ module.exports = {
    ** See https://axios.nuxtjs.org/options
    */
   axios: {
-    proxy: true
-  },
-  proxy: {
-    '/api/': 'http://backend:3030'
+    baseURL: `http://backend:${process.env.SERVER_PORT}`
   },
   /*
    ** vuetify module configuration
