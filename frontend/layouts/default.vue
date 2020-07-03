@@ -9,17 +9,21 @@
     <BottomNav class="hidden-sm-and-up" />
 
     <v-snackbar
+      transition="slide-x-reverse-transition"
       :value="snackbar.showing"
       :color="snackbar.color"
       :timeout="snackbar.timeout"
       top
       right
-      outlined
-      transition="slide-x-reverse-transition"
       text
       @input="HIDE_SNACKBAR"
     >
       {{ snackbar.text }}
+      <template v-slot:action="{ attrs }">
+        <v-btn dark text v-bind="attrs" @click="HIDE_SNACKBAR">
+          <v-icon>mdi-close</v-icon>
+        </v-btn>
+      </template>
     </v-snackbar>
   </v-app>
 </template>
