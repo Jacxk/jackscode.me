@@ -12,8 +12,11 @@
       :value="snackbar.showing"
       :color="snackbar.color"
       :timeout="snackbar.timeout"
-      :bottom="true"
+      top
+      right
       outlined
+      transition="slide-x-reverse-transition"
+      text
       @input="HIDE_SNACKBAR"
     >
       {{ snackbar.text }}
