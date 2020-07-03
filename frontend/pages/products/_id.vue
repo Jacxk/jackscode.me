@@ -2,7 +2,7 @@
   <v-row>
     <v-col cols="12" xs="12" sm="4" md="3" lg="3" xl="2">
       <v-row>
-        <v-col>
+        <v-col cols="12">
           <v-card outlined width="100%">
             <v-img :src="product.picture" max-height="200px" contain />
             <v-divider />
@@ -57,7 +57,7 @@
             </v-card-text>
           </v-card>
         </v-col>
-        <v-col>
+        <v-col cols="12">
           <HotItems />
         </v-col>
       </v-row>

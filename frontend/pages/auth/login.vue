@@ -1,6 +1,6 @@
 <template>
   <v-row class="px-5">
-    <v-col cols="12" xs="12" sm="6" class="px-0">
+    <v-col cols="12" xs="12" sm="6" md="4" lg="3" xl="3" class="px-0 mx-auto">
       <v-card elevation="3" outlined>
         <v-card-title>
           <h1 class="display-1">Login</h1>
@@ -16,15 +16,15 @@
             />
             <v-text-field
               v-model="login.password"
-              :rules="rules.password"
               label="Password"
+              :rules="rules.password"
               :type="hide ? 'password' : 'text'"
               :append-icon="hide ? 'mdi-eye-off' : 'mdi-eye'"
               outlined
               required
               @click:append="hide = !hide"
             />
-            <div class="text-right">
+            <div class="text-right mb-5">
               <a>Forgot Password?</a>
             </div>
             <div>
@@ -33,24 +33,17 @@
                 :loading="loading"
                 :disabled="loading"
                 outlined
+                block
                 @click="submit"
               >
                 Login
               </v-btn>
             </div>
+            <div class="mt-5">
+              You don't have an account?
+              <nuxt-link to="/auth/register">Sign Up!</nuxt-link>
+            </div>
           </v-form>
-        </v-card-text>
-      </v-card>
-    </v-col>
-    <v-col cols="12" xs="12" sm="6" class="px-0">
-      <v-card elevation="3" height="100%" outlined>
-        <v-card-text>
-          <v-card-title>
-            <h3>Why login?</h3>
-          </v-card-title>
-          <ul v-for="(item, i) in why_login" :key="i">
-            <li>{{ item }}</li>
-          </ul>
         </v-card-text>
       </v-card>
     </v-col>
@@ -58,17 +51,11 @@
 </template>
 
 <script>
-// TODO: Register on login
 import { mapActions } from 'vuex'
 export default {
   middleware: 'guest',
   data() {
     return {
-      why_login: [
-        'Get access to update notification',
-        'Ability to leave feedback',
-        'Talk to the developer'
-      ],
       valid: true,
       loading: false,
       hide: true,
