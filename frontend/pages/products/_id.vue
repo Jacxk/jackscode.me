@@ -4,7 +4,7 @@
       <v-row>
         <v-col cols="12">
           <v-card outlined width="100%">
-            <v-img :src="product.picture" max-height="200px" contain />
+            <v-img :src="product.picture" height="200px" />
             <v-divider />
             <v-card-title>
               <span>{{ product.name }}</span>

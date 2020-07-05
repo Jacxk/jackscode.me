@@ -196,6 +196,13 @@ export const getters = {
       }
       return 'Free'
     }
+  },
+  hasRole({ auth }: any) {
+    return (role: number) => {
+      const user = auth.user
+      if (!user) return false
+      return user.role === role
+    }
   }
 }
 

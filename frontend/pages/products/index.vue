@@ -14,7 +14,7 @@
           </v-list>
         </v-menu>
 
-        <v-btn to="/products/create">
+        <v-btn v-if="hasRole('seller')" to="/products/create">
           Create
         </v-btn>
       </v-col>
@@ -79,6 +79,7 @@ export default {
   },
   computed: {
     ...mapGetters('preferences', ['getProductView']),
+    ...mapGetters(['hasRole']),
     colsXs() {
       return this.getProductView() !== 0 ? this.cols.list.xs : this.cols.card.xs
     },
