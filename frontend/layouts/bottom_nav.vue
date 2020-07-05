@@ -32,3 +32,12 @@ export default {
   }
 }
 </script>
+<style>
+.v-bottom-navigation--fixed {
+  position: fixed !important;
+}
+
+.v-item-group.v-bottom-navigation .v-btn {
+  height: inherit !important;
+}
+</style>

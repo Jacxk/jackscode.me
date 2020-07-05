@@ -10,6 +10,7 @@
     <v-img
       :src="product.picture"
       height="200px"
+      aspect-ratio="1"
       class="white--text align-end"
       gradient="to bottom, rgba(0,0,0,0),rgba(0,0,0,.2), rgba(0,0,0,.8)"
     >
