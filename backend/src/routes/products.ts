@@ -1,6 +1,6 @@
 import { Router } from 'express'
 import { Schemas } from '../database'
-import { hasFiles, newProduct } from '../validation'
+import { hasFiles, newProduct, versionUpdate } from '../validation'
 import { JWT, sendError, uploadFirebase } from '../helpers'
 
 import Multer from 'multer'
@@ -51,6 +51,7 @@ products.get('/:id', async function(req, res) {
     const product = await Schemas.Product
       .findById(req.params.id)
       .populate('author', 'username')
+      .populate('versions')
       .lean()
       .exec()
     res.json(product)
@@ -60,11 +61,69 @@ products.get('/:id', async function(req, res) {
   }
 })
 
+products.patch(
+  '/:id',
+  JWT.authenticate,
+  multer.single('file'),
+  async function(req, res) {
+    try {
+      const body = req.body
+
+      if (!hasFiles(res, true, !body.file)) return
+
+      const { error } = versionUpdate(body)
+      if (error) {
+        return sendError(res, error.message, 400)
+      }
+
+      // @ts-ignore
+      const file = req.file
+      if (!hasFiles(res, true, file)) return
+
+      const id = req.params.id
+
+      const download_url = await uploadFirebase(
+        file.originalname,
+        // @ts-ignore
+        req.user._id,
+        id,
+        body.version,
+        file.buffer
+      )
+
+      const version = new Schemas.Version({
+        product: id,
+        version: body.version,
+        title: body.title,
+        change_log: body.change_log,
+        download_url
+      })
+
+      await Schemas.Product
+        .findByIdAndUpdate(id, {
+          $push: {
+            versions: version
+          },
+          $set: {
+            latest_version: version,
+            version: body.version
+          }
+        })
+        .exec()
+      await version.save()
+
+      res.sendStatus(204)
+    } catch (e) {
+      console.error(e)
+      return sendError(res)
+    }
+  })
+
 products.post('/', JWT.authenticate, upload, async function(req, res) {
   try {
     const body = req.body
 
-    if (!hasFiles(res, body.picture_file, body.file)) return
+    if (!hasFiles(res, !body.picture_file, !body.file)) return
 
     const { error } = newProduct(body)
     if (error) {
@@ -82,7 +141,7 @@ products.post('/', JWT.authenticate, upload, async function(req, res) {
     // @ts-ignore
     const files = req.files.file
 
-    if (!hasFiles(res, !pics, !files)) return
+    if (!hasFiles(res, pics, files)) return
 
     const pic = pics[0]
     const file = files[0]
@@ -92,6 +151,12 @@ products.post('/', JWT.authenticate, upload, async function(req, res) {
       author: _id
     })
 
+    const version: any = new Schemas.Version({
+      product: product._id,
+      version: body.version
+    })
+
+    product.latest_version = version._id
     product.picture = await uploadFirebase(
       pic.originalname,
       _id,
@@ -99,7 +164,8 @@ products.post('/', JWT.authenticate, upload, async function(req, res) {
       product.version,
       pic.buffer
     )
-    product.download_url = await uploadFirebase(
+
+    version.download_url = await uploadFirebase(
       file.originalname,
       _id,
       product._id,
@@ -108,6 +174,7 @@ products.post('/', JWT.authenticate, upload, async function(req, res) {
     )
 
     await product.save()
+    await version.save()
 
     res.json(product)
   } catch (e) {

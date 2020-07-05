@@ -91,15 +91,28 @@ export function productUpdate(data) {
       .base64(),
     price: Joi
       .number()
-      .min(100)
-      .max(5000),
+      .min(1)
+      .max(50)
+  })
+
+  return schema.validate(data)
+}
+
+export function versionUpdate(data) {
+  const schema = Joi.object({
+    title: Joi
+      .string()
+      .min(5)
+      .required(),
     version: Joi
       .string()
       .min(1)
       .required(),
-    file: Joi
+    change_log: Joi
       .string()
-      .base64()
+      .min(5),
+    product: Joi
+      .string()
       .required()
   })
 
@@ -107,11 +120,11 @@ export function productUpdate(data) {
 }
 
 export function hasFiles(res, picture, file) {
-  if (picture) {
+  if (!picture) {
     sendError(res, '"picture" not found on request', 400)
     return false
   }
-  if (file) {
+  if (!file) {
     sendError(res, '"file" not found on request', 400)
     return false
   }

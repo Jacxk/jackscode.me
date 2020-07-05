@@ -36,13 +36,14 @@ const schema = new Schema({
     type: Number,
     default: 0
   },
-  download_url: {
-    type: String,
+  latest_version: {
+    type: Schema.Types.ObjectId,
+    ref: 'version',
     required: true
   },
-  old_versions: [{
-    version: String,
-    download_path: String,
+  versions: [{
+    type: Schema.Types.ObjectId,
+    ref: 'version',
     default: []
   }],
   created_at: {

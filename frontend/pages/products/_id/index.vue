@@ -86,10 +86,31 @@
               </v-card>
             </v-tab-item>
             <v-tab-item>
-              <v-card width="100%" height="100%">
+              <v-card v-if="(product.versions || '').length < 1">
+                <v-card-text
+                  >There are no older versions right now... Come back
+                  later!</v-card-text
+                >
+              </v-card>
+              <v-card
+                v-for="(version, i) in product.versions"
+                :key="i"
+                width="100%"
+                height="100%"
+              >
+                <v-card-title>
+                  {{ version.title }}
+                </v-card-title>
                 <v-card-text>
-                  Soon
+                  {{ version.change_log }}
                 </v-card-text>
+                <v-card-actions class="d-flex justify-space-between">
+                  <v-subheader>v{{ version.version }}</v-subheader>
+                  <v-btn v-if="owns() || bought(product._id)" icon @click="">
+                    <v-icon>mdi-download</v-icon>
+                  </v-btn>
+                </v-card-actions>
+                <v-divider />
               </v-card>
             </v-tab-item>
           </v-tabs>
@@ -148,8 +169,8 @@
 
 <script>
 import { mapGetters, mapActions } from 'vuex'
-import HotItems from '../../components/products/hot_items'
-import Rating from '../../components/products/rating'
+import HotItems from '../../../components/products/hot_items'
+import Rating from '../../../components/products/rating'
 
 export default {
   name: 'Id',
