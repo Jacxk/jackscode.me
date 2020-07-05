@@ -16,7 +16,7 @@ auth.post('/register', async (req, res) => {
     }
 
     const { email, password, username } = body
-    const exists = await Schemas.User.findOne({ email })
+    const exists = await Schemas.User.exists({ email })
 
     if (exists) {
       return sendError(res, 'Email already exists', 400)
@@ -56,6 +56,7 @@ auth.post('/login', async (req, res) => {
     const user: any = await Schemas.User
       .findOne({ email: body.email })
       .lean()
+      .exec()
 
     if (!user) {
       return sendError(res, 'Incorrect email', 400)
@@ -81,6 +82,7 @@ auth.get('/user', JWT.authenticate, async (req, res) => {
       .populate('products_bought')
       .populate('cart')
       .lean()
+      .exec()
     return res.json(user)
   } catch (e) {
     console.log(e)

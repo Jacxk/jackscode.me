@@ -25,6 +25,7 @@ users.get('/:id/cart', async (req, res) => {
       .select('cart')
       .populate('cart')
       .lean()
+      .exec()
     res.json(cart)
   } catch (e) {
     console.log(e)
@@ -64,7 +65,9 @@ users.put('/:id/cart', async (req, res) => {
     const id = req.params['id']
     const { product } = req.body
 
-    await Schemas.User.findByIdAndUpdate(id, { $push: { cart: product } })
+    await Schemas.User
+      .findByIdAndUpdate(id, { $push: { cart: product } })
+      .exec()
 
     res.sendStatus(204)
   } catch (e) {
@@ -78,7 +81,9 @@ users.delete('/:id/cart', async (req, res) => {
     const id = req.params['id']
     const { product } = req.body
 
-    await Schemas.User.findByIdAndUpdate(id, { $pull: { cart: product } })
+    await Schemas.User
+      .findByIdAndUpdate(id, { $pull: { cart: product } })
+      .exec()
 
     res.sendStatus(204)
   } catch (e) {
@@ -110,16 +115,18 @@ users.put('/:id/product', async (req, res) => {
       return sendError(res, 'You do not own this product... Stop hacking...', 403)
     }
 
-    await Schemas.User.findByIdAndUpdate(userId, {
-      $push: {
-        products_bought: {
-          $each: JSON.parse(paymentIntent.metadata.products)
+    await Schemas.User
+      .findByIdAndUpdate(userId, {
+        $push: {
+          products_bought: {
+            $each: JSON.parse(paymentIntent.metadata.products)
+          }
+        },
+        $set: {
+          cart: []
         }
-      },
-      $set: {
-        cart: []
-      }
-    })
+      })
+      .exec()
 
     res.sendStatus(204)
   } catch (e) {

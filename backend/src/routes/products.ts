@@ -30,6 +30,7 @@ products.get('/', async function(_, res) {
       .find({})
       .populate('author', 'username')
       .lean()
+      .exec()
     res.json(products)
   } catch (e) {
     console.error(e)
@@ -43,6 +44,7 @@ products.get('/:id', async function(req, res) {
       .findById(req.params.id)
       .populate('author', 'username')
       .lean()
+      .exec()
     res.json(product)
   } catch (e) {
     console.error(e)
