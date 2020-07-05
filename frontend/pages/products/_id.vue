@@ -12,7 +12,7 @@
             <v-card-text>
               <div>Price: {{ price(product.price) }}</div>
               <div>Description: {{ product.description }}</div>
-              <div>Author: {{ product.author }}</div>
+              <div>Author: {{ (product.author || {}).username }}</div>
               <div>Version: {{ product.version }}</div>
               <div class="d-flex">
                 Rating:
@@ -29,7 +29,7 @@
               </div>
             </v-card-text>
             <v-card-text>
-              <div v-if="!bought(product._id) && product.price > 0">
+              <div v-if="buyable()">
                 <v-btn
                   v-if="inCart(product)"
                   color="warning"
@@ -50,8 +50,18 @@
                 </v-btn>
               </div>
               <div v-else>
-                <v-btn color="primary" block outlined @click="">
+                <v-btn color="primary" block outlined @click="downloadFile">
                   Download
+                </v-btn>
+                <v-btn
+                  v-if="owns()"
+                  class="mt-3"
+                  color="secondary"
+                  block
+                  outlined
+                  :to="`/products/${product._id}/update`"
+                >
+                  Update
                 </v-btn>
               </div>
             </v-card-text>
@@ -171,7 +181,19 @@ export default {
     ...mapActions({
       addCart: 'addToCart',
       removeCart: 'removeFromCart'
-    })
+    }),
+    buyable() {
+      return (
+        !this.owns() && !this.bought(this.product._id) && this.product.price > 0
+      )
+    },
+    owns() {
+      const user = this.$auth.user || {}
+      return this.product.author._id === user._id
+    },
+    async downloadFile() {
+      // TODO: Download the file
+    }
   }
 }
 </script>

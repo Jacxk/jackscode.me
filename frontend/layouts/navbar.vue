@@ -189,14 +189,7 @@ export default {
           { title: 'My account', icon: 'account', href: '/users/@me' },
           { title: 'My Cart', icon: 'cart', href: '/cart' }
         ],
-        logged: [
-          { title: 'Account', icon: 'account', href: '/users/@me' },
-          {
-            title: 'My Orders',
-            icon: 'storefront-outline',
-            href: '/account/orders'
-          }
-        ],
+        logged: [{ title: 'Account', icon: 'account', href: '/users/@me' }],
         not_logged: []
       },
       toggleTheme: () => {
