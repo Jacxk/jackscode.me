@@ -1,7 +1,7 @@
 <template>
   <v-row>
-    <v-col cols="12" sm="3">
-      <v-card width="300px" class="mx-auto">
+    <v-col cols="12" sm="12" md="3">
+      <v-card>
         <v-img
           :src="user.avatar || 'https://via.placeholder.com/200'"
           height="300px"
@@ -19,7 +19,7 @@
         </v-card-text>
       </v-card>
     </v-col>
-    <v-col cols="12" sm="9">
+    <v-col cols="12" sm="12" md="9">
       <v-tabs v-model="tab" grow>
         <v-tab>Ratings</v-tab>
         <v-tab>Products</v-tab>

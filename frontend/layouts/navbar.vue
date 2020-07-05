@@ -185,8 +185,8 @@ export default {
       items: {
         drawer: [
           { title: 'Home', icon: 'home', href: '/' },
-          { title: 'My account', icon: 'account', href: '/users/@me' },
           { title: 'All Products', icon: 'shopping', href: '/products' },
+          { title: 'My account', icon: 'account', href: '/users/@me' },
           { title: 'My Cart', icon: 'cart', href: '/cart' }
         ],
         logged: [

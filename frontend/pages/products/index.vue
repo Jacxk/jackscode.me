@@ -13,6 +13,10 @@
             <v-list-item @click="changeProductView(1)">List</v-list-item>
           </v-list>
         </v-menu>
+
+        <v-btn to="/products/create">
+          Create
+        </v-btn>
       </v-col>
     </v-row>
     <v-row align="stretch" justify="start" dense>

@@ -1,9 +1,9 @@
 <template>
   <v-card
     v-if="!dense"
-    :to="'/products/' + product._id"
+    :to="clickable ? '/products/' + product._id : ''"
     :ripple="false"
-    height="100%"
+    :height="fullWidth ? '100%' : ''"
     class="product-card"
     outlined
   >
@@ -13,11 +13,14 @@
       class="white--text align-end"
       gradient="to bottom, rgba(0,0,0,0),rgba(0,0,0,.2), rgba(0,0,0,.8)"
     >
-      <v-card-title>{{ product.name }}</v-card-title>
+      <v-card-title class="d-flex justify-space-between">
+        <span>{{ product.name || 'Untitled' }}</span>
+        <span>v{{ product.version || '0.0' }}</span>
+      </v-card-title>
     </v-img>
 
     <v-card-text class="mb-10">
-      <p>{{ product.description }}</p>
+      <p>{{ product.description || 'No description provided' }}</p>
     </v-card-text>
 
     <v-card-actions class="product-card-action">
@@ -38,7 +41,10 @@
       <v-spacer />
 
       <v-subheader>{{ price(product.price) }}</v-subheader>
-      <v-tooltip v-if="!bought(product._id) && product.price > 0" bottom>
+      <v-tooltip
+        v-if="buyable && !bought(product._id) && product.price > 0"
+        bottom
+      >
         <template v-slot:activator="{ on, attrs }">
           <v-btn
             icon
@@ -60,14 +66,19 @@
 
   <div v-else>
     <v-divider v-if="divider && top" />
-    <v-list-item :to="'/products/' + product._id" :ripple="false">
+    <v-list-item
+      :to="clickable ? '/products/' + product._id : ''"
+      :ripple="false"
+    >
       <v-list-item-avatar>
         <v-img :src="product.picture" />
       </v-list-item-avatar>
 
       <v-list-item-content>
         <v-list-item-title class="d-flex flex-wrap justify-space-between">
-          <span> {{ product.name }} - {{ price(product.price) }} </span>
+          <span>
+            {{ product.name || 'Untitled' }} - {{ price(product.price) }}
+          </span>
 
           <v-rating
             v-if="ratings"
@@ -82,7 +93,9 @@
             small
           />
         </v-list-item-title>
-        <v-list-item-subtitle v-text="product.description" />
+        <v-list-item-subtitle>
+          {{ product.description || 'No description provided' }}
+        </v-list-item-subtitle>
       </v-list-item-content>
 
       <v-list-item-action v-if="deleteable">
@@ -108,7 +121,8 @@ export default {
           price: 0.0,
           _id: null,
           rating: 0.0,
-          description: 'No description'
+          description: 'No description',
+          version: '0.0.0'
         }
       }
     },
@@ -117,7 +131,19 @@ export default {
     divider: Boolean,
     top: Boolean,
     bottom: Boolean,
+    clickable: {
+      type: Boolean,
+      default: true
+    },
     ratings: {
+      type: Boolean,
+      default: true
+    },
+    buyable: {
+      type: Boolean,
+      default: true
+    },
+    fullWidth: {
       type: Boolean,
       default: true
     }

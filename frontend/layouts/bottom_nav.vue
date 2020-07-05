@@ -1,5 +1,5 @@
 <template>
-  <v-bottom-navigation grow fixed>
+  <v-bottom-navigation grow fixed app>
     <v-btn v-for="(item, i) in items" :key="i" :to="item.href">
       <span>{{ item.title }}</span>
       <v-icon>mdi-{{ item.icon }}</v-icon>

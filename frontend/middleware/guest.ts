@@ -1,5 +1,4 @@
-// @ts-ignore
-export default function({ $auth, redirect }) {
+export default function({ $auth, redirect }: any) {
   if ($auth.loggedIn) {
     redirect('/')
   }

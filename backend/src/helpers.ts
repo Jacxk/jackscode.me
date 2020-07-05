@@ -1,8 +1,10 @@
-import jwt from 'jsonwebtoken'
-import bcrypt from 'bcrypt'
 import { Schemas } from './database/'
 import { Response } from 'express'
-import { Types } from "mongoose"
+import { Types } from 'mongoose'
+import * as Firebase from 'firebase-admin'
+
+import jwt from 'jsonwebtoken'
+import bcrypt from 'bcrypt'
 import Stripe from 'stripe'
 
 const secret = process.env.ACCESS_TOKEN_SECRET || 'youllneverfindme'
@@ -30,21 +32,25 @@ export const JWT = {
         return sendError(res, 'Authentication header must be "Bearer"', 400)
       }
 
-      jwt.verify(token, secret, async (err, user) => {
+      jwt.verify(token, secret, async (err) => {
         if (err) {
           return sendError(res, 'Forbidden', 403)
         }
 
         try {
-          const exists = await Schemas.User.findOne({ token })
-          if (!exists) {
+          const user = await Schemas.User
+            .findOne({ token })
+            .select('-password')
+            .lean()
+          if (!user) {
             return sendError(res, 'Unauthorized', 401)
           }
+
+          req.user = user
         } catch {
           return sendError(res)
         }
 
-        req.user = user
         next()
       })
     } else {
@@ -69,6 +75,17 @@ export const Password = {
 export function isValidObjectId(id) {
   const object = Types.ObjectId(id)
   return object.equals(id)
+}
+
+export async function uploadFirebase(fileName: string, user: string, product: string, buffer: Buffer) {
+  const storage = Firebase.storage()
+  const bucket = storage.bucket()
+  const file = bucket.file(`products/${ user }/${product}/${ fileName }`)
+
+  await file.save(buffer, { contentType: 'auto' })
+
+  const firebase_url = 'https://firebasestorage.googleapis.com'
+  return `${ firebase_url }/v0/b/${ bucket.name }/o/${ encodeURIComponent(file.name) }?alt=media`
 }
 
 export const stripe = new Stripe(process.env.STRIPE_API_KEY, null)

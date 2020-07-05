@@ -21,6 +21,10 @@ const schema = new Schema({
     type: String,
     default: ''
   },
+  role: {
+    type: String,
+    default: 'buyer'
+  },
   avatar: {
     type: String,
     default: 'https://via.placeholder.com/200'

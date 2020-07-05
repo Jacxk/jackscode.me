@@ -28,14 +28,23 @@ const schema = new Schema({
   },
   price: {
     type: Number,
-    min: 100,
-    max: 5000,
+    min: 0,
+    max: 50,
     required: true
   },
   rating: {
     type: Number,
     default: 0
   },
+  download_url: {
+    type: String,
+    required: true
+  },
+  old_versions: [{
+    version: String,
+    download_path: String,
+    default: []
+  }],
   created_at: {
     type: Date,
     default: Date.now
