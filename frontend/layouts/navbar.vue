@@ -20,6 +20,7 @@
           solo
           autofocus
           @blur="search = false"
+          @input="makeSearch"
         />
       </v-slide-x-reverse-transition>
 
@@ -130,6 +131,7 @@
           autofocus
           outlined
           @blur="search = false"
+          @input="makeSearch"
         />
       </v-card>
     </v-expand-transition>
@@ -209,6 +211,11 @@ export default {
     },
     notifications() {
       return []
+    }
+  },
+  methods: {
+    makeSearch(text) {
+      // TODO: implement search
     }
   }
 }

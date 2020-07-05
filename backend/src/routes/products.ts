@@ -24,10 +24,18 @@ const upload = multer.fields([
   }
 ])
 
-products.get('/', async function(_, res) {
+products.get('/', async function(req, res) {
   try {
+    const query = req.query
+    let conditions = {}
+
+    if (query && query.search) {
+      // @ts-ignore
+      conditions = { name: new RegExp(query.search, 'ig') }
+    }
+
     const products = await Schemas.Product
-      .find({})
+      .find(conditions)
       .populate('author', 'username')
       .lean()
       .exec()
@@ -74,7 +82,7 @@ products.post('/', JWT.authenticate, upload, async function(req, res) {
     // @ts-ignore
     const files = req.files.file
 
-    if (!hasFiles(res, !pics, !files)) return;
+    if (!hasFiles(res, !pics, !files)) return
 
     const pic = pics[0]
     const file = files[0]

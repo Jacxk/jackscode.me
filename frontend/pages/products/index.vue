@@ -52,8 +52,10 @@ import Item from '../../components/products/item'
 
 export default {
   components: { Item },
-  async asyncData({ $axios }) {
-    const products = await $axios.$get('/api/products')
+  async asyncData({ $axios, query }) {
+    const text = query.search
+    const search = text ? `?search=${text}` : ''
+    const products = await $axios.$get(`/api/products/${search}`)
     return { products }
   },
   data() {
