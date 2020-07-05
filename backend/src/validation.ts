@@ -1,4 +1,5 @@
 import Joi from '@hapi/joi'
+import { sendError } from './helpers'
 
 export function newUser(data) {
   const schema = Joi.object({
@@ -103,4 +104,17 @@ export function productUpdate(data) {
   })
 
   return schema.validate(data)
+}
+
+export function hasFiles(res, picture, file) {
+  if (picture) {
+    sendError(res, '"picture" not found on request', 400)
+    return false
+  }
+  if (file) {
+    sendError(res, '"file" not found on request', 400)
+    return false
+  }
+
+  return true
 }

@@ -77,15 +77,22 @@ export function isValidObjectId(id) {
   return object.equals(id)
 }
 
-export async function uploadFirebase(fileName: string, user: string, product: string, buffer: Buffer) {
+export async function uploadFirebase(
+  fileName: string,
+  user: string,
+  product: string,
+  version: string,
+  buffer: Buffer
+) {
   const storage = Firebase.storage()
   const bucket = storage.bucket()
-  const file = bucket.file(`products/${ user }/${product}/${ fileName }`)
+  const file = bucket.file(`products/${ user }/${ product }/${ version }/${ fileName }`)
 
   await file.save(buffer, { contentType: 'auto' })
 
   const firebase_url = 'https://firebasestorage.googleapis.com'
-  return `${ firebase_url }/v0/b/${ bucket.name }/o/${ encodeURIComponent(file.name) }?alt=media`
+  const filePath = encodeURIComponent(file.name)
+  return `${ firebase_url }/v0/b/${ bucket.name }/o/${ filePath }?alt=media`
 }
 
 export const stripe = new Stripe(process.env.STRIPE_API_KEY, null)

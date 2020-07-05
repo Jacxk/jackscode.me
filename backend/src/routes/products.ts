@@ -1,6 +1,6 @@
 import { Router } from 'express'
 import { Schemas } from '../database'
-import { newProduct } from '../validation'
+import { hasFiles, newProduct } from '../validation'
 import { JWT, sendError, uploadFirebase } from '../helpers'
 
 import Multer from 'multer'
@@ -54,19 +54,14 @@ products.post('/', JWT.authenticate, upload, async function(req, res) {
   try {
     const body = req.body
 
-    if (body.picture_file) {
-      return sendError(res, '"picture" not found on request', 400)
-    }
-    if (body.file) {
-      return sendError(res, '"file" not found on request', 400)
-    }
+    if (!hasFiles(res, body.picture_file, body.file)) return
 
     const { error } = newProduct(body)
     if (error) {
       return sendError(res, error.message, 400)
     }
 
-    const { role, username, _id }: any = req.user
+    const { role, _id }: any = req.user
 
     if (role !== 'seller') {
       return sendError(res, 'Forbidden', 403)
@@ -77,35 +72,31 @@ products.post('/', JWT.authenticate, upload, async function(req, res) {
     // @ts-ignore
     const files = req.files.file
 
-    if (!pics) {
-      return sendError(res, '"picture" not found on request', 400)
-    }
-    if (!files) {
-      return sendError(res, '"file" not found on request', 400)
-    }
+    if (!hasFiles(res, !pics, !files)) return;
 
     const pic = pics[0]
     const file = files[0]
 
-    const picture = await uploadFirebase(
+    const product: any = new Schemas.Product({
+      ...body,
+      author: _id
+    })
+
+    product.picture = await uploadFirebase(
       pic.originalname,
-      username,
-      body.name,
+      _id,
+      product._id,
+      product.version,
       pic.buffer
     )
-    const download_url = await uploadFirebase(
+    product.download_url = await uploadFirebase(
       file.originalname,
-      username,
-      body.name,
+      _id,
+      product._id,
+      product.version,
       file.buffer
     )
 
-    const product = new Schemas.Product({
-      ...body,
-      author: _id,
-      picture,
-      download_url
-    })
     await product.save()
 
     res.json(product)

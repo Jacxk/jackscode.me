@@ -148,6 +148,10 @@ export default {
           formData.append(key, product[key])
         })
 
+        this.sendSnackbar({
+          text: 'Creating product, please wait...',
+          color: 'warning'
+        })
         const { data } = await this.$axios.post('/api/products', formData, {
           headers: {
             'content-type': 'multipart/form-data'
