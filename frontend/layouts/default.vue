@@ -30,16 +30,12 @@
 
 <script>
 import { mapState, mapMutations } from 'vuex'
-import axios from 'axios'
 import Navbar from './navbar'
 import BottomNav from './bottom_nav'
 
 export default {
   components: { BottomNav, Navbar },
   data() {
-    const token = this.$auth.loggedIn ? this.$auth.user.token : null
-    axios.defaults.headers.common.Authorization = `Bearer ${token}`
-
     if (this.$auth.loggedIn) {
       this.$store.dispatch('setCart', this.$auth.user.cart)
     }
