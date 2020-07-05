@@ -4,7 +4,7 @@
     :to="clickable ? '/products/' + product._id : ''"
     :ripple="false"
     :height="fullWidth ? '100%' : ''"
-    class="product-card"
+    class="relative"
     outlined
   >
     <v-img
@@ -19,11 +19,13 @@
       </v-card-title>
     </v-img>
 
-    <v-card-text class="mb-10">
+    <v-card-text class="mb-8">
       <p>{{ product.description || 'No description provided' }}</p>
+      <v-divider class="pb-3" />
+      <p>Author: {{ product.author.username }}</p>
     </v-card-text>
 
-    <v-card-actions class="product-card-action">
+    <v-card-actions class="absolute bottom-0">
       <v-rating
         v-if="ratings"
         v-model="product.rating"
