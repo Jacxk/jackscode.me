@@ -27,12 +27,15 @@
     </v-card-text>
 
     <v-card-actions class="absolute bottom-0">
+      <span class="grey--text text--lighten-2 caption">
+        ({{ (product.ratings || '').length }})
+      </span>
       <v-rating
         v-if="ratings"
         v-model="product.rating"
         :title="product.rating"
         color="yellow darken-3"
-        class="px-2"
+        class="pb-1"
         background-color="grey darken-1"
         readonly
         half-increments
@@ -83,18 +86,23 @@
             {{ product.name || 'Untitled' }} - {{ price(product.price) }}
           </span>
 
-          <v-rating
-            v-if="ratings"
-            v-model="product.rating"
-            :title="product.rating"
-            color="yellow darken-3"
-            background-color="grey darken-1"
-            readonly
-            half-increments
-            hover
-            dense
-            small
-          />
+          <div class="d-flex justify-center">
+            <span class="grey--text text--lighten-2 caption pt-1">
+              ({{ (product.ratings || '').length }})
+            </span>
+            <v-rating
+              v-if="ratings"
+              v-model="product.rating"
+              :title="product.rating"
+              color="yellow darken-3"
+              background-color="grey darken-1"
+              readonly
+              half-increments
+              hover
+              dense
+              small
+            />
+          </div>
         </v-list-item-title>
         <v-list-item-subtitle>
           {{ product.description || 'No description provided' }}
