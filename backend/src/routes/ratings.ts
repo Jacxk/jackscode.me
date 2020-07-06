@@ -77,10 +77,22 @@ ratings.put('/product/:id', async (req, res) => {
     const user: any = await Schemas.User
       // @ts-ignore
       .findById(req.user._id)
-      .select('ratings_given')
+      .select('ratings_given products_bought')
       .populate('ratings_given', 'version')
+      .populate('products_bought', 'price')
       .lean()
       .exec()
+
+    // @ts-ignore
+    const owns = await Schemas.Product.findOne({ author: req.user._id })
+
+    if (owns) {
+      return sendError(res, 'You cannot rate your own products', 403)
+    }
+
+    if (user.products_bought.price > 0 && !user.products_bought.some(product => product._id === body.product)) {
+      return sendError(res, 'You need to buy this product first.', 403)
+    }
 
     if (user.ratings_given.some(rating => rating.version + '' === body.version)) {
       return sendError(res, 'You already rated this version.', 403)
