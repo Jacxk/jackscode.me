@@ -81,6 +81,7 @@ auth.get('/user', JWT.authenticate, async (req, res) => {
       .findById(req.user._id)
       .populate('products_bought')
       .populate('cart')
+      .populate('ratings_given')
       .lean()
       .exec()
     return res.json(user)

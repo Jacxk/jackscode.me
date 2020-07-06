@@ -41,7 +41,9 @@ export const JWT = {
           const user = await Schemas.User
             .findOne({ token })
             .select('-password')
+            .populate('ratings_given')
             .lean()
+            .exec()
           if (!user) {
             return sendError(res, 'Unauthorized', 401)
           }

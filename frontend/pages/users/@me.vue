@@ -27,13 +27,13 @@
       <v-tabs-items v-model="tab">
         <v-tab-item>
           <v-card width="100%" height="100%">
-            <v-card-text v-if="(user.ratings_given || []).length > 0">
-              <v-list v-for="(i, product) in user.ratings_given" :key="i">
-                <Rating :title="product.title" :rating="product.rating">
-                  {{ product.content }}
+            <div v-if="(user.ratings_given || []).length > 0">
+              <v-list v-for="(rating, i) in user.ratings_given" :key="i">
+                <Rating :title="user.username" :rating="rating.stars">
+                  {{ rating.content }}
                 </Rating>
               </v-list>
-            </v-card-text>
+            </div>
             <v-card-text v-else>
               No ratings given
             </v-card-text>
