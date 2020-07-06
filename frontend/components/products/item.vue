@@ -48,7 +48,12 @@
 
       <v-subheader>{{ price(product.price) }}</v-subheader>
       <v-tooltip
-        v-if="buyable && !bought(product._id) && product.price > 0"
+        v-if="
+          buyable &&
+            !owns(product._id) &&
+            !bought(product._id) &&
+            product.price > 0
+        "
         bottom
       >
         <template v-slot:activator="{ on, attrs }">
@@ -172,6 +177,10 @@ export default {
         this.removeFromCart(item)
         this.$emit('remove', item)
       }
+    },
+    owns() {
+      const user = this.$auth.user || {}
+      return this.product.author._id === user._id
     }
   }
 }
