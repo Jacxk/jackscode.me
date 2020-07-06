@@ -50,7 +50,12 @@
                 </v-btn>
               </div>
               <div v-else>
-                <v-btn color="primary" block outlined @click="downloadFile">
+                <v-btn
+                  color="primary"
+                  block
+                  outlined
+                  @click="downloadFile(product.latest_version)"
+                >
                   Download
                 </v-btn>
                 <v-btn
@@ -109,7 +114,11 @@
                     v{{ version.version }} -
                     <Timeago :datetime="version.created_at" auto-update />
                   </v-subheader>
-                  <v-btn v-if="owns() || bought(product._id)" icon @click="">
+                  <v-btn
+                    v-if="owns() || bought(product._id)"
+                    icon
+                    @click="downloadFile(version._id)"
+                  >
                     <v-icon>mdi-download</v-icon>
                   </v-btn>
                 </v-card-actions>
@@ -229,8 +238,26 @@ export default {
       const user = this.$auth.user || {}
       return this.product.author._id === user._id
     },
-    async downloadFile() {
-      // TODO: Download the file
+    async downloadFile(version) {
+      try {
+        this.sendSnackbar({ text: 'Downloading...', color: 'warning' })
+        const { data, headers } = await this.$axios.get(
+          `/api/products/${this.product._id}/download`,
+          {
+            params: { version },
+            responseType: 'blob'
+          }
+        )
+        const url = window.URL.createObjectURL(new Blob([data]))
+        const link = document.createElement('a')
+        link.href = url
+        link.setAttribute('download', headers['file-name'])
+        document.body.appendChild(link)
+        link.click()
+        link.remove()
+      } catch (e) {
+        this.sendSnackbar({ text: e.response.data.error, color: 'error' })
+      }
     },
     async sendRating() {
       try {

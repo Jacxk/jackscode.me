@@ -1,11 +1,16 @@
 import { Router } from 'express'
 import { Schemas } from '../database'
-import { hasFiles, newProduct, newRating, versionUpdate } from '../validation'
-import { calculateRating, JWT, sendError, uploadFirebase } from '../helpers'
-
+import { hasFiles, newProduct, versionUpdate } from '../validation'
+import { JWT, sendError, uploadFirebase } from '../helpers'
+import { v4 as uuid } from 'uuid'
+import { storage } from 'firebase-admin'
 import Multer from 'multer'
+import got from 'got'
 
 const products = Router()
+
+const bucket = storage().bucket()
+
 const multer = Multer({
   storage: Multer.memoryStorage(),
   limits: {
@@ -181,7 +186,75 @@ products.post('/', upload, async function(req, res) {
     await product.save()
     await version.save()
 
+    await Schemas.User.findByIdAndUpdate(_id, {
+      $push: {
+        products_created: product._id
+      }
+    })
+
     res.json(product)
+  } catch (e) {
+    console.error(e)
+    return sendError(res)
+  }
+})
+
+products.get('/:id/download', async (req, res) => {
+  try {
+    const bought = await Schemas.User.exists({
+      $or: [
+        {
+          products_bought: {
+            $in: [ req.params.id ]
+          }
+        },
+        {
+          products_created: {
+            $in: [ req.params.id ]
+          }
+        }
+      ]
+    })
+    if (!bought) {
+      return sendError(res, 'You do not own this product', 403)
+    }
+
+    const query = req.query
+    if (!query.version) {
+      return sendError(res, 'No product version found on body', 400)
+    }
+
+    const { download_url }: any = await Schemas.Version
+      .findById(query.version)
+      .select('download_url')
+      .lean()
+      .exec()
+
+    const [ match ] = download_url.match(/products.*/)
+    if (!match) {
+      return sendError(res, 'Invalid URL provided', 400)
+    }
+    const url = decodeURIComponent(match)
+    const file = bucket.file(url.replace(/\?.*/g, ''))
+    const uid = uuid()
+
+    await file.setMetadata({
+      metadata: {
+        firebaseStorageDownloadTokens: uid
+      }
+    })
+
+    const buffer = await got(`${ download_url }&token=${ uid }`).buffer()
+    const fileName = download_url.match(/(%2F.*%2F)(.*)\?/)[2]
+
+    res.setHeader('file-name', fileName)
+    res.send(buffer)
+
+    await file.setMetadata({
+      metadata: {
+        firebaseStorageDownloadTokens: uuid()
+      }
+    })
   } catch (e) {
     console.error(e)
     return sendError(res)

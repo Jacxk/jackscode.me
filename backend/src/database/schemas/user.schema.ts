@@ -36,6 +36,13 @@ const schema = new Schema({
       default: []
     }
   ],
+  products_created: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: 'product',
+      default: []
+    }
+  ],
   ratings_given: [
     {
       type: Schema.Types.ObjectId,
