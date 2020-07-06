@@ -156,6 +156,7 @@ products.post('/', upload, async function(req, res) {
     })
 
     const version: any = new Schemas.Version({
+      title: 'First Release',
       product: product._id,
       version: body.version
     })
