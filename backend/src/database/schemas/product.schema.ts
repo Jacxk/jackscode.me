@@ -36,6 +36,11 @@ const schema = new Schema({
     type: Number,
     default: 0
   },
+  ratings: [{
+    type: Schema.Types.ObjectId,
+    ref: 'rating',
+    default: []
+  }],
   latest_version: {
     type: Schema.Types.ObjectId,
     ref: 'version',

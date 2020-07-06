@@ -95,4 +95,13 @@ export async function uploadFirebase(
   return `${ firebase_url }/v0/b/${ bucket.name }/o/${ filePath }?alt=media`
 }
 
+export function calculateRating(...ratings: Array<number>): number {
+  if (ratings.length !== 5) return 0
+
+  let res = ratings.reduce((a, b, i) => a + ((i+1)*b), 0)
+  res /= ratings.reduce((a, b) => a + b)
+
+  return Number(res.toFixed(2))
+}
+
 export const stripe = new Stripe(process.env.STRIPE_API_KEY, null)

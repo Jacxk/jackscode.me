@@ -123,7 +123,7 @@
 
               <span>Leave a rating:</span>
               <v-rating
-                v-model="rating"
+                v-model="stars"
                 color="yellow darken-3"
                 background-color="grey darken-1"
                 empty-icon="$ratingFull"
@@ -135,30 +135,41 @@
             <v-divider />
 
             <v-expand-transition>
-              <div v-if="rating > 0">
+              <div v-if="stars > 0">
                 <v-list-item>
-                  <v-textarea class="pt-8" outlined label="Message" />
+                  <v-textarea
+                    v-model="content"
+                    class="pt-8"
+                    outlined
+                    label="Message"
+                  />
                 </v-list-item>
                 <v-list-item>
                   <v-spacer />
-                  <v-btn
-                    class="mr-5"
-                    color="error"
-                    outlined
-                    @click="rating = 0"
-                  >
+                  <v-btn class="mr-5" color="error" outlined @click="stars = 0">
                     Cancel
                   </v-btn>
-                  <v-btn color="success" outlined>
+                  <v-btn color="success" outlined @click="sendRating">
                     Submit
                   </v-btn>
                 </v-list-item>
+                <v-divider />
               </div>
             </v-expand-transition>
 
-            <v-list v-for="i in 5" :key="i">
-              <v-divider />
-              <Rating :title="'User ' + i" :rating="5">Rating #{{ i }}</Rating>
+            <v-card v-if="(product.ratings || '').length < 1">
+              <v-card-text>
+                No ratings found for this product...
+              </v-card-text>
+            </v-card>
+            <v-list v-for="(rating, i) in product.ratings" v-else :key="i">
+              <Rating
+                :picture="rating.created_by.avatar"
+                :title="rating.created_by.username"
+                :rating="rating.stars"
+              >
+                {{ rating.content }}
+              </Rating>
             </v-list>
           </v-card>
         </v-col>
@@ -188,7 +199,8 @@ export default {
       tab: null,
       params: this.$route.params,
       product: {},
-      rating: 0
+      stars: 0,
+      content: ''
     }
   },
   computed: {
@@ -201,7 +213,8 @@ export default {
   methods: {
     ...mapActions({
       addCart: 'addToCart',
-      removeCart: 'removeFromCart'
+      removeCart: 'removeFromCart',
+      sendSnackbar: 'sendSnackbar'
     }),
     buyable() {
       return (
@@ -214,6 +227,33 @@ export default {
     },
     async downloadFile() {
       // TODO: Download the file
+    },
+    async sendRating() {
+      try {
+        const { data } = await this.$axios.put(
+          `/api/products/${this.product._id}/rating`,
+          {
+            stars: this.stars,
+            content: this.content,
+            version: this.product.latest_version,
+            product: this.product._id
+          }
+        )
+
+        data.created_by = this.$auth.user
+
+        this.product.ratings.push(data)
+        this.product.rating = data.overall_rating
+        this.content = ''
+        this.stars = 0
+
+        this.sendSnackbar({
+          text: 'Rating submitted. Thank you!',
+          color: 'success'
+        })
+      } catch (e) {
+        this.sendSnackbar({ text: e.response.data.error, color: 'error' })
+      }
     }
   }
 }

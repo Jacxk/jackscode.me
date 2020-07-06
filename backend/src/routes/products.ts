@@ -1,7 +1,7 @@
 import { Router } from 'express'
 import { Schemas } from '../database'
-import { hasFiles, newProduct, versionUpdate } from '../validation'
-import { JWT, sendError, uploadFirebase } from '../helpers'
+import { hasFiles, newProduct, newRating, versionUpdate } from '../validation'
+import { calculateRating, JWT, sendError, uploadFirebase } from '../helpers'
 
 import Multer from 'multer'
 
@@ -50,8 +50,14 @@ products.get('/:id', async function(req, res) {
   try {
     const product = await Schemas.Product
       .findById(req.params.id)
-      .populate('author', 'username')
+      .populate('author', 'username avatar')
       .populate('versions')
+      .populate({
+        path: 'ratings',
+        populate: {
+          path: 'created_by'
+        }
+      })
       .lean()
       .exec()
     res.json(product)
@@ -61,65 +67,131 @@ products.get('/:id', async function(req, res) {
   }
 })
 
-products.patch(
-  '/:id',
-  JWT.authenticate,
-  multer.single('file'),
-  async function(req, res) {
-    try {
-      const body = req.body
+products.use(JWT.authenticate)
 
-      if (!hasFiles(res, true, !body.file)) return
+products.put('/:id/rating', async (req, res) => {
+  try {
+    const body = req.body
 
-      const { error } = versionUpdate(body)
-      if (error) {
-        return sendError(res, error.message, 400)
-      }
-
-      // @ts-ignore
-      const file = req.file
-      if (!hasFiles(res, true, file)) return
-
-      const id = req.params.id
-
-      const download_url = await uploadFirebase(
-        file.originalname,
-        // @ts-ignore
-        req.user._id,
-        id,
-        body.version,
-        file.buffer
-      )
-
-      const version = new Schemas.Version({
-        product: id,
-        version: body.version,
-        title: body.title,
-        change_log: body.change_log,
-        download_url
-      })
-
-      await Schemas.Product
-        .findByIdAndUpdate(id, {
-          $push: {
-            versions: version
-          },
-          $set: {
-            latest_version: version,
-            version: body.version
-          }
-        })
-        .exec()
-      await version.save()
-
-      res.sendStatus(204)
-    } catch (e) {
-      console.error(e)
-      return sendError(res)
+    const { error } = newRating(body)
+    if (error) {
+      return sendError(res, error.message, 400)
     }
-  })
 
-products.post('/', JWT.authenticate, upload, async function(req, res) {
+    const user: any = await Schemas.User
+      // @ts-ignore
+      .findById(req.user._id)
+      .select('ratings_given')
+      .populate('ratings_given', 'version')
+      .lean()
+      .exec()
+
+    console.log(user.ratings_given, user.ratings_given.some(rating => rating.version+'' === body.version))
+    if (user.ratings_given.some(rating => rating.version+'' === body.version)) {
+      return sendError(res, 'You already rated this version.', 403)
+    }
+
+    const rating = new Schemas.Rating({
+      ...body,
+      // @ts-ignore
+      created_by: req.user._id
+    })
+    await rating.save()
+
+    await Schemas.User
+      // @ts-ignore
+      .findByIdAndUpdate(req.user._id, {
+        $push: {
+          ratings_given: rating._id
+        }
+      })
+      .exec()
+
+    const product: any = await Schemas.Product
+      .findByIdAndUpdate(body.product, {
+        $push: {
+          ratings: rating._id
+        }
+      })
+      .populate('ratings', 'stars')
+      .exec()
+
+    const ratings: Array<any> = product.ratings
+    ratings.push(rating)
+
+    const total = [ 1, 2, 3, 4, 5 ]
+      .map(i => ratings.filter(rating => rating.stars === i).length)
+
+    product.rating = calculateRating(...total)
+
+    await Schemas.Product
+      .findByIdAndUpdate(body.product, { rating: product.rating })
+      .exec()
+
+    // @ts-ignore
+    res.json({ ...rating._doc, overall_rating: product.rating })
+
+  } catch (e) {
+    console.error(e)
+    return sendError(res)
+  }
+})
+
+products.patch('/:id', multer.single('file'), async function(req, res) {
+  try {
+    const body = req.body
+
+    if (!hasFiles(res, true, !body.file)) return
+
+    const { error } = versionUpdate(body)
+    if (error) {
+      return sendError(res, error.message, 400)
+    }
+
+    // @ts-ignore
+    const file = req.file
+    if (!hasFiles(res, true, file)) return
+
+    const id = req.params.id
+
+    const download_url = await uploadFirebase(
+      file.originalname,
+      // @ts-ignore
+      req.user._id,
+      id,
+      body.version,
+      file.buffer
+    )
+
+    const version = new Schemas.Version({
+      product: id,
+      version: body.version,
+      title: body.title,
+      change_log: body.change_log,
+      download_url
+    })
+
+    await Schemas.Product
+      .findByIdAndUpdate(id, {
+        $push: {
+          versions: version
+        },
+        $set: {
+          latest_version: version,
+          version: body.version
+        }
+      })
+      .exec()
+    await version.save()
+
+    res.sendStatus(204)
+  } catch (e) {
+    console.error(e)
+    return sendError(res)
+  }
+})
+
+products.post('/', upload, async function(req, res) {
   try {
     const body = req.body
 

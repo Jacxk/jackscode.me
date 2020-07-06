@@ -119,6 +119,27 @@ export function versionUpdate(data) {
   return schema.validate(data)
 }
 
+export function newRating(data) {
+  const schema = Joi.object({
+    stars: Joi
+      .number()
+      .min(1)
+      .max(5)
+      .required(),
+    content: Joi
+      .string()
+      .required(),
+    product: Joi
+      .string()
+      .required(),
+    version: Joi
+      .string()
+      .required()
+  })
+
+  return schema.validate(data)
+}
+
 export function hasFiles(res, picture, file) {
   if (!picture) {
     sendError(res, '"picture" not found on request', 400)
