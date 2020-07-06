@@ -103,17 +103,15 @@
                 width="100%"
                 height="100%"
               >
-                <v-card-title>
-                  {{ version.title }}
-                </v-card-title>
+                <v-card-title>{{ version.title }}</v-card-title>
+                <v-card-subtitle>
+                  <Timeago :datetime="version.created_at" auto-update />
+                </v-card-subtitle>
                 <v-card-text>
                   {{ version.change_log }}
                 </v-card-text>
                 <v-card-actions class="d-flex justify-space-between">
-                  <v-subheader>
-                    v{{ version.version }} -
-                    <Timeago :datetime="version.created_at" auto-update />
-                  </v-subheader>
+                  <v-subheader> v{{ version.version }} </v-subheader>
                   <v-btn
                     v-if="owns() || bought(product._id)"
                     icon
