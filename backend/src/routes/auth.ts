@@ -79,9 +79,9 @@ auth.get('/user', JWT.authenticate, async (req, res) => {
     const user = await Schemas.User
       // @ts-ignore
       .findById(req.user._id)
+      .select('-password')
       .populate('products_bought')
       .populate('cart')
-      .populate('ratings_given')
       .lean()
       .exec()
     return res.json(user)

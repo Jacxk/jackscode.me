@@ -27,6 +27,7 @@
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^5.9.19",
     "nuxt": "^2.12.2",
+    "vue-timeago": "^5.1.2",
     "vuetify": "^2.3.0",
     "vuex-persist": "^2.2.0"
   },

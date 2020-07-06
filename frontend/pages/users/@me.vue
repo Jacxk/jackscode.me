@@ -27,9 +27,15 @@
       <v-tabs-items v-model="tab">
         <v-tab-item>
           <v-card width="100%" height="100%">
-            <div v-if="(user.ratings_given || []).length > 0">
-              <v-list v-for="(rating, i) in user.ratings_given" :key="i">
-                <Rating :title="user.username" :rating="rating.stars">
+            <div v-if="(ratings_given || []).length > 0">
+              <v-list v-for="(rating, i) in ratings_given" :key="i">
+                <Rating
+                  :to="`/products/${rating.product._id}`"
+                  :date="rating.created_at"
+                  :title="rating.product.name"
+                  :picture="rating.product.picture"
+                  :rating="rating.stars"
+                >
                   {{ rating.content }}
                 </Rating>
               </v-list>
@@ -70,6 +76,11 @@ export default {
   name: 'Me',
   components: { Item, Rating },
   middleware: 'auth',
+  async asyncData({ $axios, $auth }) {
+    const { data } = await $axios.get(`/api/ratings/user/${$auth.user._id}`)
+
+    return { ratings_given: data }
+  },
   data() {
     return {
       tab: null,

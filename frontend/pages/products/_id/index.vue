@@ -105,7 +105,10 @@
                   {{ version.change_log }}
                 </v-card-text>
                 <v-card-actions class="d-flex justify-space-between">
-                  <v-subheader>v{{ version.version }}</v-subheader>
+                  <v-subheader>
+                    v{{ version.version }} -
+                    <Timeago :datetime="version.created_at" auto-update />
+                  </v-subheader>
                   <v-btn v-if="owns() || bought(product._id)" icon @click="">
                     <v-icon>mdi-download</v-icon>
                   </v-btn>
@@ -167,6 +170,7 @@
                 :picture="rating.created_by.avatar"
                 :title="rating.created_by.username"
                 :rating="rating.stars"
+                :date="rating.created_at"
               >
                 {{ rating.content }}
               </Rating>
@@ -231,7 +235,7 @@ export default {
     async sendRating() {
       try {
         const { data } = await this.$axios.put(
-          `/api/products/${this.product._id}/rating`,
+          `/api/ratings/product/${this.product._id}/`,
           {
             stars: this.stars,
             content: this.content,
