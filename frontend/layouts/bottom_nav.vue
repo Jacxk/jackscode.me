@@ -6,9 +6,10 @@
     </v-btn>
     <v-btn to="/cart">
       <span>Cart</span>
-      <v-badge :content="inCart" top overlap>
+      <v-badge v-if="hasItemsInCart" :content="inCart" top overlap>
         <v-icon>mdi-cart</v-icon>
       </v-badge>
+      <v-icon v-else>mdi-cart</v-icon>
     </v-btn>
   </v-bottom-navigation>
 </template>
@@ -26,8 +27,14 @@ export default {
     }
   },
   computed: {
+    cart() {
+      return this.$store.state.cart
+    },
     inCart() {
-      return String(this.$store.state.cart.length)
+      return String(this.cart.length)
+    },
+    hasItemsInCart() {
+      return this.cart.length > 0
     }
   }
 }

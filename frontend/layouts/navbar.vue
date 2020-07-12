@@ -32,23 +32,29 @@
           <v-icon>mdi-home</v-icon>
         </v-btn>
         <v-btn to="/cart" icon>
-          <v-badge :content="inCart" bottom overlap>
+          <v-badge v-if="hasItemsInCart" :content="inCart" bottom overlap>
             <v-icon>mdi-cart</v-icon>
           </v-badge>
+          <v-icon v-else>mdi-cart</v-icon>
         </v-btn>
       </div>
 
       <v-menu offset-y auto transition="slide-y-transition">
         <template v-slot:activator="{ on, attrs }">
           <v-btn icon v-bind="attrs" v-on="on">
-            <v-badge :content="String(notifications.length)" bottom overlap>
-              <v-icon v-if="notifications.length > 0">mdi-bell-ring</v-icon>
-              <v-icon v-else>mdi-bell</v-icon>
+            <v-badge
+              v-if="hasNotifications"
+              :content="String(notifications.length)"
+              bottom
+              overlap
+            >
+              <v-icon>mdi-bell-ring</v-icon>
             </v-badge>
+            <v-icon v-else>mdi-bell</v-icon>
           </v-btn>
         </template>
         <v-list>
-          <div v-if="notifications.length > 0">
+          <div v-if="hasNotifications">
             <v-list-item v-for="(notif, i) in notifications" :key="i">
               {{ notif }}
             </v-list-item>
@@ -206,11 +212,20 @@ export default {
     dark() {
       return this.$vuetify.theme.dark
     },
+    cart() {
+      return this.$store.state.cart
+    },
     inCart() {
-      return String(this.$store.state.cart.length)
+      return String(this.cart.length)
+    },
+    hasItemsInCart() {
+      return this.cart.length > 0
     },
     notifications() {
       return []
+    },
+    hasNotifications() {
+      return this.notifications.length > 0
     }
   },
   methods: {
