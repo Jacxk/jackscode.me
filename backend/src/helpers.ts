@@ -7,6 +7,8 @@ import jwt from 'jsonwebtoken'
 import bcrypt from 'bcrypt'
 import Stripe from 'stripe'
 
+import Pusher from 'pusher'
+
 const secret = process.env.ACCESS_TOKEN_SECRET || 'youllneverfindme'
 
 export function getStatus(code: number) {
@@ -105,5 +107,13 @@ export function calculateRating(...ratings: Array<number>): number {
 
   return Number(res.toFixed(2))
 }
+
+export const pusher = new Pusher({
+  appId: '1032161',
+  key: '8b452076b57d21a572d2',
+  secret: '18a430dd346d40528e22',
+  cluster: 'us2',
+  useTLS: true
+});
 
 export const stripe = new Stripe(process.env.STRIPE_API_KEY, null)

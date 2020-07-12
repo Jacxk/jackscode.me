@@ -33,7 +33,9 @@ module.exports = {
    */
   plugins: [
     { src: '~/plugins/vuex-persist', ssr: false },
-    { src: '~/plugins/timeago', ssr: false }
+    { src: '~/plugins/timeago', ssr: false },
+    { src: '~/plugins/sockets', ssr: false },
+    { src: '~/plugins/axios' }
   ],
   /*
    ** Nuxt.js dev-modules
@@ -87,6 +89,7 @@ module.exports = {
       measurementId: 'G-RQSXJKREY5'
     },
     onFirebaseHosting: false,
+    analytics: true,
     services: {
       remoteConfig: {
         settings: {
@@ -118,7 +121,8 @@ module.exports = {
     proxy: true
   },
   proxy: {
-    '/api/': `http://backend:${process.env.SERVER_PORT}`
+    '/api/': `http://backend:${process.env.SERVER_PORT}`,
+    '/socket/': `http://websocket:${process.env.SOCKET_PORT}/`
   },
   /*
    ** vuetify module configuration

@@ -1,5 +1,3 @@
-import axios from 'axios'
-
 export const state = () => ({
   cart: [],
   checkout_secret: '',
@@ -70,7 +68,8 @@ export const actions = {
     }
 
     if (auth.loggedIn) {
-      axios
+      // @ts-ignore
+      this.$axios
         .put(`/api/users/${auth.user._id}/cart`, {
           product: item._id
         })
@@ -81,12 +80,7 @@ export const actions = {
             color: 'success'
           })
         })
-        .catch((e) => {
-          dispatch('sendSnackbar', {
-            text: e.response.data.error,
-            color: 'error'
-          })
-        })
+        .catch(() => {})
     } else {
       commit('ADD_TO_CART', item)
       dispatch('sendSnackbar', {
@@ -98,7 +92,8 @@ export const actions = {
   removeFromCart({ state, commit, dispatch }: any, item: Item) {
     const { auth } = state
     if (auth.loggedIn) {
-      axios
+      // @ts-ignore
+      this.$axios
         .delete(`/api/users/${auth.user._id}/cart`, {
           data: {
             product: item._id
@@ -111,12 +106,7 @@ export const actions = {
             color: 'success'
           })
         })
-        .catch((e) => {
-          dispatch('sendSnackbar', {
-            text: e.response.data.error,
-            color: 'error'
-          })
-        })
+        .catch(() => {})
     } else {
       commit('REMOVE_FROM_CART', item)
       dispatch('sendSnackbar', {
@@ -145,7 +135,8 @@ export const actions = {
   async setCheckout({ dispatch, state }: any, price: number) {
     const { auth, cart } = state
 
-    const { data } = await axios.post('/api/payments/create', {
+    // @ts-ignore
+    const { data } = await this.$axios.post('/api/payments/create', {
       amount: price,
       products: cart.map((product: any) => product._id),
       receipt_email: auth.user.email
@@ -157,7 +148,8 @@ export const actions = {
   async updateCheckout({ state }: any, price: number) {
     // eslint-disable-next-line camelcase
     const { checkout_secret, auth, cart } = state
-    await axios.post('/api/payments/update', {
+    // @ts-ignore
+    await this.$axios.post('/api/payments/update', {
       secret: checkout_secret.split('_secret_')[0],
       amount: price,
       products: cart.map((product: any) => product._id),

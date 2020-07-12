@@ -52,7 +52,7 @@
 
 <script>
 import { mapActions } from 'vuex'
-import axios from 'axios'
+
 export default {
   middleware: 'guest',
   data() {
@@ -94,7 +94,7 @@ export default {
           data: this.login
         })
         .then(() => {
-          axios.defaults.headers.common.Authorization = `Bearer ${this.$auth.user.token}`
+          this.$axios.setToken(this.$auth.user.token)
           this.sendSnackbar({
             text: 'Logged in successfully',
             color: 'success'

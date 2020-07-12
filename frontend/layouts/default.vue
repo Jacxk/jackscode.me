@@ -29,7 +29,8 @@
 </template>
 
 <script>
-import { mapState, mapMutations } from 'vuex'
+import { mapState, mapMutations, mapActions } from 'vuex'
+import axios from 'axios'
 import Navbar from './navbar'
 import BottomNav from './bottom_nav'
 
@@ -48,8 +49,13 @@ export default {
   computed: {
     ...mapState(['snackbar'])
   },
+  mounted() {
+    const token = window.localStorage.getItem('auth._token.local')
+    this.$axios.setToken(token)
+  },
   methods: {
-    ...mapMutations(['HIDE_SNACKBAR'])
+    ...mapMutations(['HIDE_SNACKBAR']),
+    ...mapActions(['sendSnackbar'])
   },
   head() {
     return {

@@ -28,4 +28,20 @@ services:
     volumes:
       - ./backend:/usr/src
     restart: always
+    depends_on:
+      - websocket
+    links:
+      - websocket
+    command: npm run start-dev
+  websocket:
+    env_file:
+      - .env
+    build: ./websocket
+    expose:
+      - ${SOCKET_PORT}
+    ports:
+      - ${SOCKET_PORT}:${SOCKET_PORT}
+    volumes:
+      - ./websocket:/usr/src
+    restart: always
     command: npm run start-dev

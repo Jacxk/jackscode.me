@@ -99,21 +99,21 @@ export default {
     ...mapActions(['sendSnackbar']),
     async create() {
       this.loading = true
+      const product = Object.assign({}, this.product)
+
+      const formData = new FormData()
+      Object.keys(product).forEach((key) => {
+        formData.append(key, product[key])
+      })
+
+      this.sendSnackbar({
+        text: 'Updating product, please wait...',
+        color: 'warning'
+      })
+
       try {
-        const product = Object.assign({}, this.product)
-
-        const formData = new FormData()
-        Object.keys(product).forEach((key) => {
-          formData.append(key, product[key])
-        })
-
-        this.sendSnackbar({
-          text: 'Updating product, please wait...',
-          color: 'warning'
-        })
-
         const id = this.$route.params.id
-        await this.$axios.patch(`/api/products/${id}`, formData, {
+        await this.$axios.$patch(`/api/products/${id}`, formData, {
           headers: {
             'content-type': 'multipart/form-data'
           }
@@ -123,9 +123,7 @@ export default {
           color: 'success'
         })
         this.$router.push(`/products/${id}`)
-      } catch (e) {
-        this.sendSnackbar({ text: e.response.data.error, color: 'error' })
-      }
+      } catch {}
       this.loading = false
     }
   }

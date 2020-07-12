@@ -138,21 +138,21 @@ export default {
     ...mapActions(['sendSnackbar']),
     async create() {
       this.loading = true
+      const product = Object.assign({}, this.product)
+      delete product.picture
+      product.price = Number(product.price)
+
+      const formData = new FormData()
+      Object.keys(product).forEach((key) => {
+        formData.append(key, product[key])
+      })
+
+      this.sendSnackbar({
+        text: 'Creating product, please wait...',
+        color: 'warning'
+      })
       try {
-        const product = Object.assign({}, this.product)
-        delete product.picture
-        product.price = Number(product.price)
-
-        const formData = new FormData()
-        Object.keys(product).forEach((key) => {
-          formData.append(key, product[key])
-        })
-
-        this.sendSnackbar({
-          text: 'Creating product, please wait...',
-          color: 'warning'
-        })
-        const { data } = await this.$axios.post('/api/products', formData, {
+        const res = await this.$axios.$post('/api/products', formData, {
           headers: {
             'content-type': 'multipart/form-data'
           }
@@ -161,10 +161,8 @@ export default {
           text: 'Product created successfully',
           color: 'success'
         })
-        this.$router.push(`/products/${data._id}`)
-      } catch (e) {
-        this.sendSnackbar({ text: e.response.data.error, color: 'error' })
-      }
+        this.$router.push(`/products/${res._id}`)
+      } catch {}
       this.loading = false
     },
     showPicture(file) {

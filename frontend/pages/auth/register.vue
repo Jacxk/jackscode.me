@@ -117,12 +117,8 @@ export default {
           email: this.register.email,
           password: this.register.password
         })
-      } catch (error) {
+      } catch {
         this.loading = false
-        return this.sendSnackbar({
-          text: error.response.data.error,
-          color: 'error'
-        })
       }
 
       this.$auth

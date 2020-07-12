@@ -27,6 +27,8 @@
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^5.9.19",
     "nuxt": "^2.12.2",
+    "socket.io-client": "^2.3.0",
+    "vue-socket.io": "^3.0.9",
     "vue-timeago": "^5.1.2",
     "vuetify": "^2.3.0",
     "vuex-persist": "^2.2.0"
@@ -36,6 +38,7 @@
     "@nuxtjs/eslint-config-typescript": "^1.0.0",
     "@nuxtjs/eslint-module": "^1.0.0",
     "@nuxtjs/stylelint-module": "^3.1.0",
+    "@types/socket.io-client": "^1.4.33",
     "babel-eslint": "^10.0.1",
     "eslint": "^6.1.0",
     "eslint-config-prettier": "^6.10.0",

@@ -150,8 +150,9 @@
                   <v-textarea
                     v-model="content"
                     class="pt-8"
-                    outlined
                     label="Message"
+                    hint="Say something nice!"
+                    outlined
                   />
                 </v-list-item>
                 <v-list-item>
@@ -254,7 +255,7 @@ export default {
         link.click()
         link.remove()
       } catch (e) {
-        this.sendSnackbar({ text: e.response.data.error, color: 'error' })
+        this.sendSnackbar({ text: 'Internal error', color: 'error' })
       }
     },
     async sendRating() {

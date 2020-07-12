@@ -77,9 +77,11 @@ export default {
   components: { Item, Rating },
   middleware: 'auth',
   async asyncData({ $axios, $auth }) {
-    const { data } = await $axios.get(`/api/ratings/user/${$auth.user._id}`)
+    const ratings_given = await $axios.$get(
+      `/api/ratings/user/${$auth.user._id}`
+    )
 
-    return { ratings_given: data }
+    return { ratings_given }
   },
   data() {
     return {

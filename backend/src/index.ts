@@ -5,15 +5,19 @@ import * as FirebaseConfig from './firebase.config.json'
 (() => {
   return new Promise<unknown>((resolve, reject) => {
     connectDB()
-      .then(() => {
-        Firebase.initializeApp({
-          // @ts-ignore
-          credential: Firebase.credential.cert(FirebaseConfig),
-          storageBucket: 'jackscodedotme.appspot.com'
-        })
-        import('./app')
-          .then(() => resolve())
-          .catch(reject)
+      .then(async () => {
+        try {
+          Firebase.initializeApp({
+            // @ts-ignore
+            credential: Firebase.credential.cert(FirebaseConfig),
+            storageBucket: 'jackscodedotme.appspot.com'
+          })
+          await import('./app')
+          await import('./socket')
+          resolve()
+        } catch (e) {
+          reject(e)
+        }
       })
       .catch(reject)
   })

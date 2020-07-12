@@ -1,11 +1,12 @@
 import { Router } from 'express'
 import { Schemas } from '../database'
 import { hasFiles, newProduct, versionUpdate } from '../validation'
-import { JWT, sendError, uploadFirebase } from '../helpers'
+import { JWT, pusher, sendError, uploadFirebase } from '../helpers'
 import { v4 as uuid } from 'uuid'
 import { storage } from 'firebase-admin'
 import Multer from 'multer'
 import got from 'got'
+import client from '../socket'
 
 const products = Router()
 
@@ -108,7 +109,7 @@ products.patch('/:id', multer.single('file'), async function(req, res) {
       download_url
     })
 
-    await Schemas.Product
+    const product: any = await Schemas.Product
       .findByIdAndUpdate(id, {
         $push: {
           versions: version
@@ -118,9 +119,15 @@ products.patch('/:id', multer.single('file'), async function(req, res) {
           version: body.version
         }
       })
+      .populate('author')
+      .lean()
       .exec()
     await version.save()
 
+    client.emit('PRODUCT_UPDATE', {
+      secret: process.env.SOCKET_SECRET,
+      data: product
+    })
     res.sendStatus(204)
   } catch (e) {
     console.error(e)
