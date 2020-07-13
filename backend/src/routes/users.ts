@@ -1,5 +1,5 @@
 import { Router } from 'express'
-import { isValidObjectId, sendError, stripe, JWT } from '../helpers'
+import { clearNotifications, isValidObjectId, JWT, sendError, stripe } from '../helpers'
 import { Schemas } from '../database/'
 
 const users = Router()
@@ -14,6 +14,35 @@ users.use('/:id/*', (req, res, next) => {
   }
 
   next()
+})
+
+users.get('/:id/notifications', async (req, res) => {
+  try {
+    const id = req.params['id']
+
+    const user: any = await Schemas.User.findById(id)
+    const notifications = await Schemas.Notification
+      .find({ product: { $in: user.products_bought } })
+      .populate('product', 'name picture version')
+      .exec()
+    await clearNotifications(id)
+
+    res.json(notifications)
+  } catch (e) {
+    console.log(e)
+    return sendError(res)
+  }
+})
+
+users.delete('/:id/notifications', async (req, res) => {
+  try {
+    const id = req.params['id']
+    await clearNotifications(id)
+    res.sendStatus(204)
+  } catch (e) {
+    console.log(e)
+    return sendError(res)
+  }
 })
 
 users.get('/:id/cart', async (req, res) => {

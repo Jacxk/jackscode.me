@@ -1,7 +1,7 @@
 import { Router } from 'express'
 import { Schemas } from '../database'
 import { hasFiles, newProduct, versionUpdate } from '../validation'
-import { JWT, pusher, sendError, uploadFirebase } from '../helpers'
+import { JWT, sendError, uploadFirebase } from '../helpers'
 import { v4 as uuid } from 'uuid'
 import { storage } from 'firebase-admin'
 import Multer from 'multer'
@@ -122,6 +122,15 @@ products.patch('/:id', multer.single('file'), async function(req, res) {
       .populate('author')
       .lean()
       .exec()
+
+    const notification = await new Schemas.Notification({ version: version._id })
+    await notification.save()
+
+    await Schemas.User.updateMany(
+      { products_bought: { $in: product._id } },
+      { $inc: { notifications: 1 } }
+    )
+
     await version.save()
 
     client.emit('PRODUCT_UPDATE', {

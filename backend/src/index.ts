@@ -1,4 +1,4 @@
-import { connectDB } from './database'
+import { connectDB, Schemas } from './database'
 import * as Firebase from 'firebase-admin'
 import * as FirebaseConfig from './firebase.config.json'
 

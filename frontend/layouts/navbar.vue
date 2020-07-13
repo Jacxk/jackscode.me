@@ -39,12 +39,12 @@
         </v-btn>
       </div>
 
-      <v-menu offset-y auto transition="slide-y-transition">
+      <v-menu offset-y auto transition="slide-y-transition" min-width="320px">
         <template v-slot:activator="{ on, attrs }">
-          <v-btn icon v-bind="attrs" v-on="on">
+          <v-btn icon v-bind="attrs" v-on="on" @click="checkNotifications">
             <v-badge
-              v-if="hasNotifications"
-              :content="String(notifications.length)"
+              v-if="notifications.amount > 0"
+              :content="String(notifications.amount)"
               bottom
               overlap
             >
@@ -55,8 +55,20 @@
         </template>
         <v-list>
           <div v-if="hasNotifications">
-            <v-list-item v-for="(notif, i) in notifications" :key="i">
-              {{ notif }}
+            <v-list-item
+              v-for="(notification, i) in sortedNotifications"
+              :key="i"
+              :to="`/products/${notification.product._id}`"
+            >
+              <v-list-item-avatar>
+                <v-img :src="notification.product.picture" />
+              </v-list-item-avatar>
+              <v-list-item-content>
+                <v-list-item-title>
+                  {{ notification.product.name }} has been updated!
+                </v-list-item-title>
+                <Timeago :datetime="notification.created_at" auto-update />
+              </v-list-item-content>
             </v-list-item>
           </div>
           <v-list-item v-else class="mx-5">
@@ -190,6 +202,10 @@ export default {
     return {
       drawer_open: false,
       search: false,
+      notifications: {
+        data: [],
+        amount: this.$auth.loggedIn ? this.$auth.user.notifications : 0
+      },
       items: {
         drawer: [
           { title: 'Home', icon: 'home', href: '/' },
@@ -221,16 +237,26 @@ export default {
     hasItemsInCart() {
       return this.cart.length > 0
     },
-    notifications() {
-      return []
-    },
     hasNotifications() {
-      return this.notifications.length > 0
+      if (!this.$auth.loggedIn) return false
+      return this.notifications.data.length > 0
+    },
+    sortedNotifications() {
+      return this.notifications.data.sort((a, b) => a.created_at - b.created_at)
     }
   },
   methods: {
     makeSearch(text) {
       // TODO: implement search
+    },
+    async checkNotifications() {
+      if (!this.$auth.loggedIn) return
+      try {
+        this.notifications.data = await this.$axios.$get(
+          `/api/users/${this.$auth.user._id}/notifications`
+        )
+        this.notifications.amount = 0
+      } catch {}
     }
   }
 }
