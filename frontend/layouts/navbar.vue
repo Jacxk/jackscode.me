@@ -56,7 +56,7 @@
         <v-list>
           <div v-if="hasNotifications">
             <v-list-item
-              v-for="(notification, i) in sortedNotifications"
+              v-for="(notification, i) in sortDescending(notifications.data)"
               :key="i"
               :to="`/products/${notification.product._id}`"
             >
@@ -195,6 +195,8 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
+
 export default {
   name: 'Navbar',
   props: ['site'],
@@ -222,6 +224,7 @@ export default {
     }
   },
   computed: {
+    ...mapGetters(['sortDescending']),
     loggedIn() {
       return this.$auth.loggedIn
     },
@@ -240,9 +243,6 @@ export default {
     hasNotifications() {
       if (!this.$auth.loggedIn) return false
       return this.notifications.data.length > 0
-    },
-    sortedNotifications() {
-      return this.notifications.data.sort((a, b) => a.created_at - b.created_at)
     }
   },
   methods: {

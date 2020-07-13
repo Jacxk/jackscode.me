@@ -31,11 +31,11 @@
             <v-card-text>
               <div v-if="buyable()">
                 <v-btn
-                  v-if="inCart(product)"
+                  v-if="hasItem(product)"
                   color="warning"
                   block
                   outlined
-                  @click="removeCart(product)"
+                  @click="removeFromCart(product)"
                 >
                   In cart
                 </v-btn>
@@ -44,7 +44,7 @@
                   color="success"
                   block
                   outlined
-                  @click="addCart(product)"
+                  @click="addToCart(product)"
                 >
                   Add to cart
                 </v-btn>
@@ -92,13 +92,12 @@
             </v-tab-item>
             <v-tab-item>
               <v-card v-if="(product.versions || '').length < 1">
-                <v-card-text
-                  >There are no older versions right now... Come back
-                  later!</v-card-text
-                >
+                <v-card-text>
+                  There are no older versions right now... Come back later!
+                </v-card-text>
               </v-card>
               <v-card
-                v-for="(version, i) in product.versions"
+                v-for="(version, i) in sortDescending(product.versions)"
                 :key="i"
                 width="100%"
                 height="100%"
@@ -173,7 +172,11 @@
                 No ratings found for this product...
               </v-card-text>
             </v-card>
-            <v-list v-for="(rating, i) in product.ratings" v-else :key="i">
+            <v-list
+              v-for="(rating, i) in sortDescending(product.ratings)"
+              v-else
+              :key="i"
+            >
               <Rating
                 :picture="rating.created_by.avatar"
                 :title="rating.created_by.username"
@@ -216,18 +219,10 @@ export default {
     }
   },
   computed: {
-    ...mapGetters({
-      inCart: 'hasItem',
-      bought: 'bought',
-      price: 'price'
-    })
+    ...mapGetters(['hasItem', 'bought', 'price', 'sortDescending'])
   },
   methods: {
-    ...mapActions({
-      addCart: 'addToCart',
-      removeCart: 'removeFromCart',
-      sendSnackbar: 'sendSnackbar'
-    }),
+    ...mapActions(['addToCart', 'removeFromCart', 'sendSnackbar']),
     buyable() {
       return (
         !this.owns() && !this.bought(this.product._id) && this.product.price > 0

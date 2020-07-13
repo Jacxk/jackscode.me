@@ -3,7 +3,6 @@ export default function({ $axios, store }: any) {
     const data = error.response.data
 
     blotToJson(data).then(({ error }) => {
-      console.log(error)
       store.dispatch('sendSnackbar', { text: error, color: 'error' })
     })
   })

@@ -195,6 +195,15 @@ export const getters = {
       if (!user) return false
       return user.role === role
     }
+  },
+  sortDescending() {
+    return (array: Array<any>) => {
+      const newArray = [...array].map((value) => ({
+        ...value,
+        created_at: new Date(value.created_at).getTime()
+      }))
+      return newArray.sort((a, b) => b.created_at - a.created_at)
+    }
   }
 }
 
