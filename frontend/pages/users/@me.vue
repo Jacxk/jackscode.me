@@ -28,7 +28,10 @@
         <v-tab-item>
           <v-card width="100%" height="100%">
             <div v-if="(ratings_given || []).length > 0">
-              <v-list v-for="(rating, i) in ratings_given" :key="i">
+              <v-list
+                v-for="(rating, i) in sortDescending(ratings_given)"
+                :key="i"
+              >
                 <Rating
                   :to="`/products/${rating.product._id}`"
                   :date="rating.created_at"
@@ -69,6 +72,7 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
 import Rating from '../../components/products/rating'
 import Item from '../../components/products/item'
 
@@ -90,6 +94,7 @@ export default {
     }
   },
   computed: {
+    ...mapGetters(['sortDescending']),
     user() {
       return this.$auth.user
     }
