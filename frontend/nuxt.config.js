@@ -122,7 +122,10 @@ module.exports = {
   },
   proxy: {
     '/api/': `http://backend:${process.env.SERVER_PORT}`,
-    '/socket/': `http://websocket:${process.env.SOCKET_PORT}/`
+    '/gateway/': {
+      target: `http://websocket:${process.env.SOCKET_PORT}/`,
+      ws: true
+    }
   },
   /*
    ** vuetify module configuration

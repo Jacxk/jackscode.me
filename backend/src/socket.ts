@@ -1,7 +1,7 @@
 import io from 'socket.io-client'
 
 const client = io.connect(`http://websocket:${process.env.SOCKET_PORT}`, {
-  path: '/socket'
+  path: '/gateway'
 })
 
 client.on('connect', () => {

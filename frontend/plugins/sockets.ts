@@ -5,10 +5,10 @@ export default ({ store }: any) => {
   Vue.use(
     new VueSocketIO({
       debug: true,
-      connection: 'localhost:2020',
+      connection: '/gateway',
       vuex: { actionPrefix: 'socket_', store },
       // @ts-ignore
-      options: { path: '/socket' }
+      options: { path: '/gateway' }
     })
   )
 }

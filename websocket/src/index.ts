@@ -1,7 +1,7 @@
 const io = require('socket.io')
 
 const server = io.listen(process.env.SOCKET_PORT, {
-  path: '/socket'
+  path: '/gateway'
 })
 
 server.on('connection', (socket) => {
