@@ -72,7 +72,7 @@ export function newProduct(data) {
   return schema.validate(data)
 }
 
-export function productUpdate(data) {
+export function productEdit(data) {
   const schema = Joi.object({
     name: Joi
       .string()

@@ -113,7 +113,7 @@ export default {
 
       try {
         const id = this.$route.params.id
-        await this.$axios.$patch(`/api/products/${id}`, formData, {
+        await this.$axios.$post(`/api/products/${id}/update`, formData, {
           headers: {
             'content-type': 'multipart/form-data'
           }

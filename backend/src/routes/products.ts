@@ -1,6 +1,6 @@
 import { Router } from 'express'
 import { Schemas } from '../database'
-import { hasFiles, newProduct, versionUpdate } from '../validation'
+import { hasFiles, newProduct, productEdit, versionUpdate } from '../validation'
 import { JWT, sendError, uploadFirebase } from '../helpers'
 import { v4 as uuid } from 'uuid'
 import { storage } from 'firebase-admin'
@@ -75,7 +75,7 @@ products.get('/:id', async function(req, res) {
 
 products.use(JWT.authenticate)
 
-products.patch('/:id', multer.single('file'), async function(req, res) {
+products.post('/:id/update', multer.single('file'), async function(req, res) {
   try {
     const body = req.body
 
@@ -271,6 +271,27 @@ products.get('/:id/download', async (req, res) => {
         firebaseStorageDownloadTokens: uuid()
       }
     })
+  } catch (e) {
+    console.error(e)
+    return sendError(res)
+  }
+})
+
+products.patch('/:id', async (req, res) => {
+  try {
+    const body = req.body
+
+    const { error } = productEdit(body)
+    if (error) {
+      return sendError(res, error.message, 400)
+    }
+
+    await Schemas.Product.findByIdAndUpdate(req.params.id, {
+      $set: { ...body }
+    })
+
+    res.sendStatus(204)
+
   } catch (e) {
     console.error(e)
     return sendError(res)

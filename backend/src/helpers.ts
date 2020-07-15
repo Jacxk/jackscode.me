@@ -7,8 +7,6 @@ import jwt from 'jsonwebtoken'
 import bcrypt from 'bcrypt'
 import Stripe from 'stripe'
 
-import Pusher from 'pusher'
-
 const secret = process.env.ACCESS_TOKEN_SECRET || 'youllneverfindme'
 
 export function getStatus(code: number) {

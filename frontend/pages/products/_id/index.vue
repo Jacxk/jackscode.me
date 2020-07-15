@@ -3,12 +3,23 @@
     <v-col cols="12" xs="12" sm="4" md="3" lg="3" xl="2">
       <v-row>
         <v-col cols="12">
-          <v-card outlined width="100%">
+          <v-card outlined width="100%" class="editable">
             <v-img :src="product.picture" height="200px" />
             <v-divider />
             <v-card-title>
               <span>{{ product.name }}</span>
             </v-card-title>
+
+            <div v-if="owns() && !editing_product" class="edit">
+              <v-tooltip left>
+                <template v-slot:activator="{ on, attrs }">
+                  <v-btn v-bind="attrs" icon v-on="on" @click="editProduct">
+                    <v-icon>mdi-pencil</v-icon>
+                  </v-btn>
+                </template>
+                <span>Edit Product</span>
+              </v-tooltip>
+            </div>
             <v-card-text>
               <div>Price: {{ price(product.price) }}</div>
               <div>Description: {{ product.description }}</div>
@@ -85,8 +96,54 @@
             <v-tab>Versions</v-tab>
             <v-tab-item>
               <v-card width="100%" height="100%">
-                <v-card-text>
-                  <div v-html="$md.render(product.page_content)" />
+                <v-card-text class="editable">
+                  <div v-if="owns() && !editing_content" class="edit">
+                    <v-tooltip left>
+                      <template v-slot:activator="{ on, attrs }">
+                        <v-btn
+                          v-bind="attrs"
+                          icon
+                          v-on="on"
+                          @click="editContent"
+                        >
+                          <v-icon>mdi-pencil</v-icon>
+                        </v-btn>
+                      </template>
+                      <span>Edit Content</span>
+                    </v-tooltip>
+                  </div>
+                  <div
+                    v-if="!editing_content"
+                    @dblclick="editContent"
+                    v-html="$md.render(product.page_content)"
+                  />
+                  <div v-else>
+                    <v-tabs grow>
+                      <v-tab-item>
+                        <v-textarea v-model="edit_content" outlined auto-grow />
+                      </v-tab-item>
+                      <v-tab-item>
+                        <v-card-text
+                          v-html="$md.render(edit_content || 'No content...')"
+                        />
+                      </v-tab-item>
+                      <v-tab>Edit</v-tab>
+                      <v-tab>Preview</v-tab>
+                    </v-tabs>
+                    <v-btn color="error" text outlined @click="cancelContent">
+                      Cancel
+                    </v-btn>
+                    <v-btn
+                      color="success"
+                      text
+                      outlined
+                      :loading="loading"
+                      :disabled="loading"
+                      @click="saveContent"
+                    >
+                      Save
+                    </v-btn>
+                  </div>
                 </v-card-text>
               </v-card>
             </v-tab-item>
@@ -147,7 +204,7 @@
               <div v-if="stars > 0">
                 <v-list-item>
                   <v-textarea
-                    v-model="content"
+                    v-model="rating_content"
                     class="pt-8"
                     label="Message"
                     hint="Say something nice!"
@@ -211,11 +268,15 @@ export default {
   },
   data() {
     return {
+      loading: false,
+      editing_content: false,
+      editing_product: false,
       tab: null,
       params: this.$route.params,
       product: {},
       stars: 0,
-      content: ''
+      rating_content: '',
+      edit_content: ''
     }
   },
   computed: {
@@ -259,7 +320,7 @@ export default {
           `/api/ratings/product/${this.product._id}/`,
           {
             stars: this.stars,
-            content: this.content,
+            content: this.rating_content,
             version: this.product.latest_version,
             product: this.product._id
           }
@@ -269,17 +330,59 @@ export default {
 
         this.product.ratings.push(data)
         this.product.rating = data.overall_rating
-        this.content = ''
+        this.rating_content = ''
         this.stars = 0
 
         this.sendSnackbar({
           text: 'Rating submitted. Thank you!',
           color: 'success'
         })
-      } catch (e) {
-        this.sendSnackbar({ text: e.response.data.error, color: 'error' })
-      }
-    }
+      } catch {}
+    },
+    editContent() {
+      this.edit_content = this.product.page_content
+      this.editing_content = true
+    },
+    async saveContent() {
+      this.loading = true
+
+      try {
+        await this.$axios.$patch(`/api/products/${this.product._id}`, {
+          page_content: this.edit_content
+        })
+
+        this.product.page_content = this.edit_content
+        this.editing_content = false
+        this.sendSnackbar({
+          text: 'Info edited successfully!',
+          color: 'success'
+        })
+      } catch {}
+
+      this.loading = false
+    },
+    cancelContent() {
+      this.edit_content = this.product.page_content
+      this.editing_content = false
+    },
+    editProduct() {},
+    saveProduct() {},
+    cancelProduct() {}
   }
 }
 </script>
+
+<style lang="scss">
+.editable {
+  position: relative;
+  .edit {
+    display: none;
+    position: absolute;
+    right: 0;
+    top: 0;
+  }
+  &:hover .edit {
+    display: block;
+  }
+}
+</style>
