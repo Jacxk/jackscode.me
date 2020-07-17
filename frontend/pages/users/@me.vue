@@ -28,12 +28,10 @@
         <v-tab-item>
           <v-card width="100%" height="100%" color="theme_2" outlined>
             <div v-if="(ratings_given || []).length > 0">
-              <v-list
-                v-for="(rating, i) in sortDescending(ratings_given)"
-                :key="i"
-                color="theme_2"
-              >
+              <v-list color="theme_2" class="py-0">
                 <Rating
+                  v-for="(rating, i) in sortDescending(ratings_given)"
+                  :key="i"
                   :to="`/products/${rating.product._id}`"
                   :date="rating.created_at"
                   :title="rating.product.name"
@@ -57,6 +55,8 @@
                 :key="i"
                 :product="product"
                 dense
+                divider
+                top
               />
             </div>
             <v-card-text v-else>

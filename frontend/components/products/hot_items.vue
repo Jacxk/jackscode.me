@@ -23,8 +23,13 @@
           </v-col>
         </v-row>
       </v-list-item>
-      <v-list v-for="item in hotItems" v-else :key="item._id" color="theme_2">
-        <v-list-item :to="'/products/' + item._id" :ripple="false">
+      <v-list v-else color="theme_2" class="py-0">
+        <v-list-item
+          v-for="item in hotItems"
+          :key="item._id"
+          :to="'/products/' + item._id"
+          :ripple="false"
+        >
           <v-list-item-avatar>
             <v-img :src="item.picture" />
           </v-list-item-avatar>

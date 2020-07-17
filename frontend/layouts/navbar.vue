@@ -12,7 +12,7 @@
     >
       <v-app-bar-nav-icon @click.stop="drawer_open = !drawer_open" />
       <v-toolbar-title>
-        <nuxt-link to="/" class="text-decoration-none theme_text">
+        <nuxt-link to="/" class="text-decoration-none text-decoration-none">
           {{ site.name }}
         </nuxt-link>
       </v-toolbar-title>
@@ -115,6 +115,7 @@
     <v-navigation-drawer
       v-model="drawer_open"
       color="theme_1"
+      class="d-flex"
       clipped
       fixed
       app
@@ -135,10 +136,7 @@
         </v-list-item>
       </v-list>
 
-      <v-list
-        style="position: absolute; bottom: 0; right: 0; left: 0"
-        color="darken-4"
-      >
+      <v-list class="py-0 nav-footer" color="darken-4">
         <v-divider />
         <v-list-item>
           <v-spacer />
@@ -223,3 +221,12 @@ export default {
   }
 }
 </script>
+
+<style>
+.nav-footer {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  left: 0;
+}
+</style>

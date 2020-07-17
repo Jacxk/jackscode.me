@@ -15,7 +15,6 @@
       :timeout="snackbar.timeout"
       top
       right
-      text
       @input="HIDE_SNACKBAR"
     >
       {{ snackbar.text }}
@@ -63,11 +62,3 @@ export default {
   }
 }
 </script>
-
-<style>
-.add-product {
-  position: fixed;
-  bottom: 20px;
-  right: 20px;
-}
-</style>

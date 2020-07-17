@@ -1,5 +1,6 @@
 <template>
   <v-card :to="to || ''" width="100%" color="theme_2" flat>
+    <v-divider />
     <v-list-item>
       <v-list-item-avatar>
         <v-img :src="picture || 'https://via.placeholder.com/200'" />
@@ -29,7 +30,6 @@
     <v-card-text>
       <slot />
     </v-card-text>
-    <v-divider />
   </v-card>
 </template>
 

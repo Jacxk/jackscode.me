@@ -96,6 +96,7 @@
             <v-tab>Versions</v-tab>
             <v-tab-item>
               <v-card width="100%" height="100%" color="theme_2" outlined>
+                <v-divider />
                 <v-card-text class="editable">
                   <div v-if="owns() && !editing_content" class="edit">
                     <v-tooltip left>
@@ -153,6 +154,7 @@
                 color="theme_2"
                 outlined
               >
+                <v-divider />
                 <v-card-text>
                   There are no older versions right now... Come back later!
                 </v-card-text>
@@ -165,6 +167,7 @@
                 color="theme_2"
                 outlined
               >
+                <v-divider />
                 <v-card-title>{{ version.title }}</v-card-title>
                 <v-card-subtitle>
                   <Timeago :datetime="version.created_at" auto-update />
@@ -182,7 +185,6 @@
                     <v-icon>mdi-download</v-icon>
                   </v-btn>
                 </v-card-actions>
-                <v-divider />
               </v-card>
             </v-tab-item>
           </v-tabs>
@@ -239,13 +241,10 @@
                 No ratings found for this product...
               </v-card-text>
             </v-card>
-            <v-list
-              v-for="(rating, i) in sortDescending(product.ratings)"
-              v-else
-              :key="i"
-              color="theme_2"
-            >
+            <v-list v-else color="theme_2" class="py-0">
               <Rating
+                v-for="(rating, i) in sortDescending(product.ratings)"
+                :key="i"
                 :picture="rating.created_by.avatar"
                 :title="rating.created_by.username"
                 :rating="rating.stars"

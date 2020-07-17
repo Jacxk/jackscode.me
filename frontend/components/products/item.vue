@@ -9,7 +9,7 @@
     outlined
   >
     <v-img
-      :src="product.picture"
+      :src="product.picture || 'https://via.placeholder.com/500'"
       height="200px"
       aspect-ratio="1"
       class="white--text align-end"
@@ -84,7 +84,7 @@
   </v-card>
 
   <div v-else>
-    <v-divider v-if="divider && top" />
+    <v-divider v-if="divider && top" inset />
     <v-list-item
       :to="clickable ? '/products/' + product._id : ''"
       :ripple="false"
@@ -128,7 +128,7 @@
         </v-btn>
       </v-list-item-action>
     </v-list-item>
-    <v-divider v-if="divider && bottom" />
+    <v-divider v-if="divider && bottom" inset />
   </div>
 </template>
 

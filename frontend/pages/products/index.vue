@@ -38,7 +38,6 @@
           :product="product"
           :dense="getProductView() !== 0"
           divider
-          top
           bottom
         />
       </v-col>

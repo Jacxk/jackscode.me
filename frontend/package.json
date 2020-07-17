@@ -30,7 +30,7 @@
     "socket.io-client": "^2.3.0",
     "vue-socket.io": "^3.0.9",
     "vue-timeago": "^5.1.2",
-    "vuetify": "^2.3.0",
+    "vuetify": "^2.3.4",
     "vuex-persist": "^2.2.0"
   },
   "devDependencies": {
