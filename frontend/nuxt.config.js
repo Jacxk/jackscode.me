@@ -23,7 +23,7 @@ module.exports = {
   /*
    ** Customize the progress-bar color
    */
-  loading: { color: '#f44336' },
+  loading: { color: '#2196F3' },
   /*
    ** Global CSS
    */
@@ -138,22 +138,34 @@ module.exports = {
       light: false,
       themes: {
         dark: {
-          primary: colors.blue.darken2,
-          accent: colors.grey.darken3,
+          theme_1: '#0c0c0c',
+          theme_2: '#171717',
+          theme_3: '#1f1f1f',
+          theme_4: '#242424',
+          theme_5: '#323232',
+          theme_text: colors.white,
+          primary: colors.blue.base,
+          accent: colors.red.darken4,
           secondary: colors.amber.darken3,
-          info: colors.teal.lighten1,
-          warning: colors.amber.base,
-          error: colors.deepOrange.accent4,
-          success: colors.green.accent3
+          info: colors.teal.base,
+          warning: colors.yellow.base,
+          error: colors.red.base,
+          success: colors.green.base
         },
         light: {
-          primary: colors.red,
+          theme_1: '#ffffff',
+          theme_2: '#f6f6f6',
+          theme_3: '#ececec',
+          theme_4: '#dcdcdc',
+          theme_5: '#d0d0d0',
+          theme_text: colors.black,
+          primary: colors.blue.base,
           accent: colors.grey,
           secondary: colors.amber,
-          info: colors.teal,
-          warning: colors.amber.base,
-          error: colors.deepOrange.accent4,
-          success: colors.green.accent3
+          info: colors.teal.darken4,
+          warning: colors.yellow.darken4,
+          error: colors.red.darken4,
+          success: colors.green.darken4
         }
       }
     }

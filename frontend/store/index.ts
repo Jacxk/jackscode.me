@@ -198,6 +198,7 @@ export const getters = {
   },
   sortDescending() {
     return (array: Array<any>) => {
+      if (!array) return array
       const newArray = [...array].map((value) => ({
         ...value,
         created_at: new Date(value.created_at).getTime()

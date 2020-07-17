@@ -1,7 +1,7 @@
 <template>
   <v-row class="px-5">
-    <v-col cols="12" xs="12" sm="8" md="7" lg="6" xl="6" class="mx-auto">
-      <v-card elevation="3" outlined>
+    <v-col cols="12" xs="12" sm="6" md="4" lg="3" xl="3" class="px-0 mx-auto">
+      <v-card color="theme_2" outlined>
         <v-card-title>
           <h1 class="display-1">Register</h1>
         </v-card-title>
@@ -49,10 +49,16 @@
               :disabled="loading"
               color="primary"
               outlined
+              block
               @click="submit"
             >
               Register
             </v-btn>
+
+            <div class="mt-5">
+              Already have an account?
+              <nuxt-link to="/auth/login">Login!</nuxt-link>
+            </div>
           </v-form>
         </v-card-text>
       </v-card>

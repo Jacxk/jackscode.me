@@ -1,7 +1,7 @@
 <template>
   <v-app>
     <navbar :site="site" />
-    <v-main>
+    <v-main class="theme_1">
       <v-container>
         <nuxt />
       </v-container>
@@ -29,8 +29,7 @@
 </template>
 
 <script>
-import { mapState, mapMutations, mapActions } from 'vuex'
-import axios from 'axios'
+import { mapActions, mapMutations, mapState } from 'vuex'
 import Navbar from './navbar'
 import BottomNav from './bottom_nav'
 

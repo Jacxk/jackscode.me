@@ -43,6 +43,7 @@ products.get('/', async function(req, res) {
     const products = await Schemas.Product
       .find(conditions)
       .populate('author', 'username')
+      .populate('latest_version', 'created_at')
       .lean()
       .exec()
     res.json(products)

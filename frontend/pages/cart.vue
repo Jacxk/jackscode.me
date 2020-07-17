@@ -1,8 +1,8 @@
 <template>
   <v-row>
     <v-col cols="12" xs="12" sm="12" md="9" xl="9">
-      <v-card outlined>
-        <v-list>
+      <v-card outlined color="theme_2">
+        <v-list color="theme_2">
           <v-subheader class="d-flex justify-space-between">
             <span>Your Cart</span>
             <span>Total: ${{ totalPrice }}</span>

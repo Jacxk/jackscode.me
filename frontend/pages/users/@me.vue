@@ -1,7 +1,7 @@
 <template>
   <v-row>
     <v-col cols="12" sm="12" md="3">
-      <v-card>
+      <v-card color="theme_2" outlined>
         <v-img
           :src="user.avatar || 'https://via.placeholder.com/200'"
           height="300px"
@@ -20,17 +20,18 @@
       </v-card>
     </v-col>
     <v-col cols="12" sm="12" md="9">
-      <v-tabs v-model="tab" grow>
+      <v-tabs v-model="tab" grow background-color="theme_2">
         <v-tab>Ratings</v-tab>
         <v-tab>Products</v-tab>
       </v-tabs>
       <v-tabs-items v-model="tab">
         <v-tab-item>
-          <v-card width="100%" height="100%">
+          <v-card width="100%" height="100%" color="theme_2" outlined>
             <div v-if="(ratings_given || []).length > 0">
               <v-list
                 v-for="(rating, i) in sortDescending(ratings_given)"
                 :key="i"
+                color="theme_2"
               >
                 <Rating
                   :to="`/products/${rating.product._id}`"
@@ -49,7 +50,7 @@
           </v-card>
         </v-tab-item>
         <v-tab-item>
-          <v-card width="100%" height="100%">
+          <v-card width="100%" height="100%" color="theme_2" outlined>
             <div v-if="hasBought()">
               <Item
                 v-for="(product, i) in orders"

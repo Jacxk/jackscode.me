@@ -1,9 +1,18 @@
 <template>
   <div>
-    <v-app-bar class="pr-5" fixed clipped-left app flat>
+    <v-app-bar
+      class="pr-5"
+      color="theme_1"
+      elevation="5"
+      elevate-on-scroll
+      fixed
+      clipped-left
+      app
+      flat
+    >
       <v-app-bar-nav-icon @click.stop="drawer_open = !drawer_open" />
       <v-toolbar-title>
-        <nuxt-link to="/" class="text-decoration-none white--text">
+        <nuxt-link to="/" class="text-decoration-none theme_text">
           {{ site.name }}
         </nuxt-link>
       </v-toolbar-title>
@@ -53,7 +62,7 @@
             <v-icon v-else>mdi-bell</v-icon>
           </v-btn>
         </template>
-        <v-list>
+        <v-list color="theme_1">
           <div v-if="hasNotifications">
             <v-list-item
               v-for="(notification, i) in sortDescending(notifications.data)"
@@ -78,63 +87,12 @@
       </v-menu>
 
       <div class="hidden-xs-only">
-        <v-menu offset-y transition="slide-y-transition">
-          <template v-slot:activator="{ on, attrs }">
-            <v-btn class="ml-2" icon v-bind="attrs" v-on="on">
-              <v-icon v-if="!loggedIn">mdi-account</v-icon>
-              <v-avatar v-else>
-                <v-img src="https://via.placeholder.com/150" />
-              </v-avatar>
-            </v-btn>
-          </template>
-          <v-list>
-            <v-list-item
-              v-for="(item, index) in loggedIn
-                ? items.logged
-                : items.not_logged"
-              :key="index"
-              dense
-              :to="item.href"
-            >
-              <v-list-item-icon>
-                <v-icon>mdi-{{ item.icon }}</v-icon>
-              </v-list-item-icon>
-              <v-list-item-title>{{ item.title }}</v-list-item-title>
-            </v-list-item>
-            <v-divider v-if="loggedIn" class="my-1" />
-            <v-list-item>
-              <v-btn
-                v-if="loggedIn"
-                color="error"
-                block
-                outlined
-                @click="$auth.logout()"
-              >
-                Sign out
-              </v-btn>
-              <div v-else>
-                <v-btn
-                  class="mx-1"
-                  color="success"
-                  to="/auth/login"
-                  outlined
-                  block
-                >
-                  Login
-                </v-btn>
-                <v-btn
-                  class="mx-1"
-                  color="warning"
-                  to="/auth/register"
-                  outlined
-                  block
-                >
-                  Register
-                </v-btn>
-              </div>
-            </v-list-item>
-          </v-list>
-        </v-menu>
+        <v-btn class="ml-2" icon :to="loggedIn ? '/users/@me' : '/login'">
+          <v-icon v-if="!loggedIn">mdi-account</v-icon>
+          <v-avatar v-else>
+            <v-img src="https://via.placeholder.com/150" />
+          </v-avatar>
+        </v-btn>
       </div>
     </v-app-bar>
     <v-expand-transition>
@@ -154,7 +112,13 @@
       </v-card>
     </v-expand-transition>
 
-    <v-navigation-drawer v-model="drawer_open" clipped fixed app>
+    <v-navigation-drawer
+      v-model="drawer_open"
+      color="theme_1"
+      clipped
+      fixed
+      app
+    >
       <v-list>
         <v-list-item
           v-for="item in items.drawer"
@@ -214,9 +178,7 @@ export default {
           { title: 'All Products', icon: 'shopping', href: '/products' },
           { title: 'My account', icon: 'account', href: '/users/@me' },
           { title: 'My Cart', icon: 'cart', href: '/cart' }
-        ],
-        logged: [{ title: 'Account', icon: 'account', href: '/users/@me' }],
-        not_logged: []
+        ]
       },
       toggleTheme: () => {
         this.$vuetify.theme.dark = !this.$vuetify.theme.dark

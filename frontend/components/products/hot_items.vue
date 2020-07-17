@@ -1,5 +1,5 @@
 <template>
-  <v-card outlined>
+  <v-card color="theme_2" outlined>
     <v-subheader>Hot products</v-subheader>
     <v-divider />
     <v-list-item v-if="hotItems.length < 1">
@@ -23,7 +23,7 @@
           </v-col>
         </v-row>
       </v-list-item>
-      <v-list v-for="item in hotItems" v-else :key="item._id">
+      <v-list v-for="item in hotItems" v-else :key="item._id" color="theme_2">
         <v-list-item :to="'/products/' + item._id" :ripple="false">
           <v-list-item-avatar>
             <v-img :src="item.picture" />
@@ -46,7 +46,8 @@ export default {
   components: { Item },
   props: {
     horizontal: Boolean,
-    scroll: Boolean
+    scroll: Boolean,
+    color: String
   },
   data() {
     return { hotItems: [] }

@@ -1,7 +1,7 @@
 <template>
   <v-row>
     <v-col>
-      <v-card>
+      <v-card color="theme_2">
         <v-card-text>
           <div>
             <v-subheader class="text-uppercase px-0 mx-0">
@@ -47,7 +47,7 @@
       </v-card>
     </v-col>
     <v-col>
-      <v-card min-height="50vh">
+      <v-card min-height="50vh" color="theme_2">
         <v-card-title>Products</v-card-title>
         <v-divider />
         <div v-if="hasProducts()">

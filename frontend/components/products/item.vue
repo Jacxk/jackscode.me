@@ -4,7 +4,8 @@
     :to="clickable ? '/products/' + product._id : ''"
     :ripple="false"
     :height="fullWidth ? '100%' : ''"
-    class="relative"
+    class="product-card"
+    color="theme_3"
     outlined
   >
     <v-img
@@ -20,16 +21,23 @@
       </v-card-title>
     </v-img>
 
-    <v-card-text class="mb-8">
-      <p>{{ product.description || 'No description provided' }}</p>
+    <v-card-text class="mb-10">
+      <p class="theme_text">
+        {{ product.description || 'No description provided' }}
+      </p>
       <v-divider class="pb-3" />
-      <p>Author: {{ product.author.username }}</p>
+      <div class="more-info">
+        <p>
+          Author: <span>{{ product.author.username }}</span>
+        </p>
+        <p>Last Updated: <Timeago :datetime="getLastUpdate()" /></p>
+      </div>
     </v-card-text>
 
-    <v-card-actions class="absolute bottom-0">
-      <span class="grey--text text--lighten-2 caption">
+    <v-card-actions class="product-action ml-2">
+      <v-subheader class="caption px-0">
         ({{ (product.ratings || '').length }})
-      </span>
+      </v-subheader>
       <v-rating
         v-if="ratings"
         v-model="product.rating"
@@ -92,7 +100,7 @@
           </span>
 
           <div class="d-flex justify-center">
-            <span class="grey--text text--lighten-2 caption pt-1">
+            <span class="grey--text text--lighten-1 caption pt-1">
               ({{ (product.ratings || '').length }})
             </span>
             <v-rating
@@ -126,6 +134,7 @@
 
 <script>
 import { mapActions, mapGetters } from 'vuex'
+
 export default {
   name: 'Item',
   props: {
@@ -136,8 +145,9 @@ export default {
           name: 'No name',
           price: 0.0,
           _id: null,
-          rating: 0.0,
+          rating: 0,
           description: 'No description',
+          latest_version: '',
           version: '0.0.0'
         }
       }
@@ -181,7 +191,32 @@ export default {
     owns() {
       const user = this.$auth.user || {}
       return this.product.author._id === user._id
+    },
+    getLastUpdate() {
+      // eslint-disable-next-line camelcase
+      const { latest_version, created_at } = this.product
+      // eslint-disable-next-line camelcase
+      return latest_version ? latest_version.created_at : created_at
     }
   }
 }
 </script>
+
+<style lang="scss">
+.product-card {
+  position: relative;
+  .product-action {
+    position: absolute;
+    bottom: 0px;
+    right: 0;
+    left: 0;
+  }
+}
+
+.more-info {
+  p {
+    display: flex;
+    justify-content: space-between;
+  }
+}
+</style>

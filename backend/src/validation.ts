@@ -85,7 +85,7 @@ export function productEdit(data) {
     page_content: Joi
       .string()
       .min(50)
-      .max(2056),
+      .max(8000),
     picture: Joi
       .string()
       .base64(),

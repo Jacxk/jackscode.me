@@ -3,7 +3,7 @@
     <v-col cols="12" xs="12" sm="4" md="3" lg="3" xl="2">
       <v-row>
         <v-col cols="12">
-          <v-card outlined width="100%" class="editable">
+          <v-card outlined width="100%" class="editable" color="theme_2">
             <v-img :src="product.picture" height="200px" />
             <v-divider />
             <v-card-title>
@@ -91,11 +91,11 @@
     <v-col cols="12" xs="12" sm="8" md="8" lg="8" xl="9">
       <v-row>
         <v-col cols="12">
-          <v-tabs v-model="tab" grow>
+          <v-tabs v-model="tab" background-color="theme_2" grow>
             <v-tab>Information</v-tab>
             <v-tab>Versions</v-tab>
             <v-tab-item>
-              <v-card width="100%" height="100%">
+              <v-card width="100%" height="100%" color="theme_2" outlined>
                 <v-card-text class="editable">
                   <div v-if="owns() && !editing_content" class="edit">
                     <v-tooltip left>
@@ -148,7 +148,11 @@
               </v-card>
             </v-tab-item>
             <v-tab-item>
-              <v-card v-if="(product.versions || '').length < 1">
+              <v-card
+                v-if="(product.versions || '').length < 1"
+                color="theme_2"
+                outlined
+              >
                 <v-card-text>
                   There are no older versions right now... Come back later!
                 </v-card-text>
@@ -158,6 +162,8 @@
                 :key="i"
                 width="100%"
                 height="100%"
+                color="theme_2"
+                outlined
               >
                 <v-card-title>{{ version.title }}</v-card-title>
                 <v-card-subtitle>
@@ -182,7 +188,7 @@
           </v-tabs>
         </v-col>
         <v-col cols="12">
-          <v-card outlined width="100%" height="100%">
+          <v-card width="100%" height="100%" color="theme_2" outlined>
             <v-subheader>
               <span>Ratings</span>
               <v-spacer />
@@ -224,7 +230,11 @@
               </div>
             </v-expand-transition>
 
-            <v-card v-if="(product.ratings || '').length < 1">
+            <v-card
+              v-if="(product.ratings || '').length < 1"
+              color="theme_2"
+              outlined
+            >
               <v-card-text>
                 No ratings found for this product...
               </v-card-text>
@@ -233,6 +243,7 @@
               v-for="(rating, i) in sortDescending(product.ratings)"
               v-else
               :key="i"
+              color="theme_2"
             >
               <Rating
                 :picture="rating.created_by.avatar"

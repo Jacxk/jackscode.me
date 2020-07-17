@@ -1,17 +1,19 @@
 <template>
-  <v-bottom-navigation grow fixed app>
-    <v-btn v-for="(item, i) in items" :key="i" :to="item.href">
-      <span>{{ item.title }}</span>
-      <v-icon>mdi-{{ item.icon }}</v-icon>
-    </v-btn>
-    <v-btn to="/cart">
-      <span>Cart</span>
-      <v-badge v-if="hasItemsInCart" :content="inCart" top overlap>
-        <v-icon>mdi-cart</v-icon>
-      </v-badge>
-      <v-icon v-else>mdi-cart</v-icon>
-    </v-btn>
-  </v-bottom-navigation>
+  <div>
+    <v-bottom-navigation grow fixed app>
+      <v-btn v-for="(item, i) in items" :key="i" :to="item.href">
+        <span>{{ item.title }}</span>
+        <v-icon>mdi-{{ item.icon }}</v-icon>
+      </v-btn>
+      <v-btn to="/cart">
+        <span>Cart</span>
+        <v-badge v-if="hasItemsInCart" :content="inCart" top overlap>
+          <v-icon>mdi-cart</v-icon>
+        </v-badge>
+        <v-icon v-else>mdi-cart</v-icon>
+      </v-btn>
+    </v-bottom-navigation>
+  </div>
 </template>
 
 <script>

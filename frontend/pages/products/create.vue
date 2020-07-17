@@ -3,7 +3,7 @@
     <v-container>
       <v-row>
         <v-col xs="12" sm="7" md="8" lg="8" xl="8">
-          <v-card>
+          <v-card color="theme_2">
             <v-card-text>
               <v-text-field
                 v-model="product.name"
@@ -123,6 +123,12 @@ export default {
       loading: false,
       valid: false,
       product: {
+        author: {
+          username: this.$auth.user.username
+        },
+        latest_version: {
+          created_at: Date.now()
+        },
         name: '',
         version: '',
         description: '',

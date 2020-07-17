@@ -1,7 +1,7 @@
 <template>
   <v-row class="px-5">
     <v-col cols="12" xs="12" sm="6" md="4" lg="3" xl="3" class="px-0 mx-auto">
-      <v-card elevation="3" outlined>
+      <v-card color="theme_2" outlined>
         <v-card-title>
           <h1 class="display-1">Login</h1>
         </v-card-title>
