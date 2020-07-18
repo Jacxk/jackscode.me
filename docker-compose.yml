@@ -5,10 +5,6 @@ services:
     env_file:
       - .env
     build: ./frontend
-    expose:
-      - ${NUXT_PORT}
-    ports:
-      - ${NUXT_PORT}:${NUXT_PORT}
     depends_on:
       - backend
       - nginx
@@ -20,10 +16,6 @@ services:
     env_file:
       - .env
     build: ./backend
-    expose:
-      - ${SERVER_PORT}
-    ports:
-      - ${SERVER_PORT}:${SERVER_PORT}
     volumes:
       - ./backend:/usr/src
     restart: always
@@ -35,10 +27,6 @@ services:
     env_file:
       - .env
     build: ./websocket
-    expose:
-      - ${SOCKET_PORT}
-    ports:
-      - ${SOCKET_PORT}:${SOCKET_PORT}
     volumes:
       - ./websocket:/usr/src
     depends_on:
