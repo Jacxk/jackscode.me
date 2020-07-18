@@ -11,8 +11,7 @@ services:
       - ${NUXT_PORT}:${NUXT_PORT}
     depends_on:
       - backend
-    links:
-      - backend
+      - nginx
     volumes:
     - ./frontend:/usr/src
     restart: always
@@ -30,8 +29,7 @@ services:
     restart: always
     depends_on:
       - websocket
-    links:
-      - websocket
+      - nginx
     command: npm run start-dev
   websocket:
     env_file:
@@ -43,5 +41,18 @@ services:
       - ${SOCKET_PORT}:${SOCKET_PORT}
     volumes:
       - ./websocket:/usr/src
+    depends_on:
+      - nginx
     restart: always
     command: npm run start-dev
+  nginx:
+    env_file:
+      - .env
+    build: ./nginx
+    ports:
+      - 80:80
+      - 443:443
+    volumes:
+      - ./nginx/:/etc/nginx
+    restart: always
+    command: "/bin/sh -c 'while :; do sleep 6h & wait $${!}; nginx -s reload; done & nginx -g \"daemon off;\"'"

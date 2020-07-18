@@ -118,7 +118,9 @@ module.exports = {
    ** See https://axios.nuxtjs.org/options
    */
   axios: {
-    proxy: true
+    baseURL: 'http://nginx:80/',
+    browserBaseURL: '/',
+    proxy: false
   },
   proxy: {
     '/api/': `http://backend:${process.env.SERVER_PORT}`,

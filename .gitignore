@@ -93,3 +93,4 @@ sw.*
 # Secret files
 *.config.*
 !*.example.config.*
+certs/

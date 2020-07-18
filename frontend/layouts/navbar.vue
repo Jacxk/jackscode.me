@@ -87,7 +87,7 @@
       </v-menu>
 
       <div class="hidden-xs-only">
-        <v-btn class="ml-2" icon :to="loggedIn ? '/users/@me' : '/login'">
+        <v-btn class="ml-2" icon :to="loggedIn ? '/users/@me' : '/auth/login'">
           <v-icon v-if="!loggedIn">mdi-account</v-icon>
           <v-avatar v-else>
             <v-img src="https://via.placeholder.com/150" />
