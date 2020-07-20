@@ -1,8 +1,8 @@
 export const namespaced = true
 
 export const actions = {
-  socket_productUpdate({ dispatch, state }: any, data: any) {
-    const auth = state.auth
+  socket_productUpdate({ dispatch, rootState }: any, data: any) {
+    const auth = rootState.auth
     const products = auth.user.products_bought
     if (
       auth.loggedIn &&
