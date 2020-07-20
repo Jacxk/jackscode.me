@@ -2,14 +2,14 @@
   <v-row>
     <v-col cols="12" sm="12" md="3">
       <v-card color="theme_2" outlined>
-        <v-img
+        <VImage
           :src="user.avatar || 'https://via.placeholder.com/200'"
           height="300px"
           class="white--text align-end"
           gradient="to bottom, rgba(0,0,0,0),rgba(0,0,0,.2), rgba(0,0,0,.8)"
         >
           <v-card-title>{{ user.username }}</v-card-title>
-        </v-img>
+        </VImage>
         <v-card-text>
           Join Date: {{ new Date(user.created_at).toLocaleDateString() }}
           <br />
@@ -76,10 +76,11 @@
 import { mapGetters } from 'vuex'
 import Rating from '../../components/products/rating'
 import Item from '../../components/products/item'
+import VImage from '../../components/extended/v-image'
 
 export default {
   name: 'Me',
-  components: { Item, Rating },
+  components: { VImage, Item, Rating },
   middleware: 'auth',
   async asyncData({ $axios, $auth }) {
     const ratings_given = await $axios.$get(

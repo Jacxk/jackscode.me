@@ -34,6 +34,7 @@ module.exports = {
   plugins: [
     { src: '~/plugins/vuex-persist', ssr: false },
     { src: '~/plugins/timeago', ssr: false },
+    { src: '~/plugins/progressive-image', ssr: false },
     { src: '~/plugins/sockets', ssr: false },
     { src: '~/plugins/axios' }
   ],

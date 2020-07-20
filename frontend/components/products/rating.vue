@@ -3,7 +3,7 @@
     <v-divider />
     <v-list-item>
       <v-list-item-avatar>
-        <v-img :src="picture || 'https://via.placeholder.com/200'" />
+        <VImage :src="picture || 'https://via.placeholder.com/200'" />
       </v-list-item-avatar>
 
       <v-list-item-content>
@@ -34,8 +34,10 @@
 </template>
 
 <script>
+import VImage from '../extended/v-image'
 export default {
   name: 'Rating',
+  components: { VImage },
   props: ['picture', 'title', 'rating', 'to', 'date']
 }
 </script>

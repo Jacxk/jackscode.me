@@ -4,7 +4,7 @@
       <v-row>
         <v-col cols="12">
           <v-card outlined width="100%" class="editable" color="theme_2">
-            <v-img :src="product.picture" height="200px" />
+            <VImage :src="product.picture" height="200px" />
             <v-divider />
             <v-card-title>
               <span>{{ product.name }}</span>
@@ -264,10 +264,11 @@
 import { mapGetters, mapActions } from 'vuex'
 import HotItems from '../../../components/products/hot_items'
 import Rating from '../../../components/products/rating'
+import VImage from '../../../components/extended/v-image'
 
 export default {
   name: 'Id',
-  components: { Rating, HotItems },
+  components: { VImage, Rating, HotItems },
   async asyncData({ params, $axios }) {
     try {
       const product = await $axios.$get(`/api/products/${params.id}`)

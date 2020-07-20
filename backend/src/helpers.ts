@@ -93,14 +93,14 @@ export async function uploadFirebase(
   await file.save(buffer, { contentType: 'auto' })
 
   const firebase_url = 'https://firebasestorage.googleapis.com'
-  const filePath = encodeURIComponent(file.name)
+  const filePath = encodeURIComponent(file.name.replace(/(.*)(\..*)/, '$1.webp'))
   return `${ firebase_url }/v0/b/${ bucket.name }/o/${ filePath }?alt=media`
 }
 
 export function calculateRating(...ratings: Array<number>): number {
   if (ratings.length !== 5) return 0
 
-  let res = ratings.reduce((a, b, i) => a + ((i+1)*b), 0)
+  let res = ratings.reduce((a, b, i) => a + ((i + 1) * b), 0)
   res /= ratings.reduce((a, b) => a + b)
 
   return Number(res.toFixed(2))

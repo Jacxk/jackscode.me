@@ -70,7 +70,7 @@
               :to="`/products/${notification.product._id}`"
             >
               <v-list-item-avatar>
-                <v-img :src="notification.product.picture" />
+                <VImage :src="notification.product.picture" />
               </v-list-item-avatar>
               <v-list-item-content>
                 <v-list-item-title>
@@ -90,7 +90,7 @@
         <v-btn class="ml-2" icon :to="loggedIn ? '/users/@me' : '/auth/login'">
           <v-icon v-if="!loggedIn">mdi-account</v-icon>
           <v-avatar v-else>
-            <v-img src="https://via.placeholder.com/150" />
+            <VImage src="https://via.placeholder.com/150" />
           </v-avatar>
         </v-btn>
       </div>
@@ -158,9 +158,11 @@
 
 <script>
 import { mapGetters } from 'vuex'
+import VImage from '../components/extended/v-image'
 
 export default {
   name: 'Navbar',
+  components: { VImage },
   props: ['site'],
   data() {
     return {

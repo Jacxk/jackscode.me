@@ -8,8 +8,8 @@
     color="theme_3"
     outlined
   >
-    <v-img
-      :src="product.picture || 'https://via.placeholder.com/500'"
+    <VImage
+      :src="product.picture"
       height="200px"
       aspect-ratio="1"
       class="white--text align-end"
@@ -19,7 +19,7 @@
         <span>{{ product.name || 'Untitled' }}</span>
         <span>v{{ product.version || '0.0' }}</span>
       </v-card-title>
-    </v-img>
+    </VImage>
 
     <v-card-text class="mb-10">
       <p class="theme_text">
@@ -90,7 +90,7 @@
       :ripple="false"
     >
       <v-list-item-avatar>
-        <v-img :src="product.picture" />
+        <VImage :src="product.picture" />
       </v-list-item-avatar>
 
       <v-list-item-content>
@@ -134,9 +134,11 @@
 
 <script>
 import { mapActions, mapGetters } from 'vuex'
+import VImage from '../extended/v-image'
 
 export default {
   name: 'Item',
+  components: { VImage },
   props: {
     product: {
       type: Object,

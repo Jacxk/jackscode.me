@@ -31,7 +31,7 @@
           :ripple="false"
         >
           <v-list-item-avatar>
-            <v-img :src="item.picture" />
+            <VImage :src="item.picture" />
           </v-list-item-avatar>
 
           <v-list-item-content>
@@ -44,11 +44,12 @@
 </template>
 
 <script>
+import VImage from '../extended/v-image'
 import Item from './item'
 
 export default {
   name: 'HotItems',
-  components: { Item },
+  components: { VImage, Item },
   props: {
     horizontal: Boolean,
     scroll: Boolean,
