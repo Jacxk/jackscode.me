@@ -84,7 +84,8 @@ export async function uploadFirebase(
   user: string,
   product: string,
   version: string,
-  buffer: Buffer
+  buffer: Buffer,
+  image?: Boolean
 ) {
   const storage = Firebase.storage()
   const bucket = storage.bucket()
@@ -93,7 +94,8 @@ export async function uploadFirebase(
   await file.save(buffer, { contentType: 'auto' })
 
   const firebase_url = 'https://firebasestorage.googleapis.com'
-  const filePath = encodeURIComponent(file.name.replace(/(.*)(\..*)/, '$1.webp'))
+  const name = image ? file.name.replace(/(.*)(\..*)/, '$1.webp') : file.name
+  const filePath = encodeURIComponent(name)
   return `${ firebase_url }/v0/b/${ bucket.name }/o/${ filePath }?alt=media`
 }
 

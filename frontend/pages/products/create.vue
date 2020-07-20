@@ -18,6 +18,10 @@
                 v-model="product.price"
                 label="Price"
                 hint="Something reasonable..."
+                type="number"
+                min="0.00"
+                max="20.00"
+                step="0.01"
                 outlined
                 required
               />
@@ -134,7 +138,7 @@ export default {
         description: '',
         page_content: '',
         picture: '',
-        price: '',
+        price: '0.00',
         file: null,
         picture_file: null
       }
@@ -146,6 +150,8 @@ export default {
       this.loading = true
       const product = Object.assign({}, this.product)
       delete product.picture
+      delete product.author
+      delete product.latest_version
       product.price = Number(product.price)
 
       const formData = new FormData()

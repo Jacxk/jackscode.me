@@ -143,7 +143,10 @@ products.post('/:id/update', multer.single('file'), async function(req, res) {
       .lean()
       .exec()
 
-    const notification = await new Schemas.Notification({ version: version._id })
+    const notification = await new Schemas.Notification({
+      product: product._id,
+      version: version._id
+    })
     await notification.save()
 
     await Schemas.User.updateMany(
@@ -208,7 +211,8 @@ products.post('/', upload, async function(req, res) {
       _id,
       product._id,
       product.version,
-      pic.buffer
+      pic.buffer,
+      /image\/.*/.test(pic.mimetype)
     )
 
     version.download_url = await uploadFirebase(
