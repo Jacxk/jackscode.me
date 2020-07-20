@@ -59,22 +59,7 @@ export default {
     return { hotItems: [] }
   },
   async mounted() {
-    await this.$fireConfig.fetchAndActivate()
-    const { _value } = await this.$fireConfig.getValue('hot_items')
-    const items = JSON.parse(_value)
-
-    const hotItems = []
-
-    for (let i = 0; i < items.length; i++) {
-      const id = items[i]
-      const item = await this.$axios.$get(`/api/products/${id}`)
-      if (item.error) {
-        continue
-      }
-      hotItems.push(item)
-    }
-
-    this.hotItems = hotItems
+    this.hotItems = await this.$axios.$get('/api/products/hot')
   }
 }
 </script>

@@ -4,6 +4,7 @@ import { hasFiles, newProduct, productEdit, versionUpdate } from '../validation'
 import { JWT, sendError, uploadFirebase } from '../helpers'
 import { v4 as uuid } from 'uuid'
 import { storage } from 'firebase-admin'
+import * as Firebase from 'firebase-admin'
 import Multer from 'multer'
 import got from 'got'
 import client from '../socket'
@@ -44,6 +45,24 @@ products.get('/', async function(req, res) {
       .find(conditions)
       .populate('author', 'username')
       .populate('latest_version', 'created_at')
+      .lean()
+      .exec()
+    res.json(products)
+  } catch (e) {
+    console.error(e)
+    return sendError(res)
+  }
+})
+
+products.get('/hot', async function(req, res) {
+  try {
+    const config = await Firebase.remoteConfig().getTemplate()
+    const hotProducts: string = config.parameters.hot_items.defaultValue['value']
+
+    const products = await Schemas.Product
+      .find({ _id: { $in: JSON.parse(hotProducts) } })
+      .select('-page_content -old_versions -latest_version -versions -download_url')
+      .populate('author', 'username')
       .lean()
       .exec()
     res.json(products)
