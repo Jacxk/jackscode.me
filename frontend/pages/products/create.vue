@@ -54,6 +54,15 @@
                 required
               />
 
+              <v-select
+                v-model="product.mc_versions"
+                :items="mc_versions"
+                label="Minecraft Versions"
+                chips
+                multiple
+                outlined
+              />
+
               <v-textarea
                 v-model="product.description"
                 label="Description"
@@ -120,6 +129,7 @@ export default {
     return {
       loading: false,
       valid: false,
+      mc_versions: [...Array(9).keys()].map((i) => `1.${i + 8}`),
       product: {
         author: {
           username: this.$auth.user.username
@@ -129,6 +139,7 @@ export default {
         },
         name: '',
         version: '',
+        mc_versions: [],
         description: '',
         page_content: '',
         picture: '',

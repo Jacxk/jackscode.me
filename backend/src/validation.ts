@@ -97,7 +97,7 @@ export function productEdit(data) {
   return schema.validate(data)
 }
 
-export function versionUpdate(data) {
+export function newVersion(data) {
   const schema = Joi.object({
     title: Joi
       .string()
@@ -112,7 +112,11 @@ export function versionUpdate(data) {
       .min(5),
     product: Joi
       .string()
-      .required()
+      .required(),
+    mc_versions: Joi
+      .array()
+      .items([ Joi.string() ])
+      .allow([...Array(9).keys()].map(i => `1.${i + 8}`))
   })
 
   return schema.validate(data)

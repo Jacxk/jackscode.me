@@ -38,6 +38,17 @@
                   dense
                 />
               </div>
+              <div>
+                <span>Minecraft versions: </span>
+                <v-chip
+                  v-for="(version, i) in sortedVersions"
+                  :key="i"
+                  small
+                  class="ma-1"
+                >
+                  {{ version }}
+                </v-chip>
+              </div>
             </v-card-text>
             <v-card-text>
               <div v-if="buyable()">
@@ -296,7 +307,12 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['hasItem', 'bought', 'price', 'sortDescending'])
+    ...mapGetters(['hasItem', 'bought', 'price', 'sortDescending']),
+    sortedVersions() {
+      return [...this.product.mc_versions].sort(
+        (a, b) => String(a).split('.')[1] - String(b).split('.')[1]
+      )
+    }
   },
   methods: {
     ...mapActions(['addToCart', 'removeFromCart', 'sendSnackbar']),

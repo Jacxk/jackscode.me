@@ -1,6 +1,6 @@
 import { Router } from 'express'
 import { Schemas } from '../database'
-import { hasFiles, newProduct, productEdit, versionUpdate } from '../validation'
+import { hasFiles, newProduct, productEdit, newVersion } from '../validation'
 import { JWT, sendError, uploadFirebase } from '../helpers'
 import { v4 as uuid } from 'uuid'
 import { storage } from 'firebase-admin'
@@ -101,7 +101,7 @@ products.post('/:id/update', multer.single('file'), async function(req, res) {
 
     if (!hasFiles(res, true, !body.file)) return
 
-    const { error } = versionUpdate(body)
+    const { error } = newVersion(body)
     if (error) {
       return sendError(res, error.message, 400)
     }

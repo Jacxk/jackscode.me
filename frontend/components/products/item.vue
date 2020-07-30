@@ -31,6 +31,17 @@
           Author: <span>{{ product.author.username }}</span>
         </p>
         <p>Last Updated: <Timeago :datetime="getLastUpdate()" /></p>
+        <div>
+          <span>Minecraft Versions: </span>
+          <v-chip
+            v-for="(version, i) in sortedVersions"
+            :key="i"
+            small
+            class="ma-1"
+          >
+            {{ version }}
+          </v-chip>
+        </div>
       </div>
     </v-card-text>
 
@@ -177,7 +188,12 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['hasItem', 'bought', 'price'])
+    ...mapGetters(['hasItem', 'bought', 'price']),
+    sortedVersions() {
+      return [...this.product.mc_versions].sort(
+        (a, b) => String(a).split('.')[1] - String(b).split('.')[1]
+      )
+    }
   },
   methods: {
     ...mapActions(['sendSnackbar', 'addToCart', 'removeFromCart']),
@@ -219,6 +235,7 @@ export default {
   p {
     display: flex;
     justify-content: space-between;
+    margin: 0;
   }
 }
 </style>
