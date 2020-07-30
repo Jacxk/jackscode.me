@@ -125,6 +125,7 @@
           v-for="item in items.drawer"
           :key="item.id"
           :to="item.href"
+          exact
         >
           <v-list-item-icon>
             <v-icon>mdi-{{ item.icon }}</v-icon>

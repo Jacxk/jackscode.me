@@ -90,8 +90,8 @@ module.exports = {
       measurementId: 'G-RQSXJKREY5'
     },
     onFirebaseHosting: false,
-    analytics: true,
     services: {
+      analytics: true,
       remoteConfig: {
         settings: {
           fetchTimeoutMillis: 60000,

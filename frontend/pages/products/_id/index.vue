@@ -351,6 +351,7 @@ export default {
       } catch {}
     },
     editContent() {
+      if (!this.$auth.loggedIn || !this.owns()) return
       this.edit_content = this.product.page_content
       this.editing_content = true
     },
