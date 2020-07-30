@@ -4,7 +4,7 @@
       <v-col>
         <v-menu offset-y>
           <template v-slot:activator="{ on, attrs }">
-            <v-btn v-bind="attrs" v-on="on">
+            <v-btn v-bind="attrs" outlined v-on="on">
               View As
             </v-btn>
           </template>
@@ -14,7 +14,7 @@
           </v-list>
         </v-menu>
 
-        <v-btn v-if="hasRole('seller')" to="/products/create">
+        <v-btn v-if="hasRole('seller')" to="/products/create" outlined>
           Create
         </v-btn>
       </v-col>

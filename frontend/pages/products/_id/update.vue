@@ -31,49 +31,42 @@
                 @change="product.file = $event"
               />
 
-              <v-tabs grow>
+              <v-tabs background-color="theme_3" grow>
                 <v-tab>Edit</v-tab>
                 <v-tab>Preview</v-tab>
 
-                <v-tab-item>
+                <v-tab-item class="theme_2">
                   <v-textarea
                     v-model="product.change_log"
+                    background-color="theme_2"
                     label="Change Log"
                     hint="Describe what changed here!"
-                    class="mt-5"
                     auto-grow
                     outlined
                     required
                   />
                 </v-tab-item>
                 <v-tab-item>
-                  <v-card class="mt-5" flat outlined>
+                  <v-card color="theme_2" flat outlined>
                     <v-card-text
                       v-html="$md.render(product.change_log || 'No content...')"
                     />
                   </v-card>
                 </v-tab-item>
               </v-tabs>
+              <v-btn
+                type="submit"
+                :loading="loading"
+                :disabled="loading"
+                outlined
+              >
+                Save
+              </v-btn>
             </v-card-text>
           </v-card>
         </v-col>
       </v-row>
     </v-container>
-
-    <v-btn
-      class="add-product"
-      elevation="5"
-      type="submit"
-      :loading="loading"
-      :disabled="loading"
-      fab
-      large
-      dark
-      bottom
-      left
-    >
-      <v-icon>mdi-content-save</v-icon>
-    </v-btn>
   </v-form>
 </template>
 
@@ -129,3 +122,8 @@ export default {
   }
 }
 </script>
+<style lang="scss">
+.v-tabs-items {
+  padding-top: 10px;
+}
+</style>

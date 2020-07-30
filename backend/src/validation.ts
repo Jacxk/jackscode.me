@@ -58,7 +58,6 @@ export function newProduct(data) {
       .required(),
     price: Joi
       .number()
-      .positive()
       .precision(2)
       .min(0)
       .max(50)

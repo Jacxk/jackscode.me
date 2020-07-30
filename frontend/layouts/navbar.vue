@@ -140,6 +140,7 @@
       <v-list class="py-0 nav-footer" color="darken-4">
         <v-divider />
         <v-list-item>
+          <v-btn v-if="loggedIn" outlined @click="logout">Logout</v-btn>
           <v-spacer />
           <v-tooltip :open-delay="200" top>
             <template v-slot:activator="{ on }">
@@ -158,7 +159,7 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+import { mapGetters, mapActions } from 'vuex'
 import VImage from '../components/extended/v-image'
 
 export default {
@@ -209,6 +210,7 @@ export default {
     }
   },
   methods: {
+    ...mapActions(['sendSnackbar']),
     makeSearch(text) {
       // TODO: implement search
     },
@@ -220,6 +222,10 @@ export default {
         )
         this.notifications.amount = 0
       } catch {}
+    },
+    async logout() {
+      await this.$auth.logout()
+      this.sendSnackbar({ text: 'Logged out successfully', color: 'success' })
     }
   }
 }

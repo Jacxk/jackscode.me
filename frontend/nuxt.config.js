@@ -69,6 +69,10 @@ module.exports = {
           logout: { url: '/api/auth/logout', method: 'post' },
           user: { url: '/api/auth/user', method: 'get', propertyName: false }
         }
+      },
+      github: {
+        client_id: process.env.GITHUB_ID,
+        client_secret: process.env.GITHUB_SECRET
       }
     },
     redirect: {

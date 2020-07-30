@@ -116,6 +116,7 @@ export const actions = {
     }
   },
   setCart({ commit, getters }: any, cart: Array<any>) {
+    if (!cart) return
     cart = cart.filter((product) => !getters.bought(product._id))
     commit('SET_CART', cart)
   },

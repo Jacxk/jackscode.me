@@ -27,7 +27,7 @@
             <div class="text-right mb-5">
               <a>Forgot Password?</a>
             </div>
-            <div>
+            <div class="sign-in">
               <v-btn
                 color="primary"
                 :loading="loading"
@@ -36,7 +36,11 @@
                 block
                 @click="submit"
               >
-                Login
+                Sign In
+              </v-btn>
+              <v-btn block outlined @click="githubLogin">
+                <v-icon>mdi-github</v-icon>
+                Sign In
               </v-btn>
             </div>
             <div class="mt-5">
@@ -107,7 +111,18 @@ export default {
           })
         })
         .finally(() => (this.loading = false))
+    },
+    githubLogin() {
+      this.$auth.loginWith('github')
     }
   }
 }
 </script>
+
+<style lang="scss">
+.sign-in {
+  * {
+    margin: 5px 0;
+  }
+}
+</style>

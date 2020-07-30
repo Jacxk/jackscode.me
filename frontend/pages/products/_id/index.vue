@@ -119,17 +119,22 @@
                     v-html="$md.render(product.page_content)"
                   />
                   <div v-else>
-                    <v-tabs grow>
-                      <v-tab-item>
-                        <v-textarea v-model="edit_content" outlined auto-grow />
+                    <v-tabs background-color="theme_3" grow>
+                      <v-tab>Edit</v-tab>
+                      <v-tab>Preview</v-tab>
+                      <v-tab-item class="theme_2">
+                        <v-textarea
+                          v-model="edit_content"
+                          background-color="theme_2"
+                          outlined
+                          auto-grow
+                        />
                       </v-tab-item>
-                      <v-tab-item>
+                      <v-tab-item class="theme_2">
                         <v-card-text
                           v-html="$md.render(edit_content || 'No content...')"
                         />
                       </v-tab-item>
-                      <v-tab>Edit</v-tab>
-                      <v-tab>Preview</v-tab>
                     </v-tabs>
                     <v-btn color="error" text outlined @click="cancelContent">
                       Cancel

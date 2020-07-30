@@ -71,6 +71,15 @@
                 outlined
                 required
               />
+
+              <v-btn
+                type="submit"
+                :loading="loading"
+                :disabled="loading"
+                outlined
+              >
+                Save
+              </v-btn>
             </v-card-text>
           </v-card>
         </v-col>
@@ -86,7 +95,7 @@
       </v-row>
       <v-row>
         <v-col>
-          <v-card>
+          <v-card color="theme_2">
             <v-card-title>Page Content Preview</v-card-title>
             <v-divider />
             <v-card-text
@@ -96,21 +105,6 @@
         </v-col>
       </v-row>
     </v-container>
-
-    <v-btn
-      class="add-product"
-      elevation="5"
-      type="submit"
-      :loading="loading"
-      :disabled="loading"
-      fab
-      large
-      dark
-      bottom
-      left
-    >
-      <v-icon>mdi-content-save</v-icon>
-    </v-btn>
   </v-form>
 </template>
 
